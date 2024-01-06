@@ -1,8 +1,9 @@
-[gd_scene load_steps=27 format=3 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=28 format=3 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://yqe8raauimvm" path="res://sprites/PathAndObjects.png" id="1_lw4ko"]
-[ext_resource type="Script" path="res://scripts/skeleton.cs" id="2_eju0x"]
+[ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
 [ext_resource type="Texture2D" uid="uid://c5vvs232hqaa5" path="res://sprites/BODY_skeleton.png" id="3_6i31u"]
+[ext_resource type="Script" path="res://scripts/Skeleton.cs" id="3_my3na"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3ibrm"]
 texture = ExtResource("1_lw4ko")
@@ -273,6 +274,7 @@ _data = {
 point_count = 4
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p5tra"]
+radius = 8.40865
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eic35"]
 atlas = ExtResource("3_6i31u")
@@ -377,7 +379,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_c1nd1")
 }],
 "loop": true,
-"name": &"walk_down",
+"name": &"down",
 "speed": 5.0
 }, {
 "frames": [{
@@ -409,7 +411,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_w2pdh")
 }],
 "loop": true,
-"name": &"walk_right",
+"name": &"right",
 "speed": 5.0
 }]
 
@@ -422,21 +424,30 @@ layer_0/tile_data = PackedInt32Array(327692, 65536, 1, 393228, 65536, 1, 458764,
 [node name="Path2D" type="Path2D" parent="."]
 curve = SubResource("Curve2D_1qtef")
 
+[node name="PathIndex" parent="Path2D" instance=ExtResource("2_mv7sc")]
+position = Vector2(393.663, 148.763)
+
+[node name="PathIndex2" parent="Path2D" instance=ExtResource("2_mv7sc")]
+position = Vector2(51.0514, 141.134)
+metadata/direction = "right"
+
+[node name="PathIndex3" parent="Path2D" instance=ExtResource("2_mv7sc")]
+position = Vector2(405.008, 397.654)
+metadata/direction = "right"
+
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
 position = Vector2(3.40343, 145.902)
 
-[node name="skeleton" type="Area2D" parent="Path2D/PathFollow2D"]
-position = Vector2(20, 1)
-script = ExtResource("2_eju0x")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/PathFollow2D/skeleton"]
-position = Vector2(0, -11)
+[node name="CharacterBody2D" type="CharacterBody2D" parent="Path2D/PathFollow2D"]
 rotation = -0.00478953
 scale = Vector2(1.4, 1.4)
+script = ExtResource("3_my3na")
+
+[node name="SkeletonCollider" type="CollisionShape2D" parent="Path2D/PathFollow2D/CharacterBody2D"]
 shape = SubResource("CapsuleShape2D_p5tra")
 
-[node name="SkeletonAnimator" type="AnimatedSprite2D" parent="Path2D/PathFollow2D/skeleton"]
-position = Vector2(0, -18)
-rotation = -0.00478953
+[node name="SkeletonAnimator" type="AnimatedSprite2D" parent="Path2D/PathFollow2D/CharacterBody2D"]
+position = Vector2(0, -5)
+scale = Vector2(0.725293, 0.657342)
 sprite_frames = SubResource("SpriteFrames_wlojk")
-animation = &"walk_right"
+animation = &"right"
