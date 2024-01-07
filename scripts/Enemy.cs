@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 public partial class Enemy : CharacterBody2D
 {
@@ -8,6 +9,9 @@ public partial class Enemy : CharacterBody2D
 	private PathFollow2D pathFollow;
 	private AnimatedSprite2D animator;
 	private List<Node2D> pathIndices = new List<Node2D>();
+
+	public float defaultRotation = 0.0f;
+	public float downRotation = -90.0f;
 
 	// Called when the node enters the scene tree for the first time.
 	public void InitializeEnemy()
@@ -48,10 +52,12 @@ public partial class Enemy : CharacterBody2D
 	{
 		foreach(Node2D index in pathIndices)
 		{
+			GD.Print(RotationDegrees);
             PathIndex pathIndex = index.GetNode<PathIndex>($"/root/TileMap/Path2D/{index.Name}");
             if(pathIndex.active)
             {
-                string direction = pathIndex.indexDirection;
+				string direction = pathIndex.indexDirection;
+				RotationDegrees = direction == "down" ? downRotation : defaultRotation;
                 animator.Play(direction);
             }
 

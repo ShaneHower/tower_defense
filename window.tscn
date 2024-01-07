@@ -269,9 +269,9 @@ sources/0 = SubResource("TileSetAtlasSource_3ibrm")
 
 [sub_resource type="Curve2D" id="Curve2D_1qtef"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 3.40343, 145.902, 0, 0, 0, 0, 392.529, 145.902, 0, 0, 0, 0, 408.411, 397.654, 0, 0, 0, 0, 1318.26, 396.701)
+"points": PackedVector2Array(0, 0, 0, 0, 3.40343, 145.902, 0, 0, 0, 0, 47.8521, 144.969, 0, 0, 0, 0, 392.529, 145.902, 0, 0, 0, 0, 408.411, 397.654, 0, 0, 0, 0, 1318.26, 396.701)
 }
-point_count = 4
+point_count = 5
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p5tra"]
 radius = 8.40865
@@ -425,21 +425,21 @@ layer_0/tile_data = PackedInt32Array(327692, 65536, 1, 393228, 65536, 1, 458764,
 curve = SubResource("Curve2D_1qtef")
 
 [node name="PathIndex" parent="Path2D" instance=ExtResource("2_mv7sc")]
-position = Vector2(393.663, 148.763)
+position = Vector2(409.546, 171.649)
 
 [node name="PathIndex2" parent="Path2D" instance=ExtResource("2_mv7sc")]
-position = Vector2(51.0514, 141.134)
+position = Vector2(5.67238, 143.041)
 metadata/direction = "right"
 
 [node name="PathIndex3" parent="Path2D" instance=ExtResource("2_mv7sc")]
-position = Vector2(405.008, 397.654)
+position = Vector2(392.529, 446.288)
 metadata/direction = "right"
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
 position = Vector2(3.40343, 145.902)
+rotation = -0.020997
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="Path2D/PathFollow2D"]
-rotation = -0.00478953
 scale = Vector2(1.4, 1.4)
 script = ExtResource("3_my3na")
 
@@ -451,3 +451,5 @@ position = Vector2(0, -5)
 scale = Vector2(0.725293, 0.657342)
 sprite_frames = SubResource("SpriteFrames_wlojk")
 animation = &"right"
+frame = 7
+frame_progress = 0.890842
