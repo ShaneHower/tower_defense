@@ -1,8 +1,9 @@
-[gd_scene load_steps=27 format=3 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=28 format=3 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://yqe8raauimvm" path="res://sprites/PathAndObjects.png" id="1_lw4ko"]
-[ext_resource type="Script" path="res://scripts/skeleton.cs" id="2_eju0x"]
+[ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
 [ext_resource type="Texture2D" uid="uid://c5vvs232hqaa5" path="res://sprites/BODY_skeleton.png" id="3_6i31u"]
+[ext_resource type="Script" path="res://scripts/Skeleton.cs" id="3_my3na"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3ibrm"]
 texture = ExtResource("1_lw4ko")
@@ -268,11 +269,13 @@ sources/0 = SubResource("TileSetAtlasSource_3ibrm")
 
 [sub_resource type="Curve2D" id="Curve2D_1qtef"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 3.40343, 145.902, 0, 0, 0, 0, 392.529, 145.902, 0, 0, 0, 0, 408.411, 397.654, 0, 0, 0, 0, 1318.26, 396.701)
+"points": PackedVector2Array(0, 0, 0, 0, 2.26895, 147.809, 0, 0, 0, 0, 400.47, 147.809, 0, 0, 0, 0, 398.201, 398.608, 0, 0, 0, 0, 1306.92, 396.701)
 }
 point_count = 4
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p5tra"]
+radius = 1.36235
+height = 2.7247
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eic35"]
 atlas = ExtResource("3_6i31u")
@@ -377,8 +380,8 @@ animations = [{
 "texture": SubResource("AtlasTexture_c1nd1")
 }],
 "loop": true,
-"name": &"walk_down",
-"speed": 5.0
+"name": &"down",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -409,8 +412,8 @@ animations = [{
 "texture": SubResource("AtlasTexture_w2pdh")
 }],
 "loop": true,
-"name": &"walk_right",
-"speed": 5.0
+"name": &"right",
+"speed": 10.0
 }]
 
 [node name="TileMap" type="TileMap"]
@@ -422,21 +425,34 @@ layer_0/tile_data = PackedInt32Array(327692, 65536, 1, 393228, 65536, 1, 458764,
 [node name="Path2D" type="Path2D" parent="."]
 curve = SubResource("Curve2D_1qtef")
 
+[node name="PathIndex" parent="Path2D" instance=ExtResource("2_mv7sc")]
+position = Vector2(399.336, 145.902)
+
+[node name="PathIndex2" parent="Path2D" instance=ExtResource("2_mv7sc")]
+position = Vector2(3, 147.8)
+metadata/direction = "right"
+
+[node name="PathIndex3" parent="Path2D" instance=ExtResource("2_mv7sc")]
+position = Vector2(398.201, 402.422)
+metadata/direction = "right"
+
+[node name="PathIndex4" parent="Path2D" instance=ExtResource("2_mv7sc")]
+position = Vector2(1306.92, 395)
+metadata/direction = "right"
+
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-position = Vector2(3.40343, 145.902)
+position = Vector2(2.26895, 147.809)
 
-[node name="skeleton" type="Area2D" parent="Path2D/PathFollow2D"]
-position = Vector2(20, 1)
-script = ExtResource("2_eju0x")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/PathFollow2D/skeleton"]
-position = Vector2(0, -11)
-rotation = -0.00478953
+[node name="Skeleton" type="CharacterBody2D" parent="Path2D/PathFollow2D"]
 scale = Vector2(1.4, 1.4)
+script = ExtResource("3_my3na")
+
+[node name="SkeletonCollider" type="CollisionShape2D" parent="Path2D/PathFollow2D/Skeleton"]
+position = Vector2(-1.28488, 1.36235)
 shape = SubResource("CapsuleShape2D_p5tra")
 
-[node name="SkeletonAnimator" type="AnimatedSprite2D" parent="Path2D/PathFollow2D/skeleton"]
-position = Vector2(0, -18)
-rotation = -0.00478953
+[node name="SkeletonAnimator" type="AnimatedSprite2D" parent="Path2D/PathFollow2D/Skeleton"]
+position = Vector2(-2.90555, -3.40569)
+scale = Vector2(0.725293, 0.657342)
 sprite_frames = SubResource("SpriteFrames_wlojk")
-animation = &"walk_right"
+animation = &"right"
