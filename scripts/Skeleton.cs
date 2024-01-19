@@ -5,7 +5,8 @@ using System.Security.Cryptography.X509Certificates;
 
 public partial class Skeleton : Enemy
 {
-	public float speedRatio = 0.001f;
+	public float defaultSpeedRatio = 0.0009f;
+	public float slowSpeedRatio = 0.0001f;
 	public string name = "skeleton";
 	public float health = 100.0f;
 
@@ -17,7 +18,7 @@ public partial class Skeleton : Enemy
 
 	public override void _PhysicsProcess(double delta)
 	{
-		AnimateEnemy(speedRatio);
+		AnimateEnemy(defaultSpeedRatio, slowSpeedRatio);
 	}
 
 }

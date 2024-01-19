@@ -7,6 +7,7 @@ public partial class PathIndex : Area2D
 {
 	public string indexDirection;
     public bool active;
+    public bool stopAnimation;
 
 	public override void _Ready()
 	{
@@ -16,6 +17,7 @@ public partial class PathIndex : Area2D
 	private void OnEnter(Enemy enemy)
     {
         active = true;
+        enemy.direction = indexDirection;
     }
 
     // Called when another body exits the area

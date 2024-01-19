@@ -269,12 +269,13 @@ sources/0 = SubResource("TileSetAtlasSource_3ibrm")
 
 [sub_resource type="Curve2D" id="Curve2D_1qtef"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 3.40343, 145.902, 0, 0, 0, 0, 47.8521, 144.969, 0, 0, 0, 0, 392.529, 145.902, 0, 0, 0, 0, 408.411, 397.654, 0, 0, 0, 0, 1318.26, 396.701)
+"points": PackedVector2Array(0, 0, 0, 0, 2.26895, 147.809, 0, 0, 0, 0, 400.47, 147.809, 0, 0, 0, 0, 398.201, 398.608, 0, 0, 0, 0, 1306.92, 396.701)
 }
-point_count = 5
+point_count = 4
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p5tra"]
-radius = 8.40865
+radius = 1.36235
+height = 2.7247
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_eic35"]
 atlas = ExtResource("3_6i31u")
@@ -380,7 +381,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"down",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -412,7 +413,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"right",
-"speed": 5.0
+"speed": 10.0
 }]
 
 [node name="TileMap" type="TileMap"]
@@ -425,31 +426,33 @@ layer_0/tile_data = PackedInt32Array(327692, 65536, 1, 393228, 65536, 1, 458764,
 curve = SubResource("Curve2D_1qtef")
 
 [node name="PathIndex" parent="Path2D" instance=ExtResource("2_mv7sc")]
-position = Vector2(409.546, 171.649)
+position = Vector2(399.336, 145.902)
 
 [node name="PathIndex2" parent="Path2D" instance=ExtResource("2_mv7sc")]
-position = Vector2(5.67238, 143.041)
+position = Vector2(3, 147.8)
 metadata/direction = "right"
 
 [node name="PathIndex3" parent="Path2D" instance=ExtResource("2_mv7sc")]
-position = Vector2(392.529, 446.288)
+position = Vector2(398.201, 402.422)
+metadata/direction = "right"
+
+[node name="PathIndex4" parent="Path2D" instance=ExtResource("2_mv7sc")]
+position = Vector2(1306.92, 395)
 metadata/direction = "right"
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
-position = Vector2(3.40343, 145.902)
-rotation = -0.020997
+position = Vector2(2.26895, 147.809)
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="Path2D/PathFollow2D"]
+[node name="Skeleton" type="CharacterBody2D" parent="Path2D/PathFollow2D"]
 scale = Vector2(1.4, 1.4)
 script = ExtResource("3_my3na")
 
-[node name="SkeletonCollider" type="CollisionShape2D" parent="Path2D/PathFollow2D/CharacterBody2D"]
+[node name="SkeletonCollider" type="CollisionShape2D" parent="Path2D/PathFollow2D/Skeleton"]
+position = Vector2(-1.28488, 1.36235)
 shape = SubResource("CapsuleShape2D_p5tra")
 
-[node name="SkeletonAnimator" type="AnimatedSprite2D" parent="Path2D/PathFollow2D/CharacterBody2D"]
-position = Vector2(0, -5)
+[node name="SkeletonAnimator" type="AnimatedSprite2D" parent="Path2D/PathFollow2D/Skeleton"]
+position = Vector2(-2.90555, -3.40569)
 scale = Vector2(0.725293, 0.657342)
 sprite_frames = SubResource("SpriteFrames_wlojk")
 animation = &"right"
-frame = 7
-frame_progress = 0.890842

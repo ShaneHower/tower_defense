@@ -2,16 +2,20 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 
 public partial class Enemy : CharacterBody2D
 {
 	private Path2D path;
 	private PathFollow2D pathFollow;
 	private AnimatedSprite2D animator;
-	private List<Node2D> pathIndices = new List<Node2D>();
 
 	public float defaultRotation = 0.0f;
 	public float downRotation = -90.0f;
+	public bool slowDown = false;
+	public string direction;
 
 	// Called when the node enters the scene tree for the first time.
 	public void InitializeEnemy()
@@ -22,46 +26,14 @@ public partial class Enemy : CharacterBody2D
 
 		// The path parent have to pull from further into the tree.
 		path = pathFollow.GetParent<Path2D>();
-
-		// Get all of the path indices on the map.  We use this to change animations.
-		GetPathIndices();
 	}
 
-	public void AnimateEnemy(float speedRatio)
+	public void AnimateEnemy(float defaultSpeedRatio, float slowSpeedRatio)
 	{
-		Animate();
-		pathFollow.ProgressRatio += speedRatio;
+		animator.Play(direction);
+		RotationDegrees = direction == "down" ? downRotation : defaultRotation;
+		pathFollow.ProgressRatio += defaultSpeedRatio;
 	}
 
-	public void GetPathIndices()
-	{
-		foreach(Node2D child in path.GetChildren())
-		{
-			if(child.HasMeta("tag"))
-			{
-				String tag = child.GetMeta("tag").ToString();
-				if (tag == "path_index")
-				{
-					pathIndices.Add(child);
-				}
-			}
-		}
-	}
-
-	public void Animate()
-	{
-		foreach(Node2D index in pathIndices)
-		{
-			GD.Print(RotationDegrees);
-            PathIndex pathIndex = index.GetNode<PathIndex>($"/root/TileMap/Path2D/{index.Name}");
-            if(pathIndex.active)
-            {
-				string direction = pathIndex.indexDirection;
-				RotationDegrees = direction == "down" ? downRotation : defaultRotation;
-                animator.Play(direction);
-            }
-
-		}
-	}
 
 }
