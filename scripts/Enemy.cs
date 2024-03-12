@@ -16,13 +16,15 @@ public partial class Enemy : CharacterBody2D
 	public float downRotation = -90.0f;
 	public bool slowDown = false;
 	public string direction;
+	public bool targeted;
+	public int targetOrder;
 
 	// Called when the node enters the scene tree for the first time.
 	public void InitializeEnemy()
 	{
 		// Direct parent and decendents.
 		pathFollow = GetParent<PathFollow2D>();
-		animator = GetNode<AnimatedSprite2D>("SkeletonAnimator");
+		animator = GetNode<AnimatedSprite2D>("Animator");
 
 		// The path parent have to pull from further into the tree.
 		path = pathFollow.GetParent<Path2D>();
@@ -31,7 +33,7 @@ public partial class Enemy : CharacterBody2D
 	public void AnimateEnemy(float defaultSpeedRatio, float slowSpeedRatio)
 	{
 		animator.Play(direction);
-		RotationDegrees = direction == "down" ? downRotation : defaultRotation;
+		// RotationDegrees = direction == "down" ? downRotation : defaultRotation;
 		pathFollow.ProgressRatio += defaultSpeedRatio;
 	}
 
