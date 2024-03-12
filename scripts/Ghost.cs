@@ -1,13 +1,8 @@
-using Godot;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-
-public partial class Skeleton : Enemy
+public partial class Ghost : Enemy
 {
-	public float defaultSpeedRatio = 0.0006f;
+	public float defaultSpeedRatio = 0.001f;
 	public float slowSpeedRatio = 0.0001f;
-	public string name = "skeleton";
+	public string name = "ghost";
 	public float health = 100.0f;
 
 	// Called when the node enters the scene tree for the first time.
