@@ -1,9 +1,6 @@
 using Godot;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.Linq;
-using System.Threading.Tasks;
 
 public partial class Tower : Node
 {
@@ -11,13 +8,14 @@ public partial class Tower : Node
 	public float projectileSpeed = 100f;
 	public float attackSpeed = 1.0f;
 	public bool canFire = true;
+	public Projectile proj_instance;
 	private Dictionary<int, Enemy> targetEnemies = new Dictionary<int, Enemy>();
-	Projectile proj_instance;
+	private int targetOrder;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-
+		targetOrder = 0;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -55,7 +53,8 @@ public partial class Tower : Node
 	private void OnEnter(Enemy enemy)
     {
 		enemy.targeted = true;
-		enemy.targetOrder = targetEnemies.Count + 1;
+		targetOrder += 1;
+		enemy.targetOrder = targetOrder;
 		GD.Print($"{enemy.Name} Entered Attack Zone: {enemy.targetOrder}");
 		targetEnemies.Add(enemy.targetOrder, enemy);
     }
