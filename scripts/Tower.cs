@@ -11,7 +11,7 @@ public partial class Tower : Node
 	public float projectileSpeed = 100f;
 	public float attackSpeed = 1.0f;
 	public bool canFire = true;
-	private List<Enemy> targetEnemies = new List<Enemy>();
+	private Dictionary<int, Enemy> targetEnemies = new Dictionary<int, Enemy>();
 	Projectile proj_instance;
 
 	// Called when the node enters the scene tree for the first time.
@@ -23,14 +23,16 @@ public partial class Tower : Node
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		AttackTarget(delta);
+		AttackTarget();
 	}
 
-	private async void AttackTarget(double delta)
+	private async void AttackTarget()
 	{
 		if(targetEnemies.Count > 0)
 		{
-			Enemy target = targetEnemies.First();
+			List<int> keys = new List<int>(targetEnemies.Keys);
+			int minKey = keys.Min();
+			Enemy target = targetEnemies[minKey];
 
 			if(canFire)
 			{
@@ -54,16 +56,17 @@ public partial class Tower : Node
     {
 		enemy.targeted = true;
 		enemy.targetOrder = targetEnemies.Count + 1;
-		targetEnemies.Add(enemy);
+		GD.Print($"{enemy.Name} Entered Attack Zone: {enemy.targetOrder}");
+		targetEnemies.Add(enemy.targetOrder, enemy);
     }
 
     // Called when another body exits the area
     private void OnExit(Enemy enemy)
     {
-		// Where should target order be stored?  Technically an enemy shouldn't know what order they are in
-		// the list.  If OOO is real life, a skeleton wouldn't know how he is being targeted, just that he is targeted.
+		// For now I'm treating this like a stack, first in first out.
 		enemy.targeted = false;
-		targetEnemies.RemoveAt(enemy.targetOrder  - 1);
+		GD.Print($"{enemy.Name} Leaving Attack Zone: {enemy.targetOrder}");
+		targetEnemies.Remove(enemy.targetOrder);
     }
 
 }

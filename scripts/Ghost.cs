@@ -1,3 +1,5 @@
+using Godot;
+
 public partial class Ghost : Enemy
 {
 	public float speed = 0.06f;
@@ -6,7 +8,7 @@ public partial class Ghost : Enemy
 	public override void _Ready()
 	{
 	 	InitializeEnemy();
-		health = 100.0f;
+		health = 40.0f;
 		name = "ghost";
 	}
 

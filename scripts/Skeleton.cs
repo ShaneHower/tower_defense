@@ -1,3 +1,5 @@
+using Godot;
+
 public partial class Skeleton : Enemy
 {
 	public float speed = 0.045f;

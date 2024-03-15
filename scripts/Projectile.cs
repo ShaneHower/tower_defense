@@ -7,6 +7,7 @@ public partial class Projectile : CharacterBody2D
 	public string name;
 	public Enemy target;
 	public float speed;
+	public float damage = 20;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -31,10 +32,11 @@ public partial class Projectile : CharacterBody2D
 			{
 				// I'm anticipating hoards of enemies, I don't want a projectile to hit an enemy that is not
 				// the original target.  If only deal damage and kill the projectile by target order, I should
-				// avoid this issue. 
+				// avoid this issue.
 				Enemy collided_enemy = (Enemy)collided_node;
 				if(collided_enemy.targetOrder == target.targetOrder)
 				{
+					target.hitByProjectile(damage);
 					QueueFree();
 				}
 			}

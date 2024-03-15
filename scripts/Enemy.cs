@@ -34,16 +34,17 @@ public partial class Enemy : CharacterBody2D
 
 	public void animateDeath()
 	{
-		GD.Print("Dead");
+		QueueFree();
 	}
 
-	public void hitByProjectile(float health, float damage)
+	public void hitByProjectile(float damage)
 	{
-		health = (health - damage);
-		if(health < 0)
+		health = health - damage;
+		if(health <= 0)
 		{
 			animateDeath();
 		}
+
 
 	}
 
