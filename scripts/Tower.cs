@@ -1,16 +1,18 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Threading.Tasks;
 
 public partial class Tower : Node
 {
 	public PackedScene projectile;
-	public float projectileSpeed = 0.1f;
+	public float projectileSpeed = 100f;
 	public float attackSpeed = 1.0f;
 	public bool canFire = true;
 	private List<Enemy> targetEnemies = new List<Enemy>();
+	Projectile proj_instance;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -32,24 +34,19 @@ public partial class Tower : Node
 
 			if(canFire)
 			{
-				GD.Print("Attack!");
 				canFire = false;
 				// Instantiate projectile
 				projectile = GD.Load<PackedScene>("res://prefabs/arrow.tscn");
-				var instance = projectile.Instantiate();
-				AddChild(instance);
-
-				GD.Print(instance.Name);
-				// I need a projectile script
-				// var dir = (target.GlobalPosition - instance.GlobalPosition).Normalize();
-				// instance.GlobalRotation = dir.Angle() + Math.PI / 2.0f;
-				// instance.direction = dir;
-				// Move object
+				proj_instance = (Projectile) projectile.Instantiate();
+				AddChild(proj_instance);
+				proj_instance.target = target;
+				proj_instance.speed = projectileSpeed;
 
 				// Wait out the attack speed
 				await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
 				canFire = true;
 			}
+
 		}
 	}
 

@@ -1,7 +1,4 @@
 using Godot;
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 public partial class PathIndex : Area2D
 {

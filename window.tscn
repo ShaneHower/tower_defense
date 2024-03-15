@@ -329,10 +329,6 @@ _data = {
 }
 point_count = 4
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p5tra"]
-radius = 1.36235
-height = 2.7247
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_vivxr"]
 atlas = ExtResource("6_rqe36")
 region = Rect2(0, 0, 24, 24)
@@ -524,9 +520,9 @@ animations = [{
 "speed": 6.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nfyvd"]
-radius = 8.83958
-height = 17.6792
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_p5tra"]
+radius = 5.98807
+height = 15.9187
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kh53e"]
 atlas = ExtResource("7_tlkg2")
@@ -719,6 +715,10 @@ animations = [{
 "speed": 6.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_nfyvd"]
+radius = 8.32441
+height = 16.6488
+
 [node name="TileMap" type="TileMap"]
 scale = Vector2(1.25371, 1.01832)
 tile_set = SubResource("TileSet_qr06h")
@@ -759,40 +759,44 @@ metadata/direction = "right"
 position = Vector2(1306.92, 395)
 metadata/direction = "right"
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+[node name="Skeleton" type="PathFollow2D" parent="Path2D"]
 position = Vector2(-1.59526, 157.122)
 rotation = -0.00247216
 rotates = false
 loop = false
 
-[node name="Skeleton" type="CharacterBody2D" parent="Path2D/PathFollow2D"]
+[node name="Skeleton" type="CharacterBody2D" parent="Path2D/Skeleton"]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("3_my3na")
 
-[node name="Collider" type="CollisionShape2D" parent="Path2D/PathFollow2D/Skeleton"]
-position = Vector2(-1.28488, 1.36235)
-shape = SubResource("CapsuleShape2D_p5tra")
-
-[node name="Animator" type="AnimatedSprite2D" parent="Path2D/PathFollow2D/Skeleton"]
+[node name="Animator" type="AnimatedSprite2D" parent="Path2D/Skeleton/Skeleton"]
 scale = Vector2(0.807, 1)
 sprite_frames = SubResource("SpriteFrames_wlojk")
 animation = &"right"
 
-[node name="PathFollow2D2" type="PathFollow2D" parent="Path2D"]
+[node name="Collider" type="CollisionShape2D" parent="Path2D/Skeleton/Skeleton"]
+shape = SubResource("CapsuleShape2D_p5tra")
+
+[node name="Ghost" type="PathFollow2D" parent="Path2D"]
 position = Vector2(-0.13526, 157.122)
 rotation = -0.00247216
 h_offset = 1.46
 rotates = false
 loop = false
 
-[node name="Ghost" type="CharacterBody2D" parent="Path2D/PathFollow2D2"]
+[node name="Ghost" type="CharacterBody2D" parent="Path2D/Ghost"]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("11_fhmba")
 
-[node name="Collision" type="CollisionShape2D" parent="Path2D/PathFollow2D2/Ghost"]
-shape = SubResource("CapsuleShape2D_nfyvd")
-
-[node name="Animator" type="AnimatedSprite2D" parent="Path2D/PathFollow2D2/Ghost"]
+[node name="Animator" type="AnimatedSprite2D" parent="Path2D/Ghost/Ghost"]
 sprite_frames = SubResource("SpriteFrames_1yxwd")
 animation = &"down"
+
+[node name="Collision" type="CollisionShape2D" parent="Path2D/Ghost/Ghost"]
+position = Vector2(0.0510862, 0.988907)
+shape = SubResource("CapsuleShape2D_nfyvd")
 
 [connection signal="body_entered" from="tower" to="tower" method="OnEnter"]
 [connection signal="body_exited" from="tower" to="tower" method="OnExit"]

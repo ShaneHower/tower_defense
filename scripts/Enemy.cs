@@ -1,10 +1,4 @@
 using Godot;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
 
 public partial class Enemy : CharacterBody2D
 {
@@ -15,6 +9,8 @@ public partial class Enemy : CharacterBody2D
 	public float defaultRotation = 0.0f;
 	public float downRotation = -90.0f;
 	public bool slowDown = false;
+	public float health;
+	public string name;
 	public string direction;
 	public bool targeted;
 	public int targetOrder;
@@ -30,12 +26,25 @@ public partial class Enemy : CharacterBody2D
 		path = pathFollow.GetParent<Path2D>();
 	}
 
-	public void AnimateEnemy(float defaultSpeedRatio, float slowSpeedRatio)
+	public void animateMovement(float delta, float defaultSpeedRatio)
 	{
 		animator.Play(direction);
-		// RotationDegrees = direction == "down" ? downRotation : defaultRotation;
-		pathFollow.ProgressRatio += defaultSpeedRatio;
+		pathFollow.ProgressRatio += defaultSpeedRatio * delta;
 	}
 
+	public void animateDeath()
+	{
+		GD.Print("Dead");
+	}
+
+	public void hitByProjectile(float health, float damage)
+	{
+		health = (health - damage);
+		if(health < 0)
+		{
+			animateDeath();
+		}
+
+	}
 
 }

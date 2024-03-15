@@ -1,24 +1,17 @@
-using Godot;
-using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-
 public partial class Skeleton : Enemy
 {
-	public float defaultSpeedRatio = 0.0006f;
-	public float slowSpeedRatio = 0.0001f;
-	public string name = "skeleton";
-	public float health = 100.0f;
-
+	public float speed = 0.045f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 	 	InitializeEnemy();
+		health = 100.0f;
+		name = "skeleton";
 	}
 
 	public override void _PhysicsProcess(double delta)
 	{
-		AnimateEnemy(defaultSpeedRatio, slowSpeedRatio);
+		animateMovement((float)delta, speed);
 	}
 
 }
