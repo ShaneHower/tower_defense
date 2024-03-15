@@ -1,72 +1,71 @@
 using Godot;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 public partial class Tower : Node
 {
 	public PackedScene projectile;
-	public float projectileSpeed = 0.1f;
+	public float projectileSpeed = 100f;
 	public float attackSpeed = 1.0f;
 	public bool canFire = true;
-	private List<Enemy> targetEnemies = new List<Enemy>();
+	public Projectile proj_instance;
+	private Dictionary<int, Enemy> targetEnemies = new Dictionary<int, Enemy>();
+	private int targetOrder;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-
+		targetOrder = 0;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		AttackTarget(delta);
+		AttackTarget();
 	}
 
-	private async void AttackTarget(double delta)
+	private async void AttackTarget()
 	{
 		if(targetEnemies.Count > 0)
 		{
-			Enemy target = targetEnemies.First();
+			List<int> keys = new List<int>(targetEnemies.Keys);
+			int minKey = keys.Min();
+			Enemy target = targetEnemies[minKey];
 
 			if(canFire)
 			{
-				GD.Print("Attack!");
 				canFire = false;
 				// Instantiate projectile
 				projectile = GD.Load<PackedScene>("res://prefabs/arrow.tscn");
-				var instance = projectile.Instantiate();
-				AddChild(instance);
-
-				GD.Print(instance.Name);
-				// I need a projectile script
-				// var dir = (target.GlobalPosition - instance.GlobalPosition).Normalize();
-				// instance.GlobalRotation = dir.Angle() + Math.PI / 2.0f;
-				// instance.direction = dir;
-				// Move object
+				proj_instance = (Projectile) projectile.Instantiate();
+				AddChild(proj_instance);
+				proj_instance.target = target;
+				proj_instance.speed = projectileSpeed;
 
 				// Wait out the attack speed
 				await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
 				canFire = true;
 			}
+
 		}
 	}
 
 	private void OnEnter(Enemy enemy)
     {
 		enemy.targeted = true;
-		enemy.targetOrder = targetEnemies.Count + 1;
-		targetEnemies.Add(enemy);
+		targetOrder += 1;
+		enemy.targetOrder = targetOrder;
+		GD.Print($"{enemy.Name} Entered Attack Zone: {enemy.targetOrder}");
+		targetEnemies.Add(enemy.targetOrder, enemy);
     }
 
     // Called when another body exits the area
     private void OnExit(Enemy enemy)
     {
-		// Where should target order be stored?  Technically an enemy shouldn't know what order they are in
-		// the list.  If OOO is real life, a skeleton wouldn't know how he is being targeted, just that he is targeted.
+		// For now I'm treating this like a stack, first in first out.
 		enemy.targeted = false;
-		targetEnemies.RemoveAt(enemy.targetOrder  - 1);
+		GD.Print($"{enemy.Name} Leaving Attack Zone: {enemy.targetOrder}");
+		targetEnemies.Remove(enemy.targetOrder);
     }
 
 }

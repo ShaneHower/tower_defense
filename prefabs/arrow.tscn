@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://dw1f66tgx3k01"]
+[gd_scene load_steps=6 format=3 uid="uid://dw1f66tgx3k01"]
 
+[ext_resource type="Script" path="res://scripts/Projectile.cs" id="1_4wr02"]
 [ext_resource type="Texture2D" uid="uid://cq8cu8gkdqq18" path="res://sprites/WEAPON_arrow.png" id="1_ixfvk"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cv78i"]
@@ -18,20 +19,22 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1ewl6"]
-radius = 1.55505
-height = 19.0721
+radius = 0.999996
+height = 20.0
 
 [node name="arrow" type="CharacterBody2D"]
 rotation = -1.5708
 collision_layer = 2
 collision_mask = 2
+script = ExtResource("1_4wr02")
+metadata/name = "arrow"
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(0.353521, 2.29958)
 rotation = 1.5708
 scale = Vector2(0.6, 0.6)
 sprite_frames = SubResource("SpriteFrames_c5w10")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.999993, -2)
 shape = SubResource("CapsuleShape2D_1ewl6")
