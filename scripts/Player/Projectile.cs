@@ -1,4 +1,4 @@
-namespace GameNamespace.Towers
+namespace GameNamespace.Player
 {
 	using Godot;
 	using System;

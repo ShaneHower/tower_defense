@@ -1,4 +1,4 @@
-namespace GameNamespace.Towers
+namespace GameNamespace.Player
 {
 	using Godot;
 	using System.Collections.Generic;
@@ -7,6 +7,7 @@ namespace GameNamespace.Towers
 
 	public partial class Tower : Node
 	{
+		public string projectilePrefab = "res://prefabs/projectiles/arrow.tscn";
 		public PackedScene projectile;
 		public float projectileSpeed = 100f;
 		public float attackSpeed = 1.0f;
@@ -39,7 +40,7 @@ namespace GameNamespace.Towers
 				{
 					canFire = false;
 					// Instantiate projectile
-					projectile = GD.Load<PackedScene>("res://prefabs/arrow.tscn");
+					projectile = GD.Load<PackedScene>(projectilePrefab);
 					proj_instance = (Projectile) projectile.Instantiate();
 					AddChild(proj_instance);
 					proj_instance.target = target;
@@ -58,7 +59,7 @@ namespace GameNamespace.Towers
 			enemy.targeted = true;
 			targetOrder += 1;
 			enemy.targetOrder = targetOrder;
-			GD.Print($"{enemy.Name} Entered Attack Zone: {enemy.targetOrder}");
+			// GD.Print($"{enemy.Name} Entered Attack Zone: {enemy.targetOrder}");
 			targetEnemies.Add(enemy.targetOrder, enemy);
 		}
 
@@ -67,7 +68,7 @@ namespace GameNamespace.Towers
 		{
 			// For now I'm treating this like a stack, first in first out.
 			enemy.targeted = false;
-			GD.Print($"{enemy.Name} Leaving Attack Zone: {enemy.targetOrder}");
+			// GD.Print($"{enemy.Name} Leaving Attack Zone: {enemy.targetOrder}");
 			targetEnemies.Remove(enemy.targetOrder);
 		}
 
