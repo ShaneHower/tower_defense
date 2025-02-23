@@ -1,18 +1,28 @@
-public partial class Slime: Enemy
+namespace GameNamespace.Enemies
 {
-	public float speed = 0.05f;
-
-	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public partial class Slime: Enemy
 	{
-	 	InitializeEnemy();
-		health = 60.0f;
-		name = "slime";
-	}
+		public float speed = 0.05f;
 
-	public override void _PhysicsProcess(double delta)
-	{
-		animateMovement((float)delta, speed);
-	}
+		// Called when the node enters the scene tree for the first time.
+		public override void _Ready()
+		{
+			InitializeEnemy();
+			health = 60.0f;
+			name = "slime";
+		}
 
+		public override async void _PhysicsProcess(double delta)
+		{
+			if (isDead)
+			{
+				await AnimateDeath();
+			}
+			else
+			{
+				AnimateMovement((float)delta, speed);
+			}
+		}
+
+	}
 }

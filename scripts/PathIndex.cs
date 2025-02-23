@@ -1,26 +1,30 @@
-using Godot;
-
-public partial class PathIndex : Area2D
+namespace GameNamespace.Game
 {
-	public string indexDirection;
-    public bool active;
-    public bool stopAnimation;
+    using Godot;
+    using GameNamespace.Enemies;
 
-	public override void _Ready()
-	{
-		indexDirection = (string)GetMeta("direction");
-	}
-
-	private void OnEnter(Enemy enemy)
+    public partial class PathIndex : Area2D
     {
-        active = true;
-        enemy.direction = indexDirection;
-    }
+        public string indexDirection;
+        public bool active;
+        public bool stopAnimation;
 
-    // Called when another body exits the area
-    private void OnExit(Enemy enemy)
-    {
-        active = false;
-    }
+        public override void _Ready()
+        {
+            indexDirection = (string)GetMeta("direction");
+        }
 
+        private void OnEnter(Enemy enemy)
+        {
+            active = true;
+            enemy.direction = indexDirection;
+        }
+
+        // Called when another body exits the area
+        private void OnExit(Enemy enemy)
+        {
+            active = false;
+        }
+
+    }
 }
