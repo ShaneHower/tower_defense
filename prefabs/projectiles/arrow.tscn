@@ -1,17 +1,17 @@
 [gd_scene load_steps=6 format=3 uid="uid://dw1f66tgx3k01"]
 
-[ext_resource type="Texture2D" uid="uid://cq8cu8gkdqq18" path="res://sprites/WEAPON_arrow.png" id="1_ixfvk"]
 [ext_resource type="Script" path="res://scripts/Player/Projectile.cs" id="1_j7wpy"]
+[ext_resource type="Texture2D" uid="uid://bk5c7xk2gxpc5" path="res://sprites/Projectiles-Sheet.png" id="2_5h1xa"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cv78i"]
-atlas = ExtResource("1_ixfvk")
-region = Rect2(774, 99, 43, 11)
+[sub_resource type="AtlasTexture" id="AtlasTexture_g8tbq"]
+atlas = ExtResource("2_5h1xa")
+region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_c5w10"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_cv78i")
+"texture": SubResource("AtlasTexture_g8tbq")
 }],
 "loop": true,
 "name": &"idle",
@@ -19,8 +19,8 @@ animations = [{
 }]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_1ewl6"]
-radius = 0.999996
-height = 20.0
+radius = 2.0
+height = 4.0
 
 [node name="arrow" type="CharacterBody2D"]
 rotation = -1.5708
@@ -36,5 +36,4 @@ sprite_frames = SubResource("SpriteFrames_c5w10")
 animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-0.999993, -2)
 shape = SubResource("CapsuleShape2D_1ewl6")

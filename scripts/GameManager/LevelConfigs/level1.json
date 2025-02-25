@@ -1,6 +1,5 @@
 {
     "levelId": 1,
-    "levelTime": 10,
     "waves": {
         "1": {
             "executeTimer": 1,

@@ -59,7 +59,6 @@ namespace GameNamespace.Player
 			enemy.targeted = true;
 			targetOrder += 1;
 			enemy.targetOrder = targetOrder;
-			// GD.Print($"{enemy.Name} Entered Attack Zone: {enemy.targetOrder}");
 			targetEnemies.Add(enemy.targetOrder, enemy);
 		}
 
@@ -68,7 +67,6 @@ namespace GameNamespace.Player
 		{
 			// For now I'm treating this like a stack, first in first out.
 			enemy.targeted = false;
-			// GD.Print($"{enemy.Name} Leaving Attack Zone: {enemy.targetOrder}");
 			targetEnemies.Remove(enemy.targetOrder);
 		}
 
