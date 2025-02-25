@@ -366,5 +366,11 @@ metadata/direction = "right"
 position = Vector2(1306.92, 395)
 metadata/direction = "right"
 
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 767.0
+offset_bottom = 601.0
+
 [connection signal="body_entered" from="tower" to="tower" method="OnEnter"]
 [connection signal="body_exited" from="tower" to="tower" method="OnExit"]
