@@ -1,4 +1,4 @@
-namespace GameNamespace.Game
+namespace GameNamespace.GameManager
 {
     using Godot;
     using GameNamespace.Enemies;
