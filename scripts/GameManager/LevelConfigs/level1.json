@@ -1,5 +1,6 @@
 {
     "levelId": 1,
+    "levelHealth": 5,
     "waves": {
         "1": [
             {"name": "ghost", "multiplier": "1"},

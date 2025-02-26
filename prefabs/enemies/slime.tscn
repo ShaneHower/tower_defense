@@ -311,23 +311,24 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_xgjnx"]
 radius = 7.63159
 
-[node name="Slime" type="PathFollow2D"]
+[node name="slime" type="PathFollow2D"]
 position = Vector2(-0.13526, 157.122)
 rotation = -0.00520098
 h_offset = 1.46
 rotates = false
 loop = false
 
-[node name="Slime" type="CharacterBody2D" parent="."]
+[node name="slime" type="CharacterBody2D" parent="."]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_xjjei")
 
-[node name="Animator" type="AnimatedSprite2D" parent="Slime"]
+[node name="Animator" type="AnimatedSprite2D" parent="slime"]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ixwve")
 animation = &"death"
 
-[node name="Collision" type="CollisionShape2D" parent="Slime"]
+[node name="Collision" type="CollisionShape2D" parent="slime"]
 position = Vector2(-0.0102725, 1.97438)
 shape = SubResource("CircleShape2D_xgjnx")
 

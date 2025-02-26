@@ -15,6 +15,7 @@ namespace GameNamespace.GameManager
     public class LevelData
     {
         public int levelId { get; set; }
+        public int levelHealth { get; set; }
         public Dictionary<string, List<SpawnData>> waves { get; set; }
     }
 
@@ -33,19 +34,27 @@ namespace GameNamespace.GameManager
         public string enemyPrefabLoc = "res://prefabs/enemies";
         public string levelConfigLoc = "scripts/GameManager/LevelConfigs";
         private LevelData levelData;
-        private Path2D enemyPath;
+        private Control window;
+        private Path2D levelPath;
+        private Button waveButton;
 
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
-            Control window = GetNode<Control>("Control");
-            enemyPath = GetNode<Path2D>("Path2D");
+            window = GetNode<Control>("Control");
+            levelPath = GetNode<Path2D>("Path2D");
+
             ParseLevelConfig();
 
-            UI ui = new UI();
-            Button startButton = ui.CreateButton(window, "start");
-            startButton.Pressed += OnButtonDown;
+            UI ui = new();
+            waveButton = ui.CreateButton(window, $"Start!");
+            waveButton.Pressed += OnButtonDown;
 		}
+
+        public override void _Process(double delta)
+        {
+            GD.Print(GameCoordinator.Instance.activeEnemies.Count);
+        }
 
         private void ParseLevelConfig()
         {
@@ -60,7 +69,6 @@ namespace GameNamespace.GameManager
         {
             // Originally I used a timer to trigger the waves.  This caused enemies to spawn ontop
             // of eachother. Instead I'm staggering the spawn every second.
-
             List<SpawnData> waveData = waves[currentWave];
             foreach(SpawnData spawnData in waveData)
             {
@@ -71,14 +79,17 @@ namespace GameNamespace.GameManager
                     await Task.Delay(1000);
                 }
             }
-
         }
 
 		public void SpawnEnemy(string enemyName)
 		{
 			PackedScene prefab = GD.Load<PackedScene>($"{enemyPrefabLoc}/{enemyName}.tscn");
-			PathFollow2D enemy = (PathFollow2D) prefab.Instantiate();
-            enemyPath.AddChild(enemy);
+			PathFollow2D enemyPathFollow = (PathFollow2D) prefab.Instantiate();
+            levelPath.AddChild(enemyPathFollow);
+            Enemy enemy = enemyPathFollow.GetNode<Enemy>(enemyName);
+
+            // Pass data to the game coordinator
+            GameCoordinator.Instance.activeEnemies.Add(enemy);
 		}
 
         public async void OnButtonDown()
@@ -90,8 +101,8 @@ namespace GameNamespace.GameManager
             }
 
             currentWave = wavesToGo.Min();
+            waveButton.QueueFree();
             await SpawnWave();
-
         }
 
 	}

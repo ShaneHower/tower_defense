@@ -15,12 +15,23 @@ run/main_scene="res://window.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameCoordinator="*res://scripts/GameManager/GameCoordinator.cs"
+
 [display]
 
+window/size/viewport_width=1440
+window/size/viewport_height=810
 window/size/mode=2
-window/stretch/scale=2.5
+window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0
 
 [dotnet]
 
 project/assembly_name="tower_defense"
+
+[rendering]
+
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true
