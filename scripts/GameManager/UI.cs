@@ -12,10 +12,6 @@ public partial class UI : Node
 		int screenWidth = (int)ProjectSettings.GetSetting("display/window/size/viewport_width");
 		int screenHeight = (int)ProjectSettings.GetSetting("display/window/size/viewport_height");
 
-		GD.Print(screenWidth);
-		GD.Print(screenHeight);
-
-
 		PackedScene prefab = GD.Load<PackedScene>($"{uiPrefabLoc}/button.tscn");
 		Button button = (Button) prefab.Instantiate();
 		window.AddChild(button);

@@ -28,32 +28,51 @@ namespace GameNamespace.GameManager
     public partial class Level : Node
 	{
         public int levelId;
+        public int levelHealth;
         public Dictionary<string, List<SpawnData>> waves;
         public List<string> wavesToGo;
-        public string currentWave = null;
+        public string currentWave = "1";
+        public bool waveActive;
         public string enemyPrefabLoc = "res://prefabs/enemies";
         public string levelConfigLoc = "scripts/GameManager/LevelConfigs";
         private LevelData levelData;
         private Control window;
         private Path2D levelPath;
         private Button waveButton;
+        private UI ui;
+        private Area2D endArea;
 
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
             window = GetNode<Control>("Control");
             levelPath = GetNode<Path2D>("Path2D");
+            endArea = levelPath.GetNode<Area2D>("End");
+            ui = new();
 
             ParseLevelConfig();
-
-            UI ui = new();
-            waveButton = ui.CreateButton(window, $"Start!");
-            waveButton.Pressed += OnButtonDown;
+            CreateWaveButton();
 		}
 
         public override void _Process(double delta)
         {
-            GD.Print(GameCoordinator.Instance.activeEnemies.Count);
+            int currentActiveEnemies = GameCoordinator.Instance.activeEnemies.Count;
+
+            if(GameCoordinator.Instance.enemyBreach)
+            {
+                GD.Print($"Breach Num {GameCoordinator.Instance.breachNum}");
+                if (levelHealth <= GameCoordinator.Instance.breachNum)
+                {
+                    GD.Print("GAME OVER");
+                }
+                GameCoordinator.Instance.enemyBreach = false;
+            }
+
+            if(waveActive && currentActiveEnemies == 0)
+            {
+                waveActive = false;
+                CreateWaveButton();
+            }
         }
 
         private void ParseLevelConfig()
@@ -61,12 +80,22 @@ namespace GameNamespace.GameManager
             levelId = (int)GetMeta("levelId");
             string json = File.ReadAllText($"{levelConfigLoc}/level{levelId}.json");
             levelData =  JsonSerializer.Deserialize<LevelData>(json);
+            levelHealth = levelData.levelHealth;
             waves = levelData.waves;
             wavesToGo = waves.Keys.ToList();
         }
 
+        public void CreateWaveButton()
+        {
+            string name = $"Start Wave {currentWave}";
+            waveButton = ui.CreateButton(window, name);
+            waveButton.Pressed += OnButtonDown;
+        }
+
         private async Task SpawnWave()
         {
+            waveActive = true;
+
             // Originally I used a timer to trigger the waves.  This caused enemies to spawn ontop
             // of eachother. Instead I'm staggering the spawn every second.
             List<SpawnData> waveData = waves[currentWave];
@@ -94,15 +123,10 @@ namespace GameNamespace.GameManager
 
         public async void OnButtonDown()
         {
-
-            if(currentWave != null)
-            {
-                wavesToGo.Remove(currentWave);
-            }
-
-            currentWave = wavesToGo.Min();
             waveButton.QueueFree();
             await SpawnWave();
+            wavesToGo.Remove(currentWave);
+            currentWave = wavesToGo.Min();
         }
 
 	}
