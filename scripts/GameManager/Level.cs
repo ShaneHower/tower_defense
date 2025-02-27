@@ -5,62 +5,107 @@ namespace GameNamespace.GameManager
 	using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
+
     using System.Text.Json;
     using System.Threading.Tasks;
+    using System.Transactions;
+
 
     public class LevelData
     {
         public int levelId { get; set; }
-        public Dictionary<string, WaveSpawnData> waves { get; set; }
+        public int levelHealth { get; set; }
+        public Dictionary<string, List<SpawnData>> waves { get; set; }
     }
 
-    public class WaveSpawnData
+    public class SpawnData
     {
-        public List<Dictionary<string, string>> enemies { get; set;}
+        public string name { get; set; }
+        public string multiplier { get; set;}
     }
-
 
     public partial class Level : Node
 	{
         public int levelId;
-        public Dictionary<string, WaveSpawnData> waves;
+        public int levelHealth;
+        public Dictionary<string, List<SpawnData>> waves;
+        public List<string> wavesToGo;
+        public string currentWave = "1";
+        public bool waveActive;
         public string enemyPrefabLoc = "res://prefabs/enemies";
         public string levelConfigLoc = "scripts/GameManager/LevelConfigs";
-        private LevelData level;
-        private Path2D enemyPath;
+        private LevelData levelData;
+        private Control window;
+        private Path2D levelPath;
+        private Button waveButton;
+        private UI ui;
+        private Area2D endArea;
 
 		// Called when the node enters the scene tree for the first time.
-		public override async void _Ready()
+		public override void _Ready()
 		{
-            enemyPath = GetNode<Path2D>("Path2D");
+            window = GetNode<Control>("Control");
+            levelPath = GetNode<Path2D>("Path2D");
+            endArea = levelPath.GetNode<Area2D>("End");
+            ui = new();
+
             ParseLevelConfig();
-            await SpawnWaves();
+            CreateWaveButton();
 		}
+
+        public override void _Process(double delta)
+        {
+            int currentActiveEnemies = GameCoordinator.Instance.activeEnemies.Count;
+
+            if(GameCoordinator.Instance.enemyBreach)
+            {
+                GD.Print($"Breach Num {GameCoordinator.Instance.breachNum}");
+                if (levelHealth <= GameCoordinator.Instance.breachNum)
+                {
+                    GD.Print("GAME OVER");
+                }
+                GameCoordinator.Instance.enemyBreach = false;
+            }
+
+            if(waveActive && currentActiveEnemies == 0)
+            {
+                waveActive = false;
+                CreateWaveButton();
+            }
+        }
 
         private void ParseLevelConfig()
         {
             levelId = (int)GetMeta("levelId");
             string json = File.ReadAllText($"{levelConfigLoc}/level{levelId}.json");
-            level =  JsonSerializer.Deserialize<LevelData>(json);
-            waves = level.waves;
+            levelData =  JsonSerializer.Deserialize<LevelData>(json);
+            levelHealth = levelData.levelHealth;
+            waves = levelData.waves;
+            wavesToGo = waves.Keys.ToList();
         }
 
-        private async Task SpawnWaves()
+        public void CreateWaveButton()
         {
+            string name = $"Start Wave {currentWave}";
+            waveButton = ui.CreateButton(window, name);
+            waveButton.Pressed += OnButtonDown;
+        }
+
+        private async Task SpawnWave()
+        {
+            waveActive = true;
+
             // Originally I used a timer to trigger the waves.  This caused enemies to spawn ontop
             // of eachother. Instead I'm staggering the spawn every second.
-            foreach(var wave in waves)
+            List<SpawnData> waveData = waves[currentWave];
+            foreach(SpawnData spawnData in waveData)
             {
-                foreach(Dictionary<string, string> enemyData in wave.Value.enemies)
+                int multiplier = int.Parse(spawnData.multiplier);
+                for (int i= 1; i <= multiplier; i++)
                 {
-                    string name = enemyData["name"];
-                    int multiplier = int.Parse(enemyData["multiplier"]);
-
-                    for (int i= 1; i <= multiplier; i++)
-                    {
-                        SpawnEnemy(name);
-                        await Task.Delay(1000);
-                    }
+                    SpawnEnemy(spawnData.name);
+                    await Task.Delay(1000);
                 }
             }
         }
@@ -68,9 +113,21 @@ namespace GameNamespace.GameManager
 		public void SpawnEnemy(string enemyName)
 		{
 			PackedScene prefab = GD.Load<PackedScene>($"{enemyPrefabLoc}/{enemyName}.tscn");
-			PathFollow2D enemy = (PathFollow2D) prefab.Instantiate();
-            enemyPath.AddChild(enemy);
+			PathFollow2D enemyPathFollow = (PathFollow2D) prefab.Instantiate();
+            levelPath.AddChild(enemyPathFollow);
+            Enemy enemy = enemyPathFollow.GetNode<Enemy>(enemyName);
+
+            // Pass data to the game coordinator
+            GameCoordinator.Instance.activeEnemies.Add(enemy);
 		}
+
+        public async void OnButtonDown()
+        {
+            waveButton.QueueFree();
+            await SpawnWave();
+            wavesToGo.Remove(currentWave);
+            currentWave = wavesToGo.Min();
+        }
 
 	}
 }

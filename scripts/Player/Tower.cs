@@ -9,7 +9,7 @@ namespace GameNamespace.Player
 	{
 		public string projectilePrefab = "res://prefabs/projectiles/arrow.tscn";
 		public PackedScene projectile;
-		public float projectileSpeed = 100f;
+		public float projectileSpeed = 200f;
 		public float attackSpeed = 1.0f;
 		public bool canFire = true;
 		public Projectile proj_instance;

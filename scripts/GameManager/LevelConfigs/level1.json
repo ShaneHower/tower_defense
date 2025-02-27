@@ -1,29 +1,20 @@
 {
     "levelId": 1,
+    "levelHealth": 5,
     "waves": {
-        "1": {
-            "executeTimer": 1,
-            "enemies": [
-                {"name": "ghost", "multiplier": "1"},
-                {"name": "slime", "multiplier": "1"}
-            ]
-        },
-        "2": {
-            "executeTimer": 3,
-            "enemies": [
-                {"name": "ghost", "multiplier": "2"},
-                {"name": "skeleton", "multiplier": "1"},
-                {"name": "slime", "multiplier": "1"}
-            ]
-        },
-        "3": {
-            "executeTimer": 6,
-            "enemies": [
-                {"name": "ghost", "multiplier": "3"},
-                {"name": "skeleton", "multiplier": "3"},
-                {"name": "slime", "multiplier": "3"}
-            ]
-        }
-
+        "1": [
+            {"name": "ghost", "multiplier": "10"},
+            {"name": "slime", "multiplier": "1"}
+        ],
+        "2": [
+            {"name": "ghost", "multiplier": "2"},
+            {"name": "skeleton", "multiplier": "1"},
+            {"name": "slime", "multiplier": "1"}
+        ],
+        "3": [
+            {"name": "ghost", "multiplier": "3"},
+            {"name": "skeleton", "multiplier": "3"},
+            {"name": "slime", "multiplier": "3"}
+        ]
     }
 }

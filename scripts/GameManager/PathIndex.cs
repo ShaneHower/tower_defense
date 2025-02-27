@@ -18,6 +18,14 @@ namespace GameNamespace.GameManager
         {
             active = true;
             enemy.direction = indexDirection;
+
+            if(Name == "End")
+            {
+                // Remove enemy from active enemies and store ending trigger
+                GameCoordinator.Instance.activeEnemies.Remove(enemy);
+                GameCoordinator.Instance.enemyBreach = true;
+                GameCoordinator.Instance.breachNum++;
+            }
         }
 
         // Called when another body exits the area

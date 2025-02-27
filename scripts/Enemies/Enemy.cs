@@ -45,6 +45,9 @@ namespace GameNamespace.Enemies
 
 			animator.Play("death");
 
+			// Remove the enemy from the coordinator's list of enemies
+			GameCoordinator.Instance.activeEnemies.Remove(this);
+
 			// Wait out the attack speed.  It makes sense that we get frame count, it makes sense that we get the speed at
 			// which the animation plays, but why multiply by 1000? Task.Delay() expects milliseconds while the animation
 			// system works in seconds.
