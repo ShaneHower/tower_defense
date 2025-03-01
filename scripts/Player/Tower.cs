@@ -41,6 +41,7 @@ namespace GameNamespace.Player
 			{
 				towerRange.Visible = false;
 				AttackTarget();
+				GD.Print($"{Name} Can Fire: {canFire}");
 			}
 		}
 
@@ -81,6 +82,7 @@ namespace GameNamespace.Player
 				List<int> keys = new List<int>(targetEnemies.Keys);
 				int minKey = keys.Min();
 				Enemy target = targetEnemies[minKey];
+				GD.Print($"{Name} Enemy Target: {target.Name}");
 
 				if(canFire && !target.isDying)
 				{
