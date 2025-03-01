@@ -1,13 +1,13 @@
-[gd_scene load_steps=17 format=3 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=13 format=3 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://yqe8raauimvm" path="res://sprites/PathAndObjects.png" id="1_lw4ko"]
 [ext_resource type="Texture2D" uid="uid://bystnf2j7c3q1" path="res://sprites/Grass Tileset-Sheet.png" id="2_bapj4"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
 [ext_resource type="Script" path="res://scripts/GameManager/Level.cs" id="3_8pa5w"]
-[ext_resource type="Script" path="res://scripts/Player/Tower.cs" id="3_lv32m"]
 [ext_resource type="Texture2D" uid="uid://bti7gccofiq5j" path="res://sprites/DefaultTower.png" id="4_2mm1c"]
 [ext_resource type="PackedScene" uid="uid://7tdaigeri2si" path="res://prefabs/game_coordinator.tscn" id="4_2xkwv"]
-[ext_resource type="Texture2D" uid="uid://dkaj03bjkourc" path="res://sprites/Main_Character_Portrait.png" id="7_nq2ph"]
+[ext_resource type="PackedScene" uid="uid://b8lugivv75kvq" path="res://prefabs/towers/tower.tscn" id="5_tdpij"]
+[ext_resource type="Script" path="res://scripts/Player/PlayerInterface.cs" id="8_we7ti"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3ibrm"]
 texture = ExtResource("1_lw4ko")
@@ -299,32 +299,13 @@ tile_size = Vector2i(24, 24)
 sources/0 = SubResource("TileSetAtlasSource_3ibrm")
 sources/3 = SubResource("TileSetAtlasSource_fjw6b")
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_bdhud"]
-
 [sub_resource type="Curve2D" id="Curve2D_1qtef"]
 _data = {
 "points": PackedVector2Array(0, 0, 0, 0, -1.59526, 157.122, 0, 0, 0, 0, 376.789, 155.154, 0, 0, 0, 0, 374.518, 396.637, 0, 0, 0, 0, 1413.56, 396.637)
 }
 point_count = 4
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_1c0qf"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_43yor"]
-atlas = ExtResource("7_nq2ph")
-region = Rect2(0, 0, 192, 192)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_k3r0w"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_43yor")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
-[node name="TileMap" type="TileMap"]
+[node name="Level" type="TileMap"]
 texture_filter = 1
 scale = Vector2(1.25371, 1.01832)
 tile_set = SubResource("TileSet_qr06h")
@@ -337,19 +318,8 @@ metadata/levelId = 1
 
 [node name="levelTimer" type="Timer" parent="."]
 
-[node name="tower" type="Area2D" parent="."]
-position = Vector2(461.732, 193.582)
-script = ExtResource("3_lv32m")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="tower"]
-scale = Vector2(9.8, 9.8)
-shape = SubResource("CircleShape2D_bdhud")
-one_way_collision_margin = 0.0
-debug_color = Color(0, 0.607843, 0.662745, 0.419608)
-
-[node name="Sprite2D" type="Sprite2D" parent="tower"]
-texture_filter = 1
-texture = ExtResource("4_2mm1c")
+[node name="tower" parent="." instance=ExtResource("5_tdpij")]
+position = Vector2(455.448, 219.97)
 
 [node name="Path2D" type="Path2D" parent="."]
 position = Vector2(0.0861426, 0.575739)
@@ -371,22 +341,43 @@ metadata/direction = "right"
 position = Vector2(1110.85, 394.665)
 metadata/direction = "right"
 
-[node name="Control" type="Control" parent="."]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 767.0
-offset_bottom = 601.0
+[node name="HUD" type="CanvasLayer" parent="."]
 
-[node name="Area2D" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-scale = Vector2(1, 1)
-shape = SubResource("CircleShape2D_1c0qf")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Area2D"]
+[node name="PlayerHud" type="Control" parent="HUD"]
 texture_filter = 1
-position = Vector2(170.693, 297.549)
-sprite_frames = SubResource("SpriteFrames_k3r0w")
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -590.5
+offset_top = -177.0
+offset_right = 590.5
+grow_horizontal = 2
+grow_vertical = 0
+script = ExtResource("8_we7ti")
 
-[connection signal="body_entered" from="tower" to="tower" method="OnEnter"]
-[connection signal="body_exited" from="tower" to="tower" method="OnExit"]
+[node name="Tower" type="Button" parent="HUD/PlayerHud"]
+layout_mode = 0
+offset_right = 50.0
+offset_bottom = 75.0
+
+[node name="TextureRect" type="TextureRect" parent="HUD/PlayerHud/Tower"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_2mm1c")
+
+[node name="WaveHud" type="Control" parent="HUD"]
+show_behind_parent = true
+custom_minimum_size = Vector2(500, 100)
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2

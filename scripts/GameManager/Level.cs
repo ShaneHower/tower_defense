@@ -36,7 +36,7 @@ namespace GameNamespace.GameManager
         public string enemyPrefabLoc = "res://prefabs/enemies";
         public string levelConfigLoc = "scripts/GameManager/LevelConfigs";
         private LevelData levelData;
-        private Control window;
+        private Control waveHud;
         private Path2D levelPath;
         private Button waveButton;
         private UI ui;
@@ -45,11 +45,16 @@ namespace GameNamespace.GameManager
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
-            window = GetNode<Control>("Control");
+            // Hud nodes
+            CanvasLayer hud = GetNode<CanvasLayer>("HUD");
+            waveHud = hud.GetNode<Control>("WaveHud");
+
+            // Other Nodes
             levelPath = GetNode<Path2D>("Path2D");
             endArea = levelPath.GetNode<Area2D>("End");
             ui = new();
 
+            // Init work
             ParseLevelConfig();
             CreateWaveButton();
 		}
@@ -88,7 +93,7 @@ namespace GameNamespace.GameManager
         public void CreateWaveButton()
         {
             string name = $"Start Wave {currentWave}";
-            waveButton = ui.CreateButton(window, name);
+            waveButton = ui.CreateButton(waveHud, name);
             waveButton.Pressed += OnButtonDown;
         }
 
