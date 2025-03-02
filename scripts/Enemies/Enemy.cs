@@ -18,7 +18,6 @@ namespace GameNamespace.Enemies
 		public string name;
 		public string direction;
 		public bool targeted;
-		public int targetOrder;
 
 		// Called when the node enters the scene tree for the first time.
 		public void InitializeEnemy()

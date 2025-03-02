@@ -4,7 +4,6 @@ namespace GameNamespace.Player
 	using System.Collections.Generic;
 	using System.Linq;
 	using GameNamespace.Enemies;
-    using System.Runtime.Intrinsics;
 
     public partial class Tower : Area2D
 	{
@@ -15,7 +14,8 @@ namespace GameNamespace.Player
 		public bool canFire = true;
 		public bool beingPlaced = false;
 		public Projectile proj_instance;
-		private Dictionary<int, Enemy> targetEnemies = new Dictionary<int, Enemy>();
+
+		private List<Enemy> targetEnemies = new();
 		private int targetOrder;
 		private AnimatedSprite2D animator;
 		private Line2D towerRange;
@@ -54,7 +54,7 @@ namespace GameNamespace.Player
 			// the higher the value of points the smoother the circle
 			float scale = collider.Scale.X;
 			float radius = circleCollider.Radius * scale;
-			int points = 32;
+			int points = 60;
 
 			Line2D circleLine = new();
 			circleLine.Width = 1;
@@ -78,34 +78,42 @@ namespace GameNamespace.Player
 		{
 			if(targetEnemies.Count > 0)
 			{
-				List<int> keys = new List<int>(targetEnemies.Keys);
-				int minKey = keys.Min();
-				Enemy target = targetEnemies[minKey];
+				// Get first element of the list
+				Enemy target = targetEnemies[0];
 
-				if(canFire && !target.isDying)
+				// Sometimes an enemy may have been killed by another tower in this case the tower can get stuck
+				// looking for an enemy that no longer exists.
+				List<Enemy> activeEnemies = GameCoordinator.Instance.activeEnemies;
+				if(activeEnemies.Contains(target))
 				{
-					canFire = false;
-					// Instantiate projectile
-					projectile = GD.Load<PackedScene>(projectilePrefab);
-					proj_instance = (Projectile) projectile.Instantiate();
-					AddChild(proj_instance);
-					proj_instance.target = target;
-					proj_instance.speed = projectileSpeed;
+					if(canFire && !target.isDying)
+					{
+						canFire = false;
 
-					// Wait out the attack speed
-					await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
-					canFire = true;
+						// Instantiate projectile
+						projectile = GD.Load<PackedScene>(projectilePrefab);
+						proj_instance = (Projectile) projectile.Instantiate();
+						AddChild(proj_instance);
+
+						proj_instance.target = target;
+						proj_instance.speed = projectileSpeed;
+
+						// Wait out the attack speed
+						await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
+						canFire = true;
+					}
 				}
-
+				else
+				{
+					targetEnemies.Remove(target);
+				}
 			}
 		}
 
 		private void OnEnter(Enemy enemy)
 		{
 			enemy.targeted = true;
-			targetOrder += 1;
-			enemy.targetOrder = targetOrder;
-			targetEnemies.Add(enemy.targetOrder, enemy);
+			targetEnemies.Add(enemy);
 		}
 
 		// Called when another body exits the area
@@ -113,7 +121,7 @@ namespace GameNamespace.Player
 		{
 			// For now I'm treating this like a stack, first in first out.
 			enemy.targeted = false;
-			targetEnemies.Remove(enemy.targetOrder);
+			targetEnemies.Remove(enemy);
 		}
 
 	}

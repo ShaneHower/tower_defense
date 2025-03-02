@@ -3,13 +3,14 @@
     "levelHealth": 5,
     "waves": {
         "1": [
-            {"name": "ghost", "multiplier": "5"},
-            {"name": "slime", "multiplier": "1"}
+            {"name": "ghost", "multiplier": "3"},
+            {"name": "skeleton", "multiplier": "3"},
+            {"name": "slime", "multiplier": "3"}
         ],
         "2": [
-            {"name": "ghost", "multiplier": "2"},
-            {"name": "skeleton", "multiplier": "1"},
-            {"name": "slime", "multiplier": "1"}
+            {"name": "ghost", "multiplier": "3"},
+            {"name": "skeleton", "multiplier": "3"},
+            {"name": "slime", "multiplier": "3"}
         ],
         "3": [
             {"name": "ghost", "multiplier": "3"},
