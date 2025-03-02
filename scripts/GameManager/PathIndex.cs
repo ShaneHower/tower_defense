@@ -25,6 +25,7 @@ namespace GameNamespace.GameManager
                 GameCoordinator.Instance.activeEnemies.Remove(enemy);
                 GameCoordinator.Instance.enemyBreach = true;
                 GameCoordinator.Instance.breachNum++;
+                enemy.QueueFree();
             }
         }
 
