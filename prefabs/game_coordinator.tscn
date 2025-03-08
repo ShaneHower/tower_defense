@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://7tdaigeri2si"]
 
-[ext_resource type="Script" path="res://scripts/GameManager/GameCoordinator.cs" id="1_nq2ar"]
+[ext_resource type="Script" uid="uid://hqlh5cuk8slq" path="res://scripts/GameManager/GameCoordinator.cs" id="1_nq2ar"]
 
 [node name="GameCoordinator" type="Node2D"]
 scale = Vector2(1, 1)

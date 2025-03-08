@@ -22,10 +22,9 @@ namespace GameNamespace.GameManager
             if(Name == "End")
             {
                 // Remove enemy from active enemies and store ending trigger
-                GameCoordinator.Instance.activeEnemies.Remove(enemy);
                 GameCoordinator.Instance.enemyBreach = true;
                 GameCoordinator.Instance.breachNum++;
-                enemy.QueueFree();
+                enemy.Destroy();
             }
         }
 

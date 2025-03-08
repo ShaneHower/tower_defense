@@ -1,6 +1,5 @@
 namespace GameNamespace.Player
 {
-    using System.Runtime.CompilerServices;
     using GameNamespace.GameManager;
     using Godot;
 
@@ -10,6 +9,8 @@ namespace GameNamespace.Player
 		public Button towerButton;
 		public Tower chosenTower;
 		public bool towerUiActive = false;
+		public bool ruinsHovered = false;
+		public Ruins ruins;
 		private InputEventMouseButton mouseEvent;
 		public string towerPrefabLoc = "res://prefabs/towers";
 
@@ -36,6 +37,10 @@ namespace GameNamespace.Player
 			if(towerUiActive)
 			{
 				chosenTower.GlobalPosition = GetGlobalMousePosition();
+				if(ruinsHovered)
+				{
+					chosenTower.GlobalPosition = ruins.GlobalPosition;
+				}
 			}
         }
 
@@ -51,7 +56,7 @@ namespace GameNamespace.Player
 
 		private void PlaceTower(InputEventMouseButton mouseButton)
 		{
-			if(chosenTower != null)
+			if(chosenTower != null && ruinsHovered)
 			{
 				if(mouseButton.ButtonIndex == MouseButton.Left)
 				{

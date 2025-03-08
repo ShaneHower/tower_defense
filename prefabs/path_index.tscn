@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://wmt2picv8hbi"]
 
-[ext_resource type="Script" path="res://scripts/GameManager/PathIndex.cs" id="1_vvesw"]
+[ext_resource type="Script" uid="uid://dctv7xnq2ssn7" path="res://scripts/GameManager/PathIndex.cs" id="1_vvesw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w8xgk"]
 size = Vector2(3.92188, 3.69627)
