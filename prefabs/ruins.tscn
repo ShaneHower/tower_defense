@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://4yvoxm5c6u73"]
+
+[ext_resource type="Script" uid="uid://chtf46tqqpd71" path="res://scripts/GameManager/Ruins.cs" id="1_5d4fu"]
+[ext_resource type="Texture2D" uid="uid://rmpd3167fjpp" path="res://sprites/Flag.png" id="2_00isa"]
+
+[node name="Ruins1" type="Area2D"]
+script = ExtResource("1_5d4fu")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(-1, -8, -4, -6, -9, -4, -14, 0, -10, 5, -4, 8, 4, 8, 8, 6, 14, 0, 11, -3, 5, -6, 9, -8, 7, -9, 2, -9, 1, -12, -1, -12)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_00isa")

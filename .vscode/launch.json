@@ -7,13 +7,13 @@
         {
             "name": "Run Godot",
             "type": "coreclr",
-            "request": "launch", 
-            "preLaunchTask": "build", 
-            "program": "C:/Users/Shane/Documents/godot/Godot_v4.1.1/godot.exe",
-            "cwd": "${workspaceFolder}", 
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "C:/Users/Shane/Documents/godot/Godot_v4.4/godot.exe",
+            "cwd": "${workspaceFolder}",
             "console": "internalConsole",
-            "stopAtEntry": false, 
-            "args": ["--path", "${workspaceRoot}"] 
+            "stopAtEntry": false,
+            "args": ["--path", "${workspaceRoot}"]
         }
     ]
 }

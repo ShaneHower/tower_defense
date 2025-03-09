@@ -1,6 +1,5 @@
 namespace GameNamespace.Player
 {
-    using System.Runtime.CompilerServices;
     using GameNamespace.GameManager;
     using Godot;
 
@@ -10,6 +9,8 @@ namespace GameNamespace.Player
 		public Button towerButton;
 		public Tower chosenTower;
 		public bool towerUiActive = false;
+		public bool ruinsHovered = false;
+		public Ruins ruins;
 		private InputEventMouseButton mouseEvent;
 		public string towerPrefabLoc = "res://prefabs/towers";
 
@@ -36,6 +37,16 @@ namespace GameNamespace.Player
 			if(towerUiActive)
 			{
 				chosenTower.GlobalPosition = GetGlobalMousePosition();
+				if(ruinsHovered)
+				{
+
+					// This statement is a little long, but its just illustrating that we are pulling the animator from
+					// chosen tower and getting the size.
+					Vector2 towerSpriteSize = chosenTower.animator.SpriteFrames.GetFrameTexture(chosenTower.animator.Animation, 0).GetSize();
+					Vector2 ruinsSpriteSize = ruins.sprite.Texture.GetSize();
+					float yDiff = (towerSpriteSize.Y / 2) - (ruinsSpriteSize.Y / 2);
+					chosenTower.GlobalPosition = ruins.GlobalPosition - new Vector2(0, yDiff);
+				}
 			}
         }
 
@@ -51,12 +62,14 @@ namespace GameNamespace.Player
 
 		private void PlaceTower(InputEventMouseButton mouseButton)
 		{
-			if(chosenTower != null)
+			if(chosenTower != null && ruinsHovered)
 			{
 				if(mouseButton.ButtonIndex == MouseButton.Left)
 				{
 					towerUiActive = false;
 					chosenTower.beingPlaced = false;
+					ruinsHovered = false;
+					ruins.QueueFree();
 				}
 				else if (mouseButton.ButtonIndex == MouseButton.Right)
 				{
