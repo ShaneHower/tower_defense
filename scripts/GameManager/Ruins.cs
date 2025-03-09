@@ -7,12 +7,15 @@ namespace GameNamespace.GameManager
     {
         // Ruins are an Area that can create a tower.
         public PlayerInterface playerHud;
+        public Sprite2D sprite;
 
         public override void _Ready()
         {
             Node level = GetTree().CurrentScene;
             CanvasLayer hud = level.GetNode<CanvasLayer>("HUD");
             playerHud = hud.GetNode<PlayerInterface>("PlayerHud");
+
+            sprite = GetNode<Sprite2D>("Sprite2D");
 
             MouseEntered += OnMouseEnter;
             MouseExited += OnMouseExit;
@@ -22,7 +25,6 @@ namespace GameNamespace.GameManager
         {
             playerHud.ruinsHovered = true;
             playerHud.ruins = this;
-            GD.Print("Mouse over flag");
         }
 
         // Called when another body exits the area
@@ -30,7 +32,6 @@ namespace GameNamespace.GameManager
         {
             playerHud.ruinsHovered = false;
             playerHud.ruins = null;
-            GD.Print("Mouse leaving");
         }
 
 

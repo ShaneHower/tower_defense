@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=17 format=4 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://bystnf2j7c3q1" path="res://sprites/Grass Tileset-Sheet.png" id="2_bapj4"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
@@ -6,9 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://b4vax1jv7edhe" path="res://sprites/Grass Tileset.png" id="3_l2cjk"]
 [ext_resource type="Texture2D" uid="uid://bti7gccofiq5j" path="res://sprites/DefaultTower.png" id="4_2mm1c"]
 [ext_resource type="PackedScene" uid="uid://7tdaigeri2si" path="res://prefabs/game_coordinator.tscn" id="4_2xkwv"]
-[ext_resource type="Script" uid="uid://chtf46tqqpd71" path="res://scripts/GameManager/Ruins.cs" id="8_6usdr"]
+[ext_resource type="PackedScene" uid="uid://4yvoxm5c6u73" path="res://prefabs/ruins.tscn" id="8_cv8km"]
 [ext_resource type="Script" uid="uid://ciko5w7xhyo1r" path="res://scripts/Player/PlayerInterface.cs" id="8_we7ti"]
-[ext_resource type="Texture2D" uid="uid://q5nssn6p4ck1" path="res://sprites/Icons Tileset.png" id="9_6usdr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fjw6b"]
 texture = ExtResource("2_bapj4")
@@ -344,21 +343,6 @@ _data = {
 }
 point_count = 4
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nlt83"]
-atlas = ExtResource("9_6usdr")
-region = Rect2(224, 0, 32, 24)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_tg7ok"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_nlt83")
-}],
-"loop": true,
-"name": &"default",
-"speed": 5.0
-}]
-
 [node name="Level" type="Node2D"]
 script = ExtResource("3_8pa5w")
 metadata/levelId = 1
@@ -456,62 +440,14 @@ metadata/direction = "right"
 
 [node name="levelTimer" type="Timer" parent="."]
 
-[node name="Ruins1" type="Area2D" parent="."]
+[node name="Ruins1" parent="." instance=ExtResource("8_cv8km")]
 position = Vector2(347, 119)
-script = ExtResource("8_6usdr")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Ruins1"]
-sprite_frames = SubResource("SpriteFrames_tg7ok")
+[node name="Ruins2" parent="." instance=ExtResource("8_cv8km")]
+position = Vector2(31, 184)
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ruins1"]
-polygon = PackedVector2Array(-1, -12, -1, -3, -10, 0, -14, 4, -10, 9, -4, 12, 4, 12, 10, 9, 14, 5, 13, 3, 4, -3, 4, -5, 9, -7, 7, -9, 2, -10, 1, -12)
+[node name="Ruins3" parent="." instance=ExtResource("8_cv8km")]
+position = Vector2(354, 417)
 
-[node name="Ruins2" type="Area2D" parent="."]
-position = Vector2(916, 424)
-script = ExtResource("8_6usdr")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Ruins2"]
-sprite_frames = SubResource("SpriteFrames_tg7ok")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ruins2"]
-polygon = PackedVector2Array(-1, -12, -1, -3, -10, 0, -14, 4, -10, 9, -4, 12, 4, 12, 10, 9, 14, 5, 13, 3, 4, -3, 4, -5, 9, -7, 7, -9, 2, -10, 1, -12)
-
-[node name="Ruins3" type="Area2D" parent="."]
-position = Vector2(442, 241)
-script = ExtResource("8_6usdr")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Ruins3"]
-sprite_frames = SubResource("SpriteFrames_tg7ok")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ruins3"]
-polygon = PackedVector2Array(-1, -12, -1, -3, -10, 0, -14, 4, -10, 9, -4, 12, 4, 12, 10, 9, 14, 5, 13, 3, 4, -3, 4, -5, 9, -7, 7, -9, 2, -10, 1, -12)
-
-[node name="Ruins4" type="Area2D" parent="."]
-position = Vector2(367, 412)
-script = ExtResource("8_6usdr")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Ruins4"]
-sprite_frames = SubResource("SpriteFrames_tg7ok")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ruins4"]
-polygon = PackedVector2Array(-1, -12, -1, -3, -10, 0, -14, 4, -10, 9, -4, 12, 4, 12, 10, 9, 14, 5, 13, 3, 4, -3, 4, -5, 9, -7, 7, -9, 2, -10, 1, -12)
-
-[node name="Ruins5" type="Area2D" parent="."]
-position = Vector2(562, 364)
-script = ExtResource("8_6usdr")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Ruins5"]
-sprite_frames = SubResource("SpriteFrames_tg7ok")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ruins5"]
-polygon = PackedVector2Array(-1, -12, -1, -3, -10, 0, -14, 4, -10, 9, -4, 12, 4, 12, 10, 9, 14, 5, 13, 3, 4, -3, 4, -5, 9, -7, 7, -9, 2, -10, 1, -12)
-
-[node name="Ruins6" type="Area2D" parent="."]
-position = Vector2(58, 180)
-script = ExtResource("8_6usdr")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Ruins6"]
-sprite_frames = SubResource("SpriteFrames_tg7ok")
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Ruins6"]
-polygon = PackedVector2Array(-1, -12, -1, -3, -10, 0, -14, 4, -10, 9, -4, 12, 4, 12, 10, 9, 14, 5, 13, 3, 4, -3, 4, -5, 9, -7, 7, -9, 2, -10, 1, -12)
+[node name="Ruins4" parent="." instance=ExtResource("8_cv8km")]
+position = Vector2(444, 218)

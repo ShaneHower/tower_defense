@@ -17,7 +17,7 @@ namespace GameNamespace.Player
 
 		private List<Enemy> targetEnemies = new();
 		private int targetOrder;
-		private AnimatedSprite2D animator;
+		public AnimatedSprite2D animator;
 		private Line2D towerRange;
 
 		// Called when the node enters the scene tree for the first time.

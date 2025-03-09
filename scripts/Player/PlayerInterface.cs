@@ -39,7 +39,13 @@ namespace GameNamespace.Player
 				chosenTower.GlobalPosition = GetGlobalMousePosition();
 				if(ruinsHovered)
 				{
-					chosenTower.GlobalPosition = ruins.GlobalPosition;
+
+					// This statement is a little long, but its just illustrating that we are pulling the animator from
+					// chosen tower and getting the size.
+					Vector2 towerSpriteSize = chosenTower.animator.SpriteFrames.GetFrameTexture(chosenTower.animator.Animation, 0).GetSize();
+					Vector2 ruinsSpriteSize = ruins.sprite.Texture.GetSize();
+					float yDiff = (towerSpriteSize.Y / 2) - (ruinsSpriteSize.Y / 2);
+					chosenTower.GlobalPosition = ruins.GlobalPosition - new Vector2(0, yDiff);
 				}
 			}
         }
@@ -62,6 +68,8 @@ namespace GameNamespace.Player
 				{
 					towerUiActive = false;
 					chosenTower.beingPlaced = false;
+					ruinsHovered = false;
+					ruins.QueueFree();
 				}
 				else if (mouseButton.ButtonIndex == MouseButton.Right)
 				{
