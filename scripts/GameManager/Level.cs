@@ -16,6 +16,7 @@ namespace GameNamespace.GameManager
     {
         public int levelId { get; set; }
         public int levelHealth { get; set; }
+        public int startGold { get; set;}
         public Dictionary<string, List<SpawnData>> waves { get; set; }
     }
 
@@ -29,6 +30,7 @@ namespace GameNamespace.GameManager
 	{
         public int levelId;
         public int levelHealth;
+        public int currentGold;
         public Dictionary<string, List<SpawnData>> waves;
         public List<string> wavesToGo;
         public string currentWave = "1";
@@ -46,17 +48,20 @@ namespace GameNamespace.GameManager
 		public override void _Ready()
 		{
             // Hud nodes
-            CanvasLayer hud = GetNode<CanvasLayer>("HUD");
-            waveHud = hud.GetNode<Control>("WaveHud");
+            ui = GetNode<UI>("HUD");
+            waveHud = ui.waveHud;
 
             // Other Nodes
             levelPath = GetNode<Path2D>("Path2D");
             endArea = levelPath.GetNode<Area2D>("End");
-            ui = new();
+            //ui = new();
 
             // Init work
             ParseLevelConfig();
             CreateWaveButton();
+            ui.UpdateGoldValue(currentGold);
+            ui.UpdateHealthValue(levelHealth);
+            GameCoordinator.Instance.currentGold = currentGold;
 		}
 
         public override void _Process(double delta)
@@ -65,11 +70,13 @@ namespace GameNamespace.GameManager
 
             if(GameCoordinator.Instance.enemyBreach)
             {
-                GD.Print($"Breach Num {GameCoordinator.Instance.breachNum}");
-                if (levelHealth <= GameCoordinator.Instance.breachNum)
+                int breachNum = GameCoordinator.Instance.breachNum;
+                if (levelHealth <= breachNum)
                 {
                     GD.Print("GAME OVER");
                 }
+                int health = levelHealth - breachNum;
+                ui.UpdateHealthValue(health);
                 GameCoordinator.Instance.enemyBreach = false;
             }
 
@@ -77,6 +84,12 @@ namespace GameNamespace.GameManager
             {
                 waveActive = false;
                 CreateWaveButton();
+            }
+
+            if(GameCoordinator.Instance.currentGold != currentGold)
+            {
+                currentGold = GameCoordinator.Instance.currentGold;
+                ui.UpdateGoldValue(currentGold);
             }
         }
 
@@ -86,6 +99,7 @@ namespace GameNamespace.GameManager
             string json = File.ReadAllText($"{levelConfigLoc}/level{levelId}.json");
             levelData =  JsonSerializer.Deserialize<LevelData>(json);
             levelHealth = levelData.levelHealth;
+            currentGold = levelData.startGold;
             waves = levelData.waves;
             wavesToGo = waves.Keys.ToList();
         }
