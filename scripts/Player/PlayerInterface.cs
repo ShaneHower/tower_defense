@@ -1,11 +1,14 @@
 namespace GameNamespace.Player
 {
+    using System.Collections.Generic;
+
     using GameNamespace.GameManager;
     using Godot;
 
     public partial class PlayerInterface : Control
 	{
 		private Level level;
+		private UI ui;
 		public Button towerButton;
 		public Tower chosenTower;
 		public bool towerUiActive = false;
@@ -17,6 +20,7 @@ namespace GameNamespace.Player
 		public override void _Ready()
 		{
 			level = GetTree().Root.GetNode<Level>("Level");
+			ui = GetParent<UI>();
 			towerButton = GetNode<Button>("Tower");
 			towerButton.Pressed += OnButtonDown;
 		}
@@ -52,18 +56,34 @@ namespace GameNamespace.Player
 
         private void OnButtonDown()
 		{
-			int currentGold = GameCoordinator.Instance.currentGold;
-			towerUiActive = true;
+			// I have to generate the prefab in order to get the towers gold value.  I probably want to refactor into
+			// config files at some point so I'm not generating game objects if I don't need them.
 			string towerName = towerButton.Name;
 			PackedScene prefab = GD.Load<PackedScene>($"{towerPrefabLoc}/{towerName.ToLower()}.tscn");
 			chosenTower = (Tower) prefab.Instantiate();
-			level.AddChild(chosenTower);
-			chosenTower.beingPlaced = true;
+			int currentGold = GameCoordinator.Instance.currentGold;
 
 			if(currentGold < chosenTower.gold)
 			{
+				Label warning = ui.SpawnWarning();
+				AddChild(warning);
+				warning.Text = "Not Enough Gold!";
+
+				// Tweens are special objects (stand for between) which can generate a simple animation. This one fades
+				// the text over time until its no longer visible.  This code will then delete the object when the animation
+				// is finished.
+				Tween warningTween = GetTree().CreateTween();
+				warningTween.TweenProperty(warning, "modulate:a", 0.0f, 2.0f);
+				warningTween.TweenCallback(Callable.From(() => warning.QueueFree()));
+
 				chosenTower.QueueFree();
-				GD.Print("NOT ENOUGH GOLD!");
+				chosenTower = null;
+			}
+			else
+			{
+				towerUiActive = true;
+				level.AddChild(chosenTower);
+				chosenTower.beingPlaced = true;
 			}
 		}
 

@@ -47,14 +47,10 @@ namespace GameNamespace.GameManager
 		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
-            // Hud nodes
+            // Nodes
             ui = GetNode<UI>("HUD");
-            waveHud = ui.waveHud;
-
-            // Other Nodes
             levelPath = GetNode<Path2D>("Path2D");
             endArea = levelPath.GetNode<Area2D>("End");
-            //ui = new();
 
             // Init work
             ParseLevelConfig();
@@ -107,7 +103,7 @@ namespace GameNamespace.GameManager
         public void CreateWaveButton()
         {
             string name = $"Start Wave {currentWave}";
-            waveButton = ui.CreateButton(waveHud, name);
+            waveButton = ui.CreateWaveButton(name);
             waveButton.Pressed += OnButtonDown;
         }
 
