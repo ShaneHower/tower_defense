@@ -11,6 +11,7 @@ namespace GameNamespace.Player
 		public PackedScene projectile;
 		public float projectileSpeed = 200f;
 		public float attackSpeed = 1.0f;
+		public int gold = 25;
 		public bool canFire = true;
 		public bool beingPlaced = false;
 		public Projectile proj_instance;

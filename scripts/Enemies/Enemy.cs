@@ -15,6 +15,7 @@ namespace GameNamespace.Enemies
 		public bool isDead = false;
 		public bool isDying = false;
 		public float health;
+		public int gold;
 		public string name;
 		public string direction;
 		public bool targeted;
@@ -50,6 +51,9 @@ namespace GameNamespace.Enemies
 			int framecount = animator.SpriteFrames.GetFrameCount("death");
 			float fps = (float)animator.SpriteFrames.GetAnimationSpeed("death");
 			float animationDuration = framecount / fps;
+
+			// Update the current gold
+			GameCoordinator.Instance.currentGold += gold;
 
 			await Task.Delay((int)animationDuration * 1000);
 			Destroy();

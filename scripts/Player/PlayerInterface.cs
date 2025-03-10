@@ -52,12 +52,19 @@ namespace GameNamespace.Player
 
         private void OnButtonDown()
 		{
+			int currentGold = GameCoordinator.Instance.currentGold;
 			towerUiActive = true;
 			string towerName = towerButton.Name;
 			PackedScene prefab = GD.Load<PackedScene>($"{towerPrefabLoc}/{towerName.ToLower()}.tscn");
 			chosenTower = (Tower) prefab.Instantiate();
 			level.AddChild(chosenTower);
 			chosenTower.beingPlaced = true;
+
+			if(currentGold < chosenTower.gold)
+			{
+				chosenTower.QueueFree();
+				GD.Print("NOT ENOUGH GOLD!");
+			}
 		}
 
 		private void PlaceTower(InputEventMouseButton mouseButton)
@@ -68,6 +75,7 @@ namespace GameNamespace.Player
 				{
 					towerUiActive = false;
 					chosenTower.beingPlaced = false;
+					GameCoordinator.Instance.currentGold -= chosenTower.gold;
 					ruinsHovered = false;
 					ruins.QueueFree();
 				}
