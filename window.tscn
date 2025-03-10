@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=4 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=23 format=4 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://bystnf2j7c3q1" path="res://sprites/Grass Tileset-Sheet.png" id="2_bapj4"]
 [ext_resource type="Script" uid="uid://bexa5owl55003" path="res://scripts/GameManager/UI.cs" id="2_it0lw"]
@@ -8,8 +8,62 @@
 [ext_resource type="Texture2D" uid="uid://b4vax1jv7edhe" path="res://sprites/Grass Tileset.png" id="3_l2cjk"]
 [ext_resource type="Texture2D" uid="uid://bti7gccofiq5j" path="res://sprites/DefaultTower.png" id="4_2mm1c"]
 [ext_resource type="PackedScene" uid="uid://7tdaigeri2si" path="res://prefabs/game_coordinator.tscn" id="4_2xkwv"]
+[ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="6_tg7ok"]
 [ext_resource type="PackedScene" uid="uid://4yvoxm5c6u73" path="res://prefabs/ruins.tscn" id="8_cv8km"]
 [ext_resource type="Script" uid="uid://ciko5w7xhyo1r" path="res://scripts/Player/PlayerInterface.cs" id="8_we7ti"]
+[ext_resource type="Texture2D" uid="uid://b5bitirqubp4s" path="res://sprites/Icons Tileset.png" id="9_6usdr"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nlt83"]
+texture = ExtResource("3_6usdr")
+texture_region_size = Vector2i(24, 24)
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+12:0/0 = 0
+13:0/0 = 0
+14:0/0 = 0
+15:0/0 = 0
+16:0/0 = 0
+17:0/0 = 0
+18:0/0 = 0
+19:0/0 = 0
+20:0/0 = 0
+21:0/0 = 0
+22:0/0 = 0
+23:0/0 = 0
+24:0/0 = 0
+25:0/0 = 0
+26:0/0 = 0
+27:0/0 = 0
+28:0/0 = 0
+29:0/0 = 0
+30:0/0 = 0
+31:0/0 = 0
+32:0/0 = 0
+33:0/0 = 0
+34:0/0 = 0
+35:0/0 = 0
+36:0/0 = 0
+37:0/0 = 0
+38:0/0 = 0
+39:0/0 = 0
+40:0/0 = 0
+41:0/0 = 0
+42:0/0 = 0
+43:0/0 = 0
+44:0/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_tg7ok"]
+tile_size = Vector2i(24, 24)
+sources/1 = SubResource("TileSetAtlasSource_nlt83")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fjw6b"]
 texture = ExtResource("2_bapj4")
