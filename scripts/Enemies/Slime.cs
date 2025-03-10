@@ -10,6 +10,7 @@ namespace GameNamespace.Enemies
 			InitializeEnemy();
 			health = 60.0f;
 			name = "slime";
+			gold = 4;
 		}
 
 		public override async void _PhysicsProcess(double delta)

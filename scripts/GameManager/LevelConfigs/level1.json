@@ -1,6 +1,7 @@
 {
     "levelId": 1,
     "levelHealth": 5,
+    "startGold": 50,
     "waves": {
         "1": [
             {"name": "ghost", "multiplier": "3"},

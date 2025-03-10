@@ -9,6 +9,7 @@ public partial class GameCoordinator : Node
 
     public bool enemyBreach = false;
     public int breachNum = 0;
+    public int currentGold = 0;
 
     public override void _Ready()
     {
