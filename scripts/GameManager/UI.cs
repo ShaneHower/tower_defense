@@ -14,15 +14,15 @@ public partial class UI : CanvasLayer
 		waveHud = GetNode<Control>("WaveHud");
     }
 
-    public Button CreateButton(Control window, string buttonText)
+    public Button CreateWaveButton(string buttonText)
 	{
 		// Get size of window
-		float windowWidth = window.Size.X;
-		float windowHeight = window.Size.Y;
+		float windowWidth = waveHud.Size.X;
+		float windowHeight = waveHud.Size.Y;
 
 		PackedScene prefab = GD.Load<PackedScene>($"{uiPrefabLoc}/button.tscn");
 		Button button = (Button) prefab.Instantiate();
-		window.AddChild(button);
+		waveHud.AddChild(button);
 		button.Text = buttonText;
 
 		float xPos = (windowWidth - button.Size.X) / 2;
@@ -44,5 +44,12 @@ public partial class UI : CanvasLayer
 		Sprite2D health = levelState.GetNode<Sprite2D>("Health");
 		Label healthValue = health.GetNode<Label>("HealthValue");
 		healthValue.Text = amt.ToString();
+	}
+
+	public Label SpawnWarning()
+	{
+		PackedScene prefab = GD.Load<PackedScene>($"{uiPrefabLoc}/warning_label.tscn");
+		Label warning = (Label)prefab.Instantiate();
+		return warning;
 	}
 }
