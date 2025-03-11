@@ -2,18 +2,17 @@ namespace GameNamespace.GameManager
 {
     using GameNamespace.Enemies;
     using Godot;
-	using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
     using System.Text.Json;
     using System.Threading.Tasks;
-    using System.Transactions;
 
 
     public class LevelData
     {
+        // JSON config for level data
         public int levelId { get; set; }
         public int levelHealth { get; set; }
         public int startGold { get; set;}
@@ -22,48 +21,78 @@ namespace GameNamespace.GameManager
 
     public class SpawnData
     {
+        // JSON config for spawn data
         public string name { get; set; }
         public string multiplier { get; set;}
     }
 
+    /// <summary>
+    /// This object is responsible for the level behavior.  Namely it handles
+    ///     1. Spawning enemies
+    ///     2. Tracking level (or player) health and triggering level end game behavior
+    ///     3. Tracking level (or player) gold
+    /// The level class tracks (2) and (3) by reading changes from the GameCoordinator object.  It may seem like we
+    /// should track player health and gold in a player object, but these values are based on the level itself.
+    /// Therefore, I think it makes sense to make this object responsible.
+    /// </summary>
     public partial class Level : Node
 	{
+        // Level meta data
         public int levelId;
         public int levelHealth;
         public int currentGold;
+
+        // Wave data
         public Dictionary<string, List<SpawnData>> waves;
         public List<string> wavesToGo;
         public string currentWave = "1";
         public bool waveActive;
+
+        // File and prefab locations
         public string enemyPrefabLoc = "res://prefabs/enemies";
         public string levelConfigLoc = "scripts/GameManager/LevelConfigs";
-        private LevelData levelData;
-        private Control waveHud;
-        private Path2D levelPath;
-        private Button waveButton;
-        private UI ui;
-        private Area2D endArea;
 
-		// Called when the node enters the scene tree for the first time.
+        // Game objects
+        public Path2D levelPath;
+        public UIControl uiControl;
+        private Control waveHud;
+        private Button waveButton;
+
+		/// <summary>
+        /// This is the first bit of code to run in the scene.  Establishes the base-line health, economy, and wave
+        /// information.  Creates the initial wave button as well.
+        /// </summary>
 		public override void _Ready()
 		{
             // Nodes
-            ui = GetNode<UI>("HUD");
-            levelPath = GetNode<Path2D>("Path2D");
-            endArea = levelPath.GetNode<Area2D>("End");
+            CanvasLayer uiCanvas = GetNode<CanvasLayer>("UICanvas");
+            uiControl = uiCanvas.GetNode<UIControl>("UI");
+            levelPath = GetNode<Path2D>("LevelPath");
 
             // Init work
             ParseLevelConfig();
             CreateWaveButton();
-            ui.UpdateGoldValue(currentGold);
-            ui.UpdateHealthValue(levelHealth);
+            uiControl.UpdateGoldValue(currentGold);
+            uiControl.UpdateHealthValue(levelHealth);
+
             GameCoordinator.Instance.currentGold = currentGold;
+            GameCoordinator.Instance.level = this;
 		}
 
+        /// <summary>
+        /// The level object does three things
+        ///     1. Track the level health. If enemies hit the end node we need to subtract from health.  This is where
+        ///        we will trigger an end game state.
+        ///     2. Handle wave state.  When there are no more enemies on the board, it generates a wave button that
+        ///        will spawn next wave.
+        ///     3. Track the level Gold. Enemy deaths will grant gold, placing towers will remove gold. These objects are
+        ///        updating the Game coordinator when these events trigger. It's this objects job to update that value on
+        ///        the UI.
+        /// </summary>
+        /// <param name="delta"></param>
         public override void _Process(double delta)
         {
-            int currentActiveEnemies = GameCoordinator.Instance.activeEnemies.Count;
-
+            // Track health.
             if(GameCoordinator.Instance.enemyBreach)
             {
                 int breachNum = GameCoordinator.Instance.breachNum;
@@ -72,48 +101,62 @@ namespace GameNamespace.GameManager
                     GD.Print("GAME OVER");
                 }
                 int health = levelHealth - breachNum;
-                ui.UpdateHealthValue(health);
+                uiControl.UpdateHealthValue(health);
                 GameCoordinator.Instance.enemyBreach = false;
             }
 
+            // Track wave state.
+            int currentActiveEnemies = GameCoordinator.Instance.activeEnemies.Count;
             if(waveActive && currentActiveEnemies == 0)
             {
                 waveActive = false;
                 CreateWaveButton();
             }
 
+            // Track gold.
             if(GameCoordinator.Instance.currentGold != currentGold)
             {
                 currentGold = GameCoordinator.Instance.currentGold;
-                ui.UpdateGoldValue(currentGold);
+                uiControl.UpdateGoldValue(currentGold);
             }
         }
 
+        /// <summary>
+        /// We store the level info in a JSON config.  This allows us to easily spin up and fine tune level specifics
+        /// without touching code.
+        /// </summary>
         private void ParseLevelConfig()
         {
             levelId = (int)GetMeta("levelId");
             string json = File.ReadAllText($"{levelConfigLoc}/level{levelId}.json");
-            levelData =  JsonSerializer.Deserialize<LevelData>(json);
+            LevelData levelData =  JsonSerializer.Deserialize<LevelData>(json);
             levelHealth = levelData.levelHealth;
             currentGold = levelData.startGold;
             waves = levelData.waves;
             wavesToGo = waves.Keys.ToList();
         }
 
+        /// <summary>
+        /// This method pings the UI object to create our Wave button.  It then maps it to some custom behavior.
+        /// </summary>
         public void CreateWaveButton()
         {
             string name = $"Start Wave {currentWave}";
-            waveButton = ui.CreateWaveButton(name);
-            waveButton.Pressed += OnButtonDown;
+            waveButton = uiControl.CreateWaveButton(name);
+            waveButton.Pressed += OnWaveButton;
         }
 
+        /// <summary>
+        /// This method spawns an enemy every second. There can be multiple instances of an enemy in spawnData.
+        /// For example, we may spawn 3 ghosts one after another.  This is defined as {"name": "ghost", "multiplier": "3"}
+        /// in the JSON config.
+        /// </summary>
+        /// <returns></returns>
         private async Task SpawnWave()
         {
             waveActive = true;
-
-            // Originally I used a timer to trigger the waves.  This caused enemies to spawn ontop
-            // of eachother. Instead I'm staggering the spawn every second.
             List<SpawnData> waveData = waves[currentWave];
+
             foreach(SpawnData spawnData in waveData)
             {
                 int multiplier = int.Parse(spawnData.multiplier);
@@ -127,6 +170,7 @@ namespace GameNamespace.GameManager
 
 		public void SpawnEnemy(string enemyName)
 		{
+            // Spawn a single enemy to the level's path.
 			PackedScene prefab = GD.Load<PackedScene>($"{enemyPrefabLoc}/{enemyName}.tscn");
 			PathFollow2D enemyPathFollow = (PathFollow2D) prefab.Instantiate();
             levelPath.AddChild(enemyPathFollow);
@@ -136,7 +180,7 @@ namespace GameNamespace.GameManager
             GameCoordinator.Instance.activeEnemies.Add(enemy);
 		}
 
-        public async void OnButtonDown()
+        public async void OnWaveButton()
         {
             waveButton.QueueFree();
             await SpawnWave();

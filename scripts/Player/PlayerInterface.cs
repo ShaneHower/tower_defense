@@ -1,26 +1,28 @@
 namespace GameNamespace.Player
 {
-    using System.Collections.Generic;
-
     using GameNamespace.GameManager;
     using Godot;
 
-    public partial class PlayerInterface : Control
+    /// <summary>
+	/// Governs the everything that the player can interact with.
+	/// </summary>
+    public partial class PlayerControl : UIControl
 	{
-		private Level level;
-		private UI ui;
-		public Button towerButton;
-		public Tower chosenTower;
+		// Class vars
 		public bool towerUiActive = false;
 		public bool ruinsHovered = false;
+		public string towerPrefabLoc = "res://prefabs/towers";
+
+		// Game objects
+		private Level level;
+		public Button towerButton;
+		public Tower chosenTower;
 		public Ruins ruins;
 		private InputEventMouseButton mouseEvent;
-		public string towerPrefabLoc = "res://prefabs/towers";
 
 		public override void _Ready()
 		{
 			level = GetTree().Root.GetNode<Level>("Level");
-			ui = GetParent<UI>();
 			towerButton = GetNode<Button>("Tower");
 			towerButton.Pressed += OnButtonDown;
 		}
@@ -36,6 +38,22 @@ namespace GameNamespace.Player
 			}
         }
 
+		/// <summary>
+		/// This governs the behavior for tower placement.  The there is enough gold for the tower, the player has chosen
+		/// a tower to place, now they are dragging a tower to a ruin's location to place it.  When over the ruins, it
+		/// snaps the tower in the valid build location (aligning the bottom of the ruin's sprite with the tower's sprite).
+		///
+		/// An explanation about the algorithm for snapping the tower to the ruins.
+		///     yDiff = (towerSpriteSize.Y / 2) - (ruinsSpriteSize.Y / 2)
+		///
+		/// We have to offset the location of the tower in relation to the size ratio of the tower:ruins. Both sprites
+		/// anchor points are in the center of the image, so when we try to lock the tower in place of the ruin they
+		/// don't line up in a way we would expect (the bottom of the tower is aligned with the bottom of the ruin).
+		/// We have to take half of each object and find the difference between the two in order to shift the tower
+		/// up enough pixels so that they are overlapping at the right location.
+		///
+		/// </summary>
+		/// <param name="delta"></param>
         public override void _Process(double delta)
         {
 			if(towerUiActive)
@@ -43,10 +61,12 @@ namespace GameNamespace.Player
 				chosenTower.GlobalPosition = GetGlobalMousePosition();
 				if(ruinsHovered)
 				{
+					// Get current animation meta data for the tower.
+					string currentAnimation = chosenTower.animator.Animation;
+					SpriteFrames towerSpriteFames = chosenTower.animator.SpriteFrames;
+					Vector2 towerSpriteSize = towerSpriteFames.GetFrameTexture(currentAnimation, 0).GetSize();
 
-					// This statement is a little long, but its just illustrating that we are pulling the animator from
-					// chosen tower and getting the size.
-					Vector2 towerSpriteSize = chosenTower.animator.SpriteFrames.GetFrameTexture(chosenTower.animator.Animation, 0).GetSize();
+					// Calculate tower offset and snap tower to ruins.
 					Vector2 ruinsSpriteSize = ruins.sprite.Texture.GetSize();
 					float yDiff = (towerSpriteSize.Y / 2) - (ruinsSpriteSize.Y / 2);
 					chosenTower.GlobalPosition = ruins.GlobalPosition - new Vector2(0, yDiff);
@@ -54,10 +74,17 @@ namespace GameNamespace.Player
 			}
         }
 
+		/// <summary>
+		/// This method is relatively straight forward, but here is some additional context.  We need to check that
+		/// the there is enough gold to buy the tower.  If there is, we generate the prefab and follow the behavior
+		/// defined in the _Process function.  If it is not we need to generate a message that there isn't enough gold.
+		/// The way that we do this is to use something called Tweens.  Tweens are special objects (stand for between)
+		/// which can generate a simple animation.  In this case, I am generating a warning label, and use a Tween to
+		/// slowly make the label transparent, finally deleting the object once its completely invisible.
+		/// </summary>
         private void OnButtonDown()
 		{
-			// I have to generate the prefab in order to get the towers gold value.  I probably want to refactor into
-			// config files at some point so I'm not generating game objects if I don't need them.
+			// TODO I have to fix this when I get a proper database in place, should only generate prefabs if I'm going to use them.
 			string towerName = towerButton.Name;
 			PackedScene prefab = GD.Load<PackedScene>($"{towerPrefabLoc}/{towerName.ToLower()}.tscn");
 			chosenTower = (Tower) prefab.Instantiate();
@@ -65,13 +92,10 @@ namespace GameNamespace.Player
 
 			if(currentGold < chosenTower.gold)
 			{
-				Label warning = ui.SpawnWarning();
+				Label warning = SpawnWarning();
 				AddChild(warning);
 				warning.Text = "Not Enough Gold!";
 
-				// Tweens are special objects (stand for between) which can generate a simple animation. This one fades
-				// the text over time until its no longer visible.  This code will then delete the object when the animation
-				// is finished.
 				Tween warningTween = GetTree().CreateTween();
 				warningTween.TweenProperty(warning, "modulate:a", 0.0f, 2.0f);
 				warningTween.TweenCallback(Callable.From(() => warning.QueueFree()));
@@ -87,11 +111,16 @@ namespace GameNamespace.Player
 			}
 		}
 
+		/// <summary>
+		/// This method only places the tower if there is a chosen tower that's snapped to a ruin.  Can also delete the
+		/// chosen tower by right clicking.
+		/// </summary>
+		/// <param name="mouseButton"></param>
 		private void PlaceTower(InputEventMouseButton mouseButton)
 		{
-			if(chosenTower != null && ruinsHovered)
+			if(chosenTower != null)
 			{
-				if(mouseButton.ButtonIndex == MouseButton.Left)
+				if(mouseButton.ButtonIndex == MouseButton.Left && ruinsHovered)
 				{
 					towerUiActive = false;
 					chosenTower.beingPlaced = false;

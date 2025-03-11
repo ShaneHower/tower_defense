@@ -2,7 +2,10 @@ using GameNamespace.GameManager;
 using Godot;
 using System;
 
-public partial class UI : CanvasLayer
+/// <summary>
+/// The UI class is responsible for all UI features, buttons, labels, etc.
+/// </summary>
+public partial class UIControl : Control
 {
 	public string uiPrefabLoc = "res://prefabs/ui";
 	public Control levelState;
@@ -21,7 +24,7 @@ public partial class UI : CanvasLayer
 		float windowHeight = waveHud.Size.Y;
 
 		PackedScene prefab = GD.Load<PackedScene>($"{uiPrefabLoc}/button.tscn");
-		Button button = (Button) prefab.Instantiate();
+		Button button = (Button)prefab.Instantiate();
 		waveHud.AddChild(button);
 		button.Text = buttonText;
 

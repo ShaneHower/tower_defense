@@ -2,7 +2,6 @@ namespace GameNamespace.Player
 {
 	using Godot;
 	using System.Collections.Generic;
-	using System.Linq;
 	using GameNamespace.Enemies;
 
     public partial class Tower : Area2D
