@@ -1,6 +1,4 @@
-using GameNamespace.GameManager;
 using Godot;
-using System;
 
 /// <summary>
 /// The UI class is responsible for all UI features, buttons, labels, etc.
