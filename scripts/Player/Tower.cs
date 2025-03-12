@@ -14,11 +14,10 @@ namespace GameNamespace.Player
 		// Class vars
 		public string id;
 		public string name;
-		public float projectileSpeed;
 		public float attackSpeed;
 		public int gold;
 		public float radius;
-		public string projectileName;
+		public string prefab;
 		public string projectilePrefab;
 		public bool canFire = true;
 		public bool beingPlaced = false;
@@ -46,14 +45,16 @@ namespace GameNamespace.Player
 		public void SetVars()
 		{
 			// Ping the game DB for Enemy meta data.
-			TowerData towerData = GameDataBase.Instance.QueryTowerData(id);
-			projectileSpeed = towerData.projectileSpeed;
-			attackSpeed = towerData.attackSpeed;
-			gold = towerData.gold;
-			radius = towerData.radius;
-			name = towerData.name;
-			projectileName = towerData.projectile;
-			projectilePrefab = $"res://prefabs/projectiles/{projectileName}.tscn";
+			TowerData data = GameDataBase.Instance.QueryTowerData(id);
+			attackSpeed = data.attackSpeed;
+			gold = data.gold;
+			radius = data.radius;
+			name = data.name;
+			prefab = data.prefab;
+
+			// Get the projectile prefab
+			ProjectileData projectileData = GameDataBase.Instance.QueryProjectileData(data.projectileId);
+			projectilePrefab = projectileData.prefab;
 		}
 
 		public override void _Process(double delta)
@@ -119,12 +120,10 @@ namespace GameNamespace.Player
 						canFire = false;
 
 						// Instantiate projectile
-						projectile = GD.Load<PackedScene>(projectilePrefab);
+						projectile = GD.Load<PackedScene>($"{GameCoordinator.Instance.projectilePrefabLoc}/{projectilePrefab}");
 						proj_instance = (Projectile) projectile.Instantiate();
 						AddChild(proj_instance);
-
 						proj_instance.target = target;
-						proj_instance.speed = projectileSpeed;
 
 						// Wait out the attack speed
 						await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");

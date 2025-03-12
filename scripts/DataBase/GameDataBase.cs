@@ -8,10 +8,11 @@ namespace GameNamespace.DataBase
     public partial class GameDataBase: Node
     {
         public static GameDataBase Instance { get; private set;}
-        public string configLocation = "scripts/DataBase/configs";
+        public string configLocation = "scripts/DataBase/Configs";
         public Dictionary<string, LevelData> levelData;
         public Dictionary<string, EnemyData> enemyData;
         public Dictionary<string, TowerData> towerData;
+        public Dictionary<string, ProjectileData> projectileData;
 
         public override void _Ready()
         {
@@ -35,6 +36,10 @@ namespace GameNamespace.DataBase
             string towerJson = File.ReadAllText($"{configLocation}/Towers/config.json");
             towerData = JsonSerializer.Deserialize<Dictionary<string, TowerData>>(towerJson);
 
+            // Parse and unload projectile config
+            string projectileJson = File.ReadAllText($"{configLocation}/Projectiles/config.json");
+            projectileData = JsonSerializer.Deserialize<Dictionary<string, ProjectileData>>(projectileJson);
+
             // Parse and unload level config
             string levelJson = File.ReadAllText($"{configLocation}/Levels/config.json");
             levelData = JsonSerializer.Deserialize<Dictionary<string, LevelData>>(levelJson);
@@ -55,6 +60,18 @@ namespace GameNamespace.DataBase
         public TowerData QueryTowerData(string id)
         {
             if(towerData != null && towerData.TryGetValue(id, out TowerData data))
+            {
+                return data;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public ProjectileData QueryProjectileData(string id)
+        {
+            if(projectileData != null && projectileData.TryGetValue(id, out ProjectileData data))
             {
                 return data;
             }

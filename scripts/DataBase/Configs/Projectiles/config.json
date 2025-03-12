@@ -1,0 +1,19 @@
+{
+    "101": {
+        "id": 101,
+        "name": "arrow",
+        "speed": 200.0,
+        "damage": 20.0,
+        "prefab": "arrow.tscn"
+    },
+    "102": {
+        "id": 102,
+        "name": "ice",
+        "speed": 200.0,
+        "damage": 22.0,
+        "effect": "slow",
+        "effectRate": 0.5,
+        "effectDuration": 1.5,
+        "prefab": "ice.tscn"
+    }
+}

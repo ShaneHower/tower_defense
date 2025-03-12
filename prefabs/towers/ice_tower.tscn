@@ -1,0 +1,68 @@
+[gd_scene load_steps=10 format=3 uid="uid://c2jns1o4a7ycv"]
+
+[ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/Player/Tower.cs" id="1_kkew4"]
+[ext_resource type="Texture2D" uid="uid://dbaprek5tr52q" path="res://sprites/IceTowerLv1-Sheet.png" id="2_pacu6"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bdhud"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xvhf2"]
+atlas = ExtResource("2_pacu6")
+region = Rect2(0, 0, 48, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngw7b"]
+atlas = ExtResource("2_pacu6")
+region = Rect2(48, 0, 48, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uabfv"]
+atlas = ExtResource("2_pacu6")
+region = Rect2(96, 0, 48, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cp6rc"]
+atlas = ExtResource("2_pacu6")
+region = Rect2(144, 0, 48, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e7l4m"]
+atlas = ExtResource("2_pacu6")
+region = Rect2(192, 0, 48, 72)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_y27yo"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xvhf2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngw7b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uabfv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cp6rc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e7l4m")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
+[node name="tower" type="Area2D"]
+texture_filter = 1
+script = ExtResource("1_kkew4")
+metadata/towerId = "102"
+
+[node name="Collider" type="CollisionShape2D" parent="."]
+texture_filter = 1
+scale = Vector2(9.8, 9.8)
+shape = SubResource("CircleShape2D_bdhud")
+one_way_collision_margin = 0.0
+debug_color = Color(0, 0.607843, 0.662745, 0.419608)
+
+[node name="Animator" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_y27yo")
+animation = &"idle"
+
+[connection signal="body_entered" from="." to="." method="OnEnter"]
+[connection signal="body_exited" from="." to="." method="OnExit"]

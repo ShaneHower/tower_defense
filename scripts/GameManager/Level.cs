@@ -135,19 +135,24 @@ namespace GameNamespace.GameManager
                 for (int i= 1; i <= multiplier; i++)
                 {
                     // Spawn enemy every second
-                    SpawnEnemy(spawnData.name);
+                    SpawnEnemy(spawnData.enemyId);
                     await Task.Delay(1000);
                 }
             }
         }
 
-		public void SpawnEnemy(string enemyName)
+		public void SpawnEnemy(string enemyId)
 		{
-            // Spawn a single enemy to the level's path.
-			PackedScene prefab = GD.Load<PackedScene>($"{enemyPrefabLoc}/{enemyName}.tscn");
+            // Spawn a single enemy to the level's path. First we need to grab the enemy data.
+            EnemyData enemyData = GameDataBase.Instance.QueryEnemyData(enemyId);
+			PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.enemyPrefabLoc}/{enemyData.prefab}");
 			PathFollow2D enemyPathFollow = (PathFollow2D) prefab.Instantiate();
             levelPath.AddChild(enemyPathFollow);
-            Enemy enemy = enemyPathFollow.GetNode<Enemy>(enemyName);
+
+            // This should maybe be changed in the future.  Currently The parent node isn't holding the script because its
+            // a pathfollow2D node and not a characterbody2D node.  The character body is within the pathfollow2D node so
+            // I have to grab it by name.
+            Enemy enemy = enemyPathFollow.GetNode<Enemy>(enemyData.name);
 
             // Pass data to the game coordinator
             GameCoordinator.Instance.activeEnemies.Add(enemy);
