@@ -51,6 +51,7 @@ animations = [{
 [node name="tower" type="Area2D"]
 texture_filter = 1
 script = ExtResource("1_bcxmp")
+metadata/towerId = "101"
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 texture_filter = 1

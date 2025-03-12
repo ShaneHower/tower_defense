@@ -2,36 +2,60 @@ namespace GameNamespace.Player
 {
 	using Godot;
 	using System.Collections.Generic;
-	using System.Linq;
 	using GameNamespace.Enemies;
+	using GameNamespace.GameManager;
+    using GameNamespace.DataBase;
 
+    /// <summary>
+    /// Basic tower class. Holds high level behavior and meta data about all towers.
+    /// </summary>
     public partial class Tower : Area2D
 	{
-		public string projectilePrefab = "res://prefabs/projectiles/arrow.tscn";
-		public PackedScene projectile;
-		public float projectileSpeed = 200f;
-		public float attackSpeed = 1.0f;
-		public int gold = 25;
+		// Class vars
+		public string id;
+		public string name;
+		public float projectileSpeed;
+		public float attackSpeed;
+		public int gold;
+		public float radius;
+		public string projectileName;
+		public string projectilePrefab;
 		public bool canFire = true;
 		public bool beingPlaced = false;
-		public Projectile proj_instance;
-
 		private List<Enemy> targetEnemies = new();
-		private int targetOrder;
+		private int targetOrder = 0;
+
+		// Game objects
+		public PackedScene projectile;
+		public Projectile proj_instance;
 		public AnimatedSprite2D animator;
 		private Line2D towerRange;
 
-		// Called when the node enters the scene tree for the first time.
 		public override void _Ready()
 		{
+			// Set class vars
+			id = (string)GetMeta("towerId");
+			SetVars();
+
+			// init work
 			animator = GetNode<AnimatedSprite2D>("Animator");
 			animator.Play("idle");
-			targetOrder = 0;
-
 			towerRange = BuildTowerRange();
 		}
 
-		// Called every frame. 'delta' is the elapsed time since the previous frame.
+		public void SetVars()
+		{
+			// Ping the game DB for Enemy meta data.
+			TowerData towerData = GameDataBase.Instance.QueryTowerData(id);
+			projectileSpeed = towerData.projectileSpeed;
+			attackSpeed = towerData.attackSpeed;
+			gold = towerData.gold;
+			radius = towerData.radius;
+			name = towerData.name;
+			projectileName = towerData.projectile;
+			projectilePrefab = $"res://prefabs/projectiles/{projectileName}.tscn";
+		}
+
 		public override void _Process(double delta)
 		{
 			if(beingPlaced)
@@ -45,10 +69,13 @@ namespace GameNamespace.Player
 			}
 		}
 
+        /// <summary>
+		/// This method creates a visible circle representing the tower range.  This is visible when the tower is being
+		/// placed.
+		/// </summary>
+		/// <returns></returns>
 		private Line2D BuildTowerRange()
 		{
-			// All of my tower colliders are circles, but this could be a weak point
-			// as I'm assuming all colliders will be CircleShape2D, this will break otherwise
 			CollisionShape2D collider = GetNode<CollisionShape2D>("Collider");
 			CircleShape2D circleCollider = (CircleShape2D)collider.Shape;
 

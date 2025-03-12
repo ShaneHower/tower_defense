@@ -1,0 +1,11 @@
+{
+    "101": {
+        "id": 101,
+        "name": "tower",
+        "radius": 1.0,
+        "gold": 25,
+        "attackSpeed": 1.0,
+        "projectile": "arrow",
+        "projectileSpeed": 200.0
+    }
+}

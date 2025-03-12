@@ -1,0 +1,23 @@
+{
+    "101": {
+        "id": 101,
+        "name": "ghost",
+        "health": 40.0,
+        "gold": 2,
+        "speed": 0.06
+    },
+    "102": {
+        "id": 102,
+        "name": "slime",
+        "health": 60.0,
+        "gold": 4,
+        "speed": 0.05
+    },
+    "103": {
+        "id": 103,
+        "name": "skeleton",
+        "health": 100.0,
+        "gold": 6,
+        "speed": 0.045
+    }
+}
