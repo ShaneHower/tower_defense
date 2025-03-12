@@ -1,5 +1,7 @@
 namespace GameNamespace.Player
 {
+    using GameNamespace.DataBase;
+
     using GameNamespace.GameManager;
     using Godot;
 
@@ -84,14 +86,13 @@ namespace GameNamespace.Player
 		/// </summary>
         private void OnButtonDown()
 		{
-			// TODO I have to fix this when I get a proper database in place, should only generate prefabs if I'm going to use them.
-			string towerName = towerButton.Name;
-			PackedScene prefab = GD.Load<PackedScene>($"{towerPrefabLoc}/{towerName.ToLower()}.tscn");
-			chosenTower = (Tower) prefab.Instantiate();
-			int currentGold = GameCoordinator.Instance.currentGold;
+			// Get tower data and extract the cost so we can check if the player has enough money to buy the tower.
+			string towerId = (string)towerButton.GetMeta("towerId");
+			TowerData towerData = GameDataBase.Instance.QueryTowerData(towerId);
 
-			if(currentGold < chosenTower.gold)
+			if(GameCoordinator.Instance.currentGold < towerData.gold)
 			{
+				// Flash a warning message that there isn't enough gold.
 				Label warning = SpawnWarning();
 				AddChild(warning);
 				warning.Text = "Not Enough Gold!";
@@ -99,12 +100,12 @@ namespace GameNamespace.Player
 				Tween warningTween = GetTree().CreateTween();
 				warningTween.TweenProperty(warning, "modulate:a", 0.0f, 2.0f);
 				warningTween.TweenCallback(Callable.From(() => warning.QueueFree()));
-
-				chosenTower.QueueFree();
-				chosenTower = null;
 			}
 			else
 			{
+				// Generate the tower prefab.
+				PackedScene prefab = GD.Load<PackedScene>($"{towerPrefabLoc}/{towerData.name.ToLower()}.tscn");
+				chosenTower = (Tower)prefab.Instantiate();
 				towerUiActive = true;
 				level.AddChild(chosenTower);
 				chosenTower.beingPlaced = true;

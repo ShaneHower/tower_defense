@@ -11,10 +11,9 @@ namespace GameNamespace.GameManager
     /// </summary>
     public partial class Ruins : Area2D
     {
-        // The ruins sprite is later used in PlayerInterface
+        // Game objects
         public Sprite2D sprite;
         public PlayerControl playerHud;
-
 
         public override void _Ready()
         {

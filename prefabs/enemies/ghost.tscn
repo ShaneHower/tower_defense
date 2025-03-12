@@ -1,6 +1,6 @@
 [gd_scene load_steps=36 format=3 uid="uid://c00yk2s5rsca1"]
 
-[ext_resource type="Script" uid="uid://dwt3rxlbd5vf4" path="res://scripts/Enemies/Ghost.cs" id="1_o5ad6"]
+[ext_resource type="Script" uid="uid://dtudiok5s4uwj" path="res://scripts/Enemies/Enemy.cs" id="1_3r7sd"]
 [ext_resource type="Texture2D" uid="uid://cet8mo1i2pmnm" path="res://sprites/Death Animation-Sheet.png" id="2_tfuub"]
 [ext_resource type="Texture2D" uid="uid://c7uj6yg04p6so" path="res://sprites/Ghost F-Sheet.png" id="3_3xtn6"]
 [ext_resource type="Texture2D" uid="uid://ytfvtxqq14m2" path="res://sprites/Ghost L-Sheet.png" id="4_2tlhk"]
@@ -238,7 +238,8 @@ loop = false
 [node name="ghost" type="CharacterBody2D" parent="."]
 collision_layer = 3
 collision_mask = 3
-script = ExtResource("1_o5ad6")
+script = ExtResource("1_3r7sd")
+metadata/enemyId = "101"
 
 [node name="Animator" type="AnimatedSprite2D" parent="ghost"]
 texture_filter = 1

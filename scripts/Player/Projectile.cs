@@ -6,13 +6,15 @@ namespace GameNamespace.Player
 
 	public partial class Projectile : Area2D
 	{
+		// Class vars
 		public string name;
-		public Enemy target;
 		public float speed;
 		public float damage = 20;
-		private CollisionShape2D projCollider;
 
-		// Called when the node enters the scene tree for the first time.
+		// Game objects
+		private CollisionShape2D projCollider;
+		public Enemy target;
+
 		public override void _Ready()
 		{
 			projCollider = GetNode<CollisionShape2D>("Collider");
@@ -21,7 +23,6 @@ namespace GameNamespace.Player
 			BodyEntered += OnBodyEntered;
 		}
 
-		// Called every frame. 'delta' is the elapsed time since the previous frame.
 		public override void _Process(double delta)
 		{
 			try

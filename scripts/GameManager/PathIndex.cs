@@ -12,6 +12,7 @@ namespace GameNamespace.GameManager
     /// </summary>
     public partial class PathIndex : Area2D
     {
+        // Class vars
         public string indexDirection;
         public bool active;
         public bool stopAnimation;

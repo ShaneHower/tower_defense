@@ -5,7 +5,10 @@ using Godot;
 /// </summary>
 public partial class UIControl : Control
 {
+	// Class vars
 	public string uiPrefabLoc = "res://prefabs/ui";
+
+	// Game objects
 	public Control levelState;
 	public Control waveHud;
 

@@ -1,30 +1,11 @@
 namespace GameNamespace.GameManager
 {
+    using GameNamespace.DataBase;
     using GameNamespace.Enemies;
     using Godot;
     using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
-
-    using System.Text.Json;
     using System.Threading.Tasks;
-
-
-    public class LevelData
-    {
-        // JSON config for level data
-        public int levelId { get; set; }
-        public int levelHealth { get; set; }
-        public int startGold { get; set;}
-        public Dictionary<string, List<SpawnData>> waves { get; set; }
-    }
-
-    public class SpawnData
-    {
-        // JSON config for spawn data
-        public string name { get; set; }
-        public string multiplier { get; set;}
-    }
 
     /// <summary>
     /// This object is responsible for the level behavior.  Namely it handles
@@ -38,7 +19,7 @@ namespace GameNamespace.GameManager
     public partial class Level : Node
 	{
         // Level meta data
-        public int levelId;
+        public string levelId;
         public int levelHealth;
         public int currentGold;
 
@@ -70,7 +51,9 @@ namespace GameNamespace.GameManager
             levelPath = GetNode<Path2D>("LevelPath");
 
             // Init work
-            ParseLevelConfig();
+            levelId = (string)GetMeta("levelId");
+            SetVars();
+
             CreateWaveButton();
             uiControl.UpdateGoldValue(currentGold);
             uiControl.UpdateHealthValue(levelHealth);
@@ -79,20 +62,26 @@ namespace GameNamespace.GameManager
             GameCoordinator.Instance.level = this;
 		}
 
-        /// <summary>
-        /// The level object does three things
-        ///     1. Track the level health. If enemies hit the end node we need to subtract from health.  This is where
-        ///        we will trigger an end game state.
-        ///     2. Handle wave state.  When there are no more enemies on the board, it generates a wave button that
-        ///        will spawn next wave.
-        ///     3. Track the level Gold. Enemy deaths will grant gold, placing towers will remove gold. These objects are
-        ///        updating the Game coordinator when these events trigger. It's this objects job to update that value on
-        ///        the UI.
-        /// </summary>
-        /// <param name="delta"></param>
+        private void SetVars()
+        {
+            // Ping the game DB for Level meta data.
+            LevelData levelData = GameDataBase.Instance.QueryLevelData((string)GetMeta("levelId"));
+            levelHealth = levelData.levelHealth;
+            currentGold = levelData.startGold;
+            waves = levelData.waves;
+            wavesToGo = waves.Keys.ToList();
+        }
+
         public override void _Process(double delta)
         {
-            // Track health.
+            TrackHealth();
+            TrackWaveState();
+            TrackGold();
+        }
+
+        private void TrackHealth()
+        {
+            // Checks if enemies have hit the end node and subtracts health if so.
             if(GameCoordinator.Instance.enemyBreach)
             {
                 int breachNum = GameCoordinator.Instance.breachNum;
@@ -104,16 +93,22 @@ namespace GameNamespace.GameManager
                 uiControl.UpdateHealthValue(health);
                 GameCoordinator.Instance.enemyBreach = false;
             }
+        }
 
-            // Track wave state.
+        private void TrackWaveState()
+        {
+            // Checks if the wave has been cleared, if so spawns a button for the next wave.
             int currentActiveEnemies = GameCoordinator.Instance.activeEnemies.Count;
             if(waveActive && currentActiveEnemies == 0)
             {
                 waveActive = false;
                 CreateWaveButton();
             }
+        }
 
-            // Track gold.
+        private void TrackGold()
+        {
+            // Checks if we've bought a tower (removing gold) or killed an enemy (added gold)
             if(GameCoordinator.Instance.currentGold != currentGold)
             {
                 currentGold = GameCoordinator.Instance.currentGold;
@@ -121,24 +116,6 @@ namespace GameNamespace.GameManager
             }
         }
 
-        /// <summary>
-        /// We store the level info in a JSON config.  This allows us to easily spin up and fine tune level specifics
-        /// without touching code.
-        /// </summary>
-        private void ParseLevelConfig()
-        {
-            levelId = (int)GetMeta("levelId");
-            string json = File.ReadAllText($"{levelConfigLoc}/level{levelId}.json");
-            LevelData levelData =  JsonSerializer.Deserialize<LevelData>(json);
-            levelHealth = levelData.levelHealth;
-            currentGold = levelData.startGold;
-            waves = levelData.waves;
-            wavesToGo = waves.Keys.ToList();
-        }
-
-        /// <summary>
-        /// This method pings the UI object to create our Wave button.  It then maps it to some custom behavior.
-        /// </summary>
         public void CreateWaveButton()
         {
             string name = $"Start Wave {currentWave}";
@@ -146,22 +123,18 @@ namespace GameNamespace.GameManager
             waveButton.Pressed += OnWaveButton;
         }
 
-        /// <summary>
-        /// This method spawns an enemy every second. There can be multiple instances of an enemy in spawnData.
-        /// For example, we may spawn 3 ghosts one after another.  This is defined as {"name": "ghost", "multiplier": "3"}
-        /// in the JSON config.
-        /// </summary>
-        /// <returns></returns>
         private async Task SpawnWave()
         {
             waveActive = true;
             List<SpawnData> waveData = waves[currentWave];
 
+            // This is an example of spawnData - {"name": "ghost", "multiplier": "3"}
             foreach(SpawnData spawnData in waveData)
             {
                 int multiplier = int.Parse(spawnData.multiplier);
                 for (int i= 1; i <= multiplier; i++)
                 {
+                    // Spawn enemy every second
                     SpawnEnemy(spawnData.name);
                     await Task.Delay(1000);
                 }

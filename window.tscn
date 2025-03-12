@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://bti7gccofiq5j" path="res://sprites/DefaultTower.png" id="4_2mm1c"]
 [ext_resource type="PackedScene" uid="uid://7tdaigeri2si" path="res://prefabs/game_coordinator.tscn" id="4_2xkwv"]
 [ext_resource type="Script" uid="uid://bexa5owl55003" path="res://scripts/GameManager/UIControl.cs" id="5_it0lw"]
-[ext_resource type="Script" path="res://scripts/Player/PlayerControl.cs" id="6_it0lw"]
+[ext_resource type="Script" uid="uid://ciko5w7xhyo1r" path="res://scripts/Player/PlayerControl.cs" id="6_it0lw"]
 [ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="6_tg7ok"]
 [ext_resource type="PackedScene" uid="uid://4yvoxm5c6u73" path="res://prefabs/ruins.tscn" id="8_cv8km"]
 [ext_resource type="Texture2D" uid="uid://b5bitirqubp4s" path="res://sprites/Icons Tileset.png" id="9_6usdr"]
@@ -470,6 +470,7 @@ offset_left = 155.0
 offset_top = 81.0
 offset_right = 205.0
 offset_bottom = 156.0
+metadata/towerId = "101"
 
 [node name="TextureRect" type="TextureRect" parent="UICanvas/UI/PlayerHud/Tower"]
 texture_filter = 1
