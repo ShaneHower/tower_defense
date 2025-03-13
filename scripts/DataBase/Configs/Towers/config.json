@@ -1,11 +1,20 @@
 {
     "101": {
         "id": 101,
-        "name": "tower",
+        "name": "basic",
         "radius": 1.0,
         "gold": 25,
         "attackSpeed": 1.0,
-        "projectile": "arrow",
-        "projectileSpeed": 200.0
+        "prefab": "basic_tower.tscn",
+        "projectileId": "101"
+    },
+    "102": {
+        "id": 102,
+        "name": "ice",
+        "radius": 1.0,
+        "gold": 25,
+        "attackSpeed": 2,
+        "prefab": "ice_tower.tscn",
+        "projectileId": "102"
     }
 }

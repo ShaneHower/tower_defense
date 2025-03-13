@@ -25,8 +25,14 @@ namespace GameNamespace.Player
 		public override void _Ready()
 		{
 			level = GetTree().Root.GetNode<Level>("Level");
-			towerButton = GetNode<Button>("Tower");
-			towerButton.Pressed += OnButtonDown;
+
+			foreach(Node child in GetChildren())
+			{
+				if(child is Button button)
+				{
+					button.Pressed += () => OnButtonDown(button);
+				}
+			}
 		}
 
         public override void _Input(InputEvent @event)
@@ -84,10 +90,10 @@ namespace GameNamespace.Player
 		/// which can generate a simple animation.  In this case, I am generating a warning label, and use a Tween to
 		/// slowly make the label transparent, finally deleting the object once its completely invisible.
 		/// </summary>
-        private void OnButtonDown()
+        private void OnButtonDown(Button pressedButton)
 		{
 			// Get tower data and extract the cost so we can check if the player has enough money to buy the tower.
-			string towerId = (string)towerButton.GetMeta("towerId");
+			string towerId = (string)pressedButton.GetMeta("towerId");
 			TowerData towerData = GameDataBase.Instance.QueryTowerData(towerId);
 
 			if(GameCoordinator.Instance.currentGold < towerData.gold)
@@ -104,7 +110,7 @@ namespace GameNamespace.Player
 			else
 			{
 				// Generate the tower prefab.
-				PackedScene prefab = GD.Load<PackedScene>($"{towerPrefabLoc}/{towerData.name.ToLower()}.tscn");
+				PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.towerPrefabLoc}/{towerData.prefab}");
 				chosenTower = (Tower)prefab.Instantiate();
 				towerUiActive = true;
 				level.AddChild(chosenTower);
@@ -119,7 +125,7 @@ namespace GameNamespace.Player
 		/// <param name="mouseButton"></param>
 		private void PlaceTower(InputEventMouseButton mouseButton)
 		{
-			if(chosenTower != null)
+			if(chosenTower is not null)
 			{
 				if(mouseButton.ButtonIndex == MouseButton.Left && ruinsHovered)
 				{

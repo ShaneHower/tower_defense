@@ -2,22 +2,20 @@
     "1": {
         "levelId": 1,
         "levelHealth": 5,
-        "startGold": 50,
+        "startGold": 55,
         "waves": {
             "1": [
-                {"name": "ghost", "multiplier": "3"},
-                {"name": "skeleton", "multiplier": "3"},
-                {"name": "slime", "multiplier": "3"}
+                {"enemyId": "101", "multiplier": "1"}
             ],
             "2": [
-                {"name": "ghost", "multiplier": "3"},
-                {"name": "skeleton", "multiplier": "3"},
-                {"name": "slime", "multiplier": "3"}
+                {"enemyId": "101", "multiplier": "3"},
+                {"enemyId": "103", "multiplier": "3"},
+                {"enemyId": "102", "multiplier": "3"}
             ],
             "3": [
-                {"name": "ghost", "multiplier": "3"},
-                {"name": "skeleton", "multiplier": "3"},
-                {"name": "slime", "multiplier": "3"}
+                {"enemyId": "101", "multiplier": "3"},
+                {"enemyId": "103", "multiplier": "3"},
+                {"enemyId": "102", "multiplier": "3"}
             ]
         }
     }

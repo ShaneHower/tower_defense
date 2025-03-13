@@ -4,8 +4,11 @@ namespace GameNamespace.Enemies
 	using System.Threading.Tasks;
 	using GameNamespace.GameManager;
 	using GameNamespace.DataBase;
+    using System.Threading;
+    using System;
 
-	public partial class Enemy : CharacterBody2D
+
+    public partial class Enemy : CharacterBody2D
 	{
 		// Class vars
 		public string id;
@@ -20,6 +23,11 @@ namespace GameNamespace.Enemies
 		public float speed;
 		public string direction;
 		public bool targeted;
+		public bool isSlowed = false;
+
+		// Status affect tracking
+		private Task currentSlowTask;
+		private CancellationTokenSource slowCanelTokenSource;
 
 		// Game objects
 		private Path2D path;
@@ -97,6 +105,56 @@ namespace GameNamespace.Enemies
 			{
 				isDead = true;
 			}
+		}
+
+	    /// <summary>
+		/// I learned something new here so lets explain it.  Obviously async tasks are tasks that can happen many times
+		/// over in parallel.  Sometimes there is a task happening that should take precident over every other of it's
+		/// parallel task. In other words, if some behavior X is happening, we want to remove all other previous iterations
+		/// of this task that are still running.  In this case, I want my slow effect to reset it's timer whenever the enemy is
+		/// hit by a new instance of the slow status effect. To do this, we create a cancellation token for the task that
+		/// is tracking the duration of the slow.  So if the enemy is hit again with a slow, it cancels and clears out the
+		/// old cancelation token, and creates a new duration timer (with its own cancellation token).  This timer will
+		/// run for the full duration unless a new instance of slow is applied.
+		/// </summary>
+		/// <param name="slowRate"></param>
+		/// <param name="duration"></param>
+		public async void Slow(float slowRate, float duration)
+		{
+			if (!isSlowed)
+			{
+				isSlowed = true;
+				speed *= 1-slowRate;
+			}
+			else
+			{
+				slowCanelTokenSource?.Cancel();
+				slowCanelTokenSource?.Dispose();
+			}
+
+			slowCanelTokenSource = new CancellationTokenSource();
+			CancellationToken token = slowCanelTokenSource.Token;
+
+			currentSlowTask = Task.Run(async () =>
+			{
+				try
+				{
+					float elapsed = 0;
+					while(elapsed < duration)
+					{
+						await Task.Delay(100, token);
+						elapsed += 0.10f;
+					}
+
+					// Wait time is up
+					speed = GameDataBase.Instance.QueryEnemyData(id).speed;
+					isSlowed = false;
+				}
+				catch (TaskCanceledException)
+				{
+					GD.Print($"[SLOW] Slow effect was cancelled early at Time: {Time.GetTicksMsec()}ms");
+				}
+			});
 		}
 
 	}

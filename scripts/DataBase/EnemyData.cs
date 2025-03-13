@@ -7,6 +7,7 @@ namespace GameNamespace.DataBase
         public float health { get; set; }
         public int gold { get; set; }
         public float speed { get; set; }
+        public string prefab { get; set; }
     }
 
 

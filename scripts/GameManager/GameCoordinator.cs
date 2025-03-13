@@ -16,13 +16,20 @@ namespace GameNamespace.GameManager
         public int breachNum = 0;
         public int currentGold = 0;
 
+        // Prefab locations
+        public string prefabLoc = "res://prefabs";
+        public string enemyPrefabLoc = "res://prefabs/enemies";
+        public string projectilePrefabLoc = "res://prefabs/projectiles";
+        public string towerPrefabLoc = "res://prefabs/towers";
+        public string uiPrefabLoc = "res://prefabs/ui";
+
         /// <summary>
         /// This is a singleton class.  It would be bad if we had more than one, so we force duplicates
         /// to delete if there are any.
         /// </summary>
         public override void _Ready()
         {
-            if(Instance != null)
+            if(Instance is not null)
             {
                 QueueFree();
                 return;

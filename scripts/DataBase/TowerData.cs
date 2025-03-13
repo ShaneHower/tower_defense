@@ -7,8 +7,8 @@ namespace GameNamespace.DataBase
         public float radius { get; set; }
         public int gold { get; set; }
         public float attackSpeed { get; set; }
-        public string projectile { get; set;}
-        public float projectileSpeed { get; set; }
+        public string prefab { get; set; }
+        public string projectileId { get; set;}
     }
 
 }
