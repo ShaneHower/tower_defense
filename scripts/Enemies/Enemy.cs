@@ -24,6 +24,7 @@ namespace GameNamespace.Enemies
 		public string direction;
 		public bool targeted;
 		public bool isSlowed = false;
+		public EnemyData passedData;
 
 		// Status affect tracking
 		private Task currentSlowTask;
@@ -48,8 +49,8 @@ namespace GameNamespace.Enemies
 		}
 		private void SetVars()
 		{
-			// Ping the game DB for Enemy meta data.
-			EnemyData enemyData = GameDataBase.Instance.QueryEnemyData(id);
+			// Either the enemyData was passed on instantiation or we have to pull it from the db.
+			EnemyData enemyData = passedData ?? GameDataBase.Instance.QueryEnemyData(id);
 			speed = enemyData.speed;
 			health = enemyData.health;
 			gold = enemyData.gold;
