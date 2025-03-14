@@ -2,10 +2,12 @@
     "1": {
         "levelId": 1,
         "levelHealth": 5,
-        "startGold": 55,
+        "startGold": 100,
         "waves": {
             "1": [
-                {"enemyId": "101", "multiplier": "1"}
+                {"enemyId": "101", "multiplier": "3"},
+                {"enemyId": "103", "multiplier": "3"},
+                {"enemyId": "102", "multiplier": "3"}
             ],
             "2": [
                 {"enemyId": "101", "multiplier": "3"},

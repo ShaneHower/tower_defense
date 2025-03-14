@@ -11,24 +11,37 @@ namespace GameNamespace.Player
     /// </summary>
     public partial class Tower : Area2D
 	{
-		// Class vars
+		// Data
 		public string id;
+		public string type;
 		public string name;
-		public float attackSpeed;
-		public int gold;
+		public int level;
 		public float radius;
+		public int gold;
+		public float attackSpeed;
 		public string prefab;
-		public string projectilePrefab;
+		public string projectileId;
+		public string attackModifier;
+		public int attackModCounter;
+		public string nextLevelId;
+
+		// Class vars
+		public int attackCounter = 0;
 		public bool canFire = true;
 		public bool beingPlaced = false;
 		private List<Enemy> targetEnemies = new();
 		private int targetOrder = 0;
+		public bool isHovered = false;
 
 		// Game objects
 		public PackedScene projectile;
 		public Projectile proj_instance;
 		public AnimatedSprite2D animator;
 		private Line2D towerRange;
+		private Area2D hoverArea;
+		private Control upgradeControl;
+		private Button upgradeButton;
+		private Level gameLevel;
 
 		public override void _Ready()
 		{
@@ -36,9 +49,20 @@ namespace GameNamespace.Player
 			id = (string)GetMeta("towerId");
 			SetVars();
 
-			// init work
+			// Init work
+			gameLevel = GetTree().Root.GetNode<Level>("Level");
 			animator = GetNode<AnimatedSprite2D>("Animator");
 			animator.Play("idle");
+
+			upgradeControl = GetNode<Control>("UpgradeControl");
+			upgradeButton = upgradeControl.GetNode<Button>("Upgrade");
+			upgradeButton.Pressed += Upgrade;
+
+
+			hoverArea = GetNode<Area2D>("HoverArea");
+			hoverArea.MouseEntered += OnMouseHover;
+			hoverArea.MouseExited += OnMouseLeave;
+
 			towerRange = BuildTowerRange();
 		}
 
@@ -46,15 +70,17 @@ namespace GameNamespace.Player
 		{
 			// Ping the game DB for Enemy meta data.
 			TowerData data = GameDataBase.Instance.QueryTowerData(id);
-			attackSpeed = data.attackSpeed;
-			gold = data.gold;
-			radius = data.radius;
+			type = data.type;
 			name = data.name;
+			level = data.level;
+			radius = data.radius;
+			gold = data.gold;
+			attackSpeed = data.attackSpeed;
 			prefab = data.prefab;
-
-			// Get the projectile prefab
-			ProjectileData projectileData = GameDataBase.Instance.QueryProjectileData(data.projectileId);
-			projectilePrefab = projectileData.prefab;
+			projectileId = data.projectileId;
+			attackModifier = data.attackModifier;
+			attackModCounter = data.attackModCounter;
+			nextLevelId = data.nextLevelId;
 		}
 
 		public override void _Process(double delta)
@@ -62,13 +88,34 @@ namespace GameNamespace.Player
 			if(beingPlaced)
 			{
 				towerRange.Visible = true;
+				hoverArea.Visible = false;
 			}
 			else
 			{
 				towerRange.Visible = false;
-				AttackTarget();
+				hoverArea.Visible = true;
+
+				if(attackCounter * attackModCounter != 0 && attackCounter % attackModCounter == 0)
+				{
+					AttackTarget(attackModifier);
+				}
+				else
+				{
+					AttackTarget(projectileId);
+				}
 			}
 		}
+
+		public override void _Input(InputEvent @event)
+        {
+            if(isHovered && @event is InputEventMouseButton mouseEvent)
+			{
+				if(mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
+				{
+					upgradeControl.Visible = true;
+				}
+			}
+        }
 
         /// <summary>
 		/// This method creates a visible circle representing the tower range.  This is visible when the tower is being
@@ -103,7 +150,7 @@ namespace GameNamespace.Player
 			return circleLine;
 		}
 
-		private async void AttackTarget()
+		private async void AttackTarget(string projectileId)
 		{
 			if(targetEnemies.Count > 0)
 			{
@@ -120,6 +167,9 @@ namespace GameNamespace.Player
 						canFire = false;
 
 						// Instantiate projectile
+						// Get the projectile prefab
+						ProjectileData projectileData = GameDataBase.Instance.QueryProjectileData(projectileId);
+						string projectilePrefab = projectileData.prefab;
 						projectile = GD.Load<PackedScene>($"{GameCoordinator.Instance.projectilePrefabLoc}/{projectilePrefab}");
 						proj_instance = (Projectile) projectile.Instantiate();
 						AddChild(proj_instance);
@@ -127,6 +177,7 @@ namespace GameNamespace.Player
 
 						// Wait out the attack speed
 						await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
+						attackCounter++;
 						canFire = true;
 					}
 				}
@@ -149,6 +200,32 @@ namespace GameNamespace.Player
 			// For now I'm treating this like a stack, first in first out.
 			enemy.targeted = false;
 			targetEnemies.Remove(enemy);
+		}
+
+		private void OnMouseHover()
+		{
+			isHovered = true;
+		}
+
+		private void OnMouseLeave()
+		{
+			isHovered = false;
+		}
+
+		private void Upgrade()
+		{
+			TowerData data = GameDataBase.Instance.QueryTowerData(nextLevelId);
+			if(GameCoordinator.Instance.currentGold > data.gold)
+			{
+				// Generate the tower prefab.
+				PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.towerPrefabLoc}/{data.prefab}");
+				Tower upgrade = (Tower)prefab.Instantiate();
+				gameLevel.AddChild(upgrade);
+				upgrade.Position = Position;
+				GameCoordinator.Instance.currentGold -= upgrade.gold;
+				QueueFree();
+			}
+
 		}
 
 	}

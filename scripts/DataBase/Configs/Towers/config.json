@@ -10,11 +10,27 @@
     },
     "102": {
         "id": 102,
+        "type": "ice",
         "name": "ice",
+        "level": 1,
         "radius": 1.0,
         "gold": 25,
         "attackSpeed": 2,
         "prefab": "ice_tower.tscn",
-        "projectileId": "102"
+        "projectileId": "102",
+        "nextLevelId": "103"
+    },
+    "103": {
+        "id": 103,
+        "type": "ice",
+        "name": "snowball",
+        "level": 2,
+        "radius": 1.0,
+        "gold": 50,
+        "attackSpeed": 2,
+        "prefab": "ice_tower_lvl2.tscn",
+        "projectileId": "102",
+        "attackModifier": "103",
+        "attackModCounter": 3
     }
 }
