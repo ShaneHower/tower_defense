@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=26 format=4 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://bystnf2j7c3q1" path="res://sprites/Grass Tileset-Sheet.png" id="2_bapj4"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
@@ -13,6 +13,8 @@
 [ext_resource type="Texture2D" uid="uid://dbaprek5tr52q" path="res://sprites/IceTowerLv1-Sheet.png" id="8_541gd"]
 [ext_resource type="PackedScene" uid="uid://4yvoxm5c6u73" path="res://prefabs/ruins.tscn" id="8_cv8km"]
 [ext_resource type="Texture2D" uid="uid://b5bitirqubp4s" path="res://sprites/Icons Tileset.png" id="9_6usdr"]
+[ext_resource type="Script" uid="uid://b18gtp6ogceg5" path="res://scripts/GameManager/PauseMenu.cs" id="11_u2gdt"]
+[ext_resource type="Script" uid="uid://bbhcwwkl4vi11" path="res://scripts/GameManager/DevWindow.cs" id="12_6vyxk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fjw6b"]
 texture = ExtResource("2_bapj4")
@@ -553,6 +555,103 @@ offset_left = -715.0
 offset_top = -903.8
 offset_right = -576.0
 offset_bottom = -811.8
+
+[node name="PauseMenu" type="Control" parent="UICanvas/UI"]
+process_mode = 3
+visible = false
+anchors_preset = 0
+offset_left = -306.0
+offset_top = -556.0
+offset_right = -160.0
+offset_bottom = -410.0
+script = ExtResource("11_u2gdt")
+
+[node name="Panel" type="Panel" parent="UICanvas/UI/PauseMenu"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 145.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/PauseMenu/Panel"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 144.0
+offset_bottom = 146.0
+alignment = 1
+
+[node name="DevWindow" type="Control" parent="UICanvas/UI"]
+process_mode = 3
+visible = false
+anchors_preset = 0
+offset_left = -683.0
+offset_top = -788.0
+offset_right = -504.0
+offset_bottom = -698.0
+script = ExtResource("12_6vyxk")
+
+[node name="Panel" type="Panel" parent="UICanvas/UI/DevWindow"]
+layout_mode = 0
+offset_left = 961.0
+offset_top = -6.0
+offset_right = 1102.0
+offset_bottom = 139.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/DevWindow/Panel"]
+layout_mode = 0
+offset_right = 140.0
+offset_bottom = 145.0
+theme_override_constants/separation = 6
+
+[node name="enemySelect" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="PickEnemy" type="OptionButton" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/enemySelect"]
+layout_mode = 2
+item_count = 3
+popup/item_0/text = "Ghost"
+popup/item_0/id = 101
+popup/item_1/text = "Slime"
+popup/item_1/id = 102
+popup/item_2/text = "Skeleton"
+popup/item_2/id = 103
+
+[node name="HPEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/HPEdit"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "HP"
+
+[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/HPEdit"]
+layout_mode = 2
+
+[node name="SpeedEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/SpeedEdit"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+text = "speed"
+
+[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/SpeedEdit"]
+layout_mode = 2
+
+[node name="Buttons" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+layout_mode = 2
+
+[node name="Spawn" type="Button" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Spawn"
+
+[node name="Exit" type="Button" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/Buttons"]
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Exit"
 
 [node name="LevelPath" type="Path2D" parent="."]
 position = Vector2(0.0861426, 0.575739)
