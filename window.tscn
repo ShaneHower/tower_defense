@@ -653,6 +653,11 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = "Exit"
 
+[node name="TowerUpgrade" type="Control" parent="UICanvas/UI"]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="LevelPath" type="Path2D" parent="."]
 position = Vector2(0.0861426, 0.575739)
 scale = Vector2(1.054, 0.996313)

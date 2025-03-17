@@ -15,5 +15,18 @@
         "effectRate": 0.5,
         "effectDuration": 1.5,
         "prefab": "ice.tscn"
+    },
+    "103": {
+        "id": 102,
+        "name": "snowball",
+        "speed": 200.0,
+        "damage": 22.0,
+        "effect": "slow",
+        "effectRate": 0.5,
+        "effectDuration": 1.5,
+        "aoe": true,
+        "aoeRange": 10,
+        "aoeDamagePerc": 0.3,
+        "prefab": "snowball.tscn"
     }
 }

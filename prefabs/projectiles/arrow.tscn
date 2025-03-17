@@ -7,7 +7,7 @@
 script = ExtResource("1_j7wpy")
 metadata/projectileId = "101"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("2_5h1xa")
 region_enabled = true

@@ -1,48 +1,48 @@
-[gd_scene load_steps=11 format=3 uid="uid://c2jns1o4a7ycv"]
+[gd_scene load_steps=11 format=3 uid="uid://bgjdullcc5usl"]
 
-[ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/Player/Tower.cs" id="1_kkew4"]
-[ext_resource type="Texture2D" uid="uid://dbaprek5tr52q" path="res://sprites/IceTowerLv1-Sheet.png" id="2_pacu6"]
-[ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="3_pacu6"]
+[ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/Player/Tower.cs" id="1_vusxy"]
+[ext_resource type="Texture2D" uid="uid://br3b38mjuuvn0" path="res://sprites/IceTowerLv2-Sheet.png" id="2_vusxy"]
+[ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="3_qkhb0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bdhud"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xvhf2"]
-atlas = ExtResource("2_pacu6")
+[sub_resource type="AtlasTexture" id="AtlasTexture_qkhb0"]
+atlas = ExtResource("2_vusxy")
 region = Rect2(0, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ngw7b"]
-atlas = ExtResource("2_pacu6")
+[sub_resource type="AtlasTexture" id="AtlasTexture_u5h28"]
+atlas = ExtResource("2_vusxy")
 region = Rect2(48, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_uabfv"]
-atlas = ExtResource("2_pacu6")
+[sub_resource type="AtlasTexture" id="AtlasTexture_hs06e"]
+atlas = ExtResource("2_vusxy")
 region = Rect2(96, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_cp6rc"]
-atlas = ExtResource("2_pacu6")
+[sub_resource type="AtlasTexture" id="AtlasTexture_valaj"]
+atlas = ExtResource("2_vusxy")
 region = Rect2(144, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_e7l4m"]
-atlas = ExtResource("2_pacu6")
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ytj4"]
+atlas = ExtResource("2_vusxy")
 region = Rect2(192, 0, 48, 72)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_y27yo"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xvhf2")
+"texture": SubResource("AtlasTexture_qkhb0")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ngw7b")
+"texture": SubResource("AtlasTexture_u5h28")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_uabfv")
+"texture": SubResource("AtlasTexture_hs06e")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_cp6rc")
+"texture": SubResource("AtlasTexture_valaj")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_e7l4m")
+"texture": SubResource("AtlasTexture_0ytj4")
 }],
 "loop": true,
 "name": &"idle",
@@ -51,8 +51,8 @@ animations = [{
 
 [node name="tower" type="Area2D"]
 texture_filter = 1
-script = ExtResource("1_kkew4")
-metadata/towerId = "102"
+script = ExtResource("1_vusxy")
+metadata/towerId = "103"
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 texture_filter = 1
@@ -64,6 +64,7 @@ debug_color = Color(0, 0.607843, 0.662745, 0.419608)
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y27yo")
 animation = &"idle"
+frame_progress = 0.744176
 
 [node name="HoverArea" type="Area2D" parent="."]
 
@@ -84,7 +85,7 @@ texture_filter = 1
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
-theme_override_fonts/font = ExtResource("3_pacu6")
+theme_override_fonts/font = ExtResource("3_qkhb0")
 text = "Upgrade"
 
 [connection signal="body_entered" from="." to="." method="OnEnter"]
