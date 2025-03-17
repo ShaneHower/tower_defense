@@ -153,7 +153,7 @@ namespace GameNamespace.Enemies
 				}
 				catch (TaskCanceledException)
 				{
-					GD.Print($"[SLOW] Slow effect was cancelled early at Time: {Time.GetTicksMsec()}ms");
+					
 				}
 			});
 		}

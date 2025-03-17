@@ -1,4 +1,3 @@
-using System.Reflection;
 
 namespace GameNamespace.DataBase
 {
@@ -11,6 +10,9 @@ namespace GameNamespace.DataBase
         public string effect { get; set; }
         public float effectRate { get; set; }
         public float effectDuration { get; set; }
+        public bool aoe { get; set; }
+        public float aoeRange { get; set; }
+        public float aoeDamagePerc { get; set; }
         public string prefab { get; set; }
     }
 

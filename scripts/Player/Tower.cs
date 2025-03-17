@@ -97,6 +97,7 @@ namespace GameNamespace.Player
 
 				if(attackCounter * attackModCounter != 0 && attackCounter % attackModCounter == 0)
 				{
+
 					AttackTarget(attackModifier);
 				}
 				else

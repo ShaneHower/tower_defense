@@ -12,7 +12,7 @@ position = Vector2(1, 0)
 scale = Vector2(1.28125, 2.5)
 polygon = PackedVector2Array(-3.26341, -1.2, -2.34146, -1.2, -2.48293, -1.6, 0.639025, -1.6, 0.639025, -1.2, 1.41951, -1.2, 1.41951, -0.8, 2.2, -0.8, 2.2, 0.8, 1.41951, 0.8, 1.41951, 1.2, 0.639025, 1.2, 0.639025, 1.6, -2.48293, 1.6, -2.48293, 1.2, -3.26341, 1.2, -3.26341, 0.8, -4.0439, 0.8, -4.0439, -0.8, -3.12195, -0.8)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("2_o16qg")
 region_enabled = true

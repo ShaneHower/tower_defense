@@ -2,6 +2,7 @@ namespace GameNamespace.Player
 {
 	using Godot;
 	using System;
+	using System.Threading.Tasks;
 	using GameNamespace.Enemies;
     using GameNamespace.DataBase;
 
@@ -15,15 +16,23 @@ namespace GameNamespace.Player
 		public string effect;
 		public float effectRate;
 		public float effectDuration;
+		public bool aoe;
+		public float aoeRange;
+		public float aoeDamagePerc;
 		public string prefab;
+
+		// Helper Vars
+		public bool aoeActive;
 
 		// Game objects
 		private CollisionPolygon2D projCollider;
+		private Sprite2D sprite;
 		public Enemy target;
 
 		public override void _Ready()
 		{
 			projCollider = GetNode<CollisionPolygon2D>("Collider");
+			sprite = GetNode<Sprite2D>("Sprite");
 			id = (string)GetMeta("projectileId");
 			SetVars();
 
@@ -40,6 +49,10 @@ namespace GameNamespace.Player
 			effect = data.effect;
 			effectRate = data.effectRate;
 			effectDuration = data.effectDuration;
+			aoe = data.aoe;
+			aoeRange = data.aoeRange;
+			aoeDamagePerc = data.aoeDamagePerc;
+
 			prefab = data.prefab;
 		}
 
@@ -47,12 +60,20 @@ namespace GameNamespace.Player
 		{
 			try
 			{
-				// Move projectile towards the target
-				CollisionShape2D targetCollider = target.GetChild<CollisionShape2D>(1);
-				var dir = (targetCollider.GlobalPosition - GlobalPosition).Normalized();
-				GlobalRotation = (float)(dir.Angle() + Math.PI / 2.0f);
+				Vector2 dir;
+				if(aoeActive)
+				{
+					dir = new Vector2(0, 0);
+				}
+				else {
+					// Move projectile towards the target
+					CollisionShape2D targetCollider = target.GetChild<CollisionShape2D>(1);
+					dir = (targetCollider.GlobalPosition - GlobalPosition).Normalized();
+					GlobalRotation = (float)(dir.Angle() + Math.PI / 2.0f);
+				}
 
 				Translate(dir * (float)delta * speed);
+
 			}
 			catch(ObjectDisposedException)
 			{
@@ -60,22 +81,63 @@ namespace GameNamespace.Player
 			}
 		}
 
-		public void OnBodyEntered(Node body)
+		public async void OnBodyEntered(Node body)
 		{
 			if(body is Enemy collidedEnemy)
 			{
 				if(collidedEnemy == target)
 				{
-					QueueFree();
 					target.HitByProjectile(damage);
+					applyEffects(target);
 
-					if(effect?.ToLower() == "slow")
+					if(aoe)
 					{
-						target.Slow(effectRate, 1.5f);
+						await HandleAOE();
 					}
+
+					QueueFree();
 				}
 			}
 
+		}
+
+		private void applyEffects(Enemy enemy)
+		{
+			if(effect?.ToLower() == "slow")
+			{
+				enemy.Slow(effectRate, 1.5f);
+			}
+		}
+
+		private async Task HandleAOE()
+		{
+			sprite.Visible = false;
+			projCollider.Visible = false;
+			Area2D aoeArea = GetNode<Area2D>("AOE");
+			AnimatedSprite2D animator = aoeArea.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+			aoeArea.Visible = true;
+			aoeArea.BodyEntered += OnAoeEnter;
+
+			animator.Play("default");
+			int framecount = animator.SpriteFrames.GetFrameCount("default");
+			float fps = (float)animator.SpriteFrames.GetAnimationSpeed("default");
+			float animationDuration = framecount / fps;
+			await Task.Delay((int)animationDuration * 1000);
+
+		}
+
+		private void OnAoeEnter(Node body)
+		{
+			if(body is Enemy collidedEnemy)
+			{
+				// Want to apply the effect to everything but the target, otherwise we would be applying the effect twice
+				// to the original target
+				if(collidedEnemy != target)
+				{
+					collidedEnemy.HitByProjectile((float)(damage * aoeDamagePerc));
+					applyEffects(collidedEnemy);
+				}
+			}
 		}
 
 	}
