@@ -22,6 +22,7 @@ namespace GameNamespace.GameManager
         public string projectilePrefabLoc = "res://prefabs/projectiles";
         public string towerPrefabLoc = "res://prefabs/towers";
         public string uiPrefabLoc = "res://prefabs/ui";
+        private static readonly ILogger log = Log.ForContext<GameCoordinator>();
 
         /// <summary>
         /// This is a singleton class.  It would be bad if we had more than one, so we force duplicates
@@ -31,12 +32,12 @@ namespace GameNamespace.GameManager
         {
             Instance = this;
             Logger.Init();
-            Log.Information("Game started.");
+            log.Information("Game started.");
         }
 
         public override void _ExitTree()
         {
-            GD.Print($"[GameCoordinator] _ExitTree at {Time.GetTicksMsec()}");
+            log.Information($"[GameCoordinator] _ExitTree at {Time.GetTicksMsec()}");
             Logger.Shutdown();
         }
     }

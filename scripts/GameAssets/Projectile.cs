@@ -4,6 +4,7 @@ namespace GameNamespace.GameAssets
 	using System;
 	using System.Threading.Tasks;
     using GameNamespace.DataBase;
+	using Serilog;
 
     public partial class Projectile : Area2D
 	{
@@ -22,6 +23,7 @@ namespace GameNamespace.GameAssets
 
 		// Helper Vars
 		public bool aoeActive;
+		private static readonly ILogger log = Log.ForContext<Projectile>();
 
 		// Game objects
 		private CollisionPolygon2D projCollider;
@@ -36,6 +38,8 @@ namespace GameNamespace.GameAssets
 			SetVars();
 
 			BodyEntered += OnBodyEntered;
+
+			log.Information($"Projectile {this} with name {this.Name} has spawned.");
 		}
 
 		public void SetVars()
@@ -84,6 +88,7 @@ namespace GameNamespace.GameAssets
 			{
 				if(collidedEnemy == target)
 				{
+					log.Information($"Projectile {this} with name {this.Name} has hit target {collidedEnemy}.");
 					target.HitByProjectile(damage);
 					applyEffects(target);
 
@@ -102,25 +107,35 @@ namespace GameNamespace.GameAssets
 		{
 			if(effect?.ToLower() == "slow")
 			{
+				log.Information($"Projectile {this} with name {this.Name} applying slow.");
 				enemy.Slow(effectRate, 1.5f);
 			}
 		}
 
 		private async Task HandleAOE()
 		{
-			sprite.Visible = false;
-			projCollider.Visible = false;
-			aoeActive = true;
-			Area2D aoeArea = GetNode<Area2D>("AOE");
-			AnimatedSprite2D animator = aoeArea.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-			aoeArea.Visible = true;
-			aoeArea.BodyEntered += OnAoeEnter;
+			if(aoeActive)
+			{
+				return;
+			}
+			else
+			{
+				log.Information("AOE active doing AOE work.");
+				sprite.Visible = false;
+				projCollider.Visible = false;
+				aoeActive = true;
+				Area2D aoeArea = GetNode<Area2D>("AOE");
+				AnimatedSprite2D animator = aoeArea.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+				aoeArea.Visible = true;
+				aoeArea.BodyEntered += OnAoeEnter;
 
-			animator.Play("default");
-			int framecount = animator.SpriteFrames.GetFrameCount("default");
-			float fps = (float)animator.SpriteFrames.GetAnimationSpeed("default");
-			float animationDuration = framecount / fps;
-			await Task.Delay((int)animationDuration * 1000);
+				animator.Play("default");
+				int framecount = animator.SpriteFrames.GetFrameCount("default");
+				float fps = (float)animator.SpriteFrames.GetAnimationSpeed("default");
+				float animationDuration = framecount / fps;
+				await Task.Delay((int)animationDuration * 1000);
+			}
+
 		}
 
 		private void OnAoeEnter(Node body)
@@ -131,6 +146,7 @@ namespace GameNamespace.GameAssets
 				// to the original target
 				if(collidedEnemy != target)
 				{
+					log.Information($"{collidedEnemy} with name {collidedEnemy.name} has entered AOE.");
 					collidedEnemy.HitByProjectile((float)(damage * aoeDamagePerc));
 					applyEffects(collidedEnemy);
 				}

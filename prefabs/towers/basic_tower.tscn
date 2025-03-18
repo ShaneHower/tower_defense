@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbplfx4tge8a8"]
+[gd_scene load_steps=11 format=3 uid="uid://bbplfx4tge8a8"]
 
 [ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/GameAssets/Tower.cs" id="1_bcxmp"]
 [ext_resource type="Texture2D" uid="uid://bwljcppnofggm" path="res://sprites/BasicTower-Sheet.png" id="2_na66u"]
+[ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="3_2oh2c"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bdhud"]
 
@@ -64,6 +65,28 @@ debug_color = Color(0, 0.607843, 0.662745, 0.419608)
 sprite_frames = SubResource("SpriteFrames_y27yo")
 animation = &"idle"
 frame_progress = 0.642995
+
+[node name="HoverArea" type="Area2D" parent="."]
+
+[node name="Collider" type="CollisionPolygon2D" parent="HoverArea"]
+polygon = PackedVector2Array(-10, -7, -14, 23, -4, 32, 4, 32, 15, 24, 10, -5, 16, -10, 2, -22, 10, -27, 0, -32, -2, -23, -15, -12, -11, -6)
+
+[node name="UpgradeControl" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = -23.0
+offset_top = -57.0
+offset_right = 27.0
+offset_bottom = -35.0
+
+[node name="Upgrade" type="Button" parent="UpgradeControl"]
+texture_filter = 1
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+theme_override_fonts/font = ExtResource("3_2oh2c")
+text = "Upgrade"
 
 [connection signal="body_entered" from="." to="." method="OnEnter"]
 [connection signal="body_exited" from="." to="." method="OnExit"]

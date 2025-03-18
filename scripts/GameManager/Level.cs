@@ -4,6 +4,8 @@ namespace GameNamespace.GameManager
     using GameNamespace.GameAssets;
     using GameNamespace.UI;
     using Godot;
+    using Serilog;
+
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -33,6 +35,7 @@ namespace GameNamespace.GameManager
         // File and prefab locations
         public string enemyPrefabLoc = "res://prefabs/enemies";
         public string levelConfigLoc = "scripts/GameManager/LevelConfigs";
+        private static readonly ILogger log = Log.ForContext<Level>();
 
         // Game objects
         public Path2D levelPath;
@@ -46,20 +49,22 @@ namespace GameNamespace.GameManager
         /// </summary>
 		public override void _Ready()
 		{
-            // Nodes
+            // Set class Vars.
+            levelId = (string)GetMeta("levelId");
+            SetVars();
+
+            // Set game objects.
             CanvasLayer uiCanvas = GetNode<CanvasLayer>("UICanvas");
             uiControl = uiCanvas.GetNode<UIControl>("UI");
             levelPath = GetNode<Path2D>("LevelPath");
 
-            // Init work
-            levelId = (string)GetMeta("levelId");
-            SetVars();
-
+            // Init work.
             CreateWaveButton();
             uiControl.UpdateGoldValue(currentGold);
             uiControl.UpdateHealthValue(levelHealth);
-
             GameCoordinator.Instance.currentGold = currentGold;
+
+            log.Information($"Level {levelId} Instantiated.");
 		}
 
         private void SetVars()
@@ -84,6 +89,7 @@ namespace GameNamespace.GameManager
             // Checks if enemies have hit the end node and subtracts health if so.
             if(GameCoordinator.Instance.enemyBreach)
             {
+                log.Information("Enemy has escaped, ticking away health.");
                 int breachNum = GameCoordinator.Instance.breachNum;
                 if (levelHealth <= breachNum)
                 {
@@ -101,6 +107,7 @@ namespace GameNamespace.GameManager
             int currentActiveEnemies = GameCoordinator.Instance.activeEnemies.Count;
             if(waveActive && currentActiveEnemies == 0)
             {
+                log.Information("Wave complete, Create new wave button.");
                 waveActive = false;
                 CreateWaveButton();
             }
@@ -111,6 +118,7 @@ namespace GameNamespace.GameManager
             // Checks if we've bought a tower (removing gold) or killed an enemy (added gold)
             if(GameCoordinator.Instance.currentGold != currentGold)
             {
+                log.Information("Gold amount has changed, update gold UI.");
                 currentGold = GameCoordinator.Instance.currentGold;
                 uiControl.UpdateGoldValue(currentGold);
             }
