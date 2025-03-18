@@ -1,7 +1,7 @@
-namespace GameNamespace.Player
+namespace GameNamespace.UI
 {
     using GameNamespace.DataBase;
-
+	using GameNamespace.GameAssets;
     using GameNamespace.GameManager;
     using Godot;
 

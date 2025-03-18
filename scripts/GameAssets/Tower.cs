@@ -1,8 +1,7 @@
-namespace GameNamespace.Player
+namespace  GameNamespace.GameAssets
 {
 	using Godot;
 	using System.Collections.Generic;
-	using GameNamespace.Enemies;
 	using GameNamespace.GameManager;
     using GameNamespace.DataBase;
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://4yvoxm5c6u73"]
 
-[ext_resource type="Script" uid="uid://chtf46tqqpd71" path="res://scripts/GameManager/Ruins.cs" id="1_5d4fu"]
+[ext_resource type="Script" uid="uid://chtf46tqqpd71" path="res://scripts/GameAssets/Ruins.cs" id="1_5d4fu"]
 [ext_resource type="Texture2D" uid="uid://rmpd3167fjpp" path="res://sprites/Flag.png" id="2_00isa"]
 
 [node name="Ruins1" type="Area2D"]

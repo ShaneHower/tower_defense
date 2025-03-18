@@ -1,6 +1,6 @@
 [gd_scene load_steps=11 format=3 uid="uid://c2jns1o4a7ycv"]
 
-[ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/Player/Tower.cs" id="1_kkew4"]
+[ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/GameAssets/Tower.cs" id="1_kkew4"]
 [ext_resource type="Texture2D" uid="uid://dbaprek5tr52q" path="res://sprites/IceTowerLv1-Sheet.png" id="2_pacu6"]
 [ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="3_pacu6"]
 

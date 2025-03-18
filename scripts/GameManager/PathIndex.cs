@@ -1,7 +1,7 @@
 namespace GameNamespace.GameManager
 {
     using Godot;
-    using GameNamespace.Enemies;
+    using GameNamespace.GameAssets;
 
     /// <summary>
     /// The PathIndex object is responsible for signalling to the enemies when they need to change animations. They are

@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://bbplfx4tge8a8"]
 
-[ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/Player/Tower.cs" id="1_bcxmp"]
+[ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/GameAssets/Tower.cs" id="1_bcxmp"]
 [ext_resource type="Texture2D" uid="uid://bwljcppnofggm" path="res://sprites/BasicTower-Sheet.png" id="2_na66u"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bdhud"]

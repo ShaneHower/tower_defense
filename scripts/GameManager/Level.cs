@@ -1,7 +1,8 @@
 namespace GameNamespace.GameManager
 {
     using GameNamespace.DataBase;
-    using GameNamespace.Enemies;
+    using GameNamespace.GameAssets;
+    using GameNamespace.UI;
     using Godot;
     using System.Collections.Generic;
     using System.Linq;
@@ -59,7 +60,6 @@ namespace GameNamespace.GameManager
             uiControl.UpdateHealthValue(levelHealth);
 
             GameCoordinator.Instance.currentGold = currentGold;
-            GameCoordinator.Instance.level = this;
 		}
 
         private void SetVars()

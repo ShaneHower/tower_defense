@@ -1,7 +1,8 @@
-namespace GameNamespace.GameManager
+namespace GameNamespace.UI
 {
     using GameNamespace.DataBase;
-    using GameNamespace.Enemies;
+    using GameNamespace.GameAssets;
+    using GameNamespace.GameManager;
     using Godot;
 
     public partial class DevWindow : Control

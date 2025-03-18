@@ -1,6 +1,6 @@
-namespace GameNamespace.GameManager
+namespace  GameNamespace.GameAssets
 {
-    using GameNamespace.Player;
+    using GameNamespace.UI;
     using Godot;
 
     /// <summary>

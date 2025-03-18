@@ -1,12 +1,10 @@
-namespace GameNamespace.Enemies
+namespace GameNamespace.GameAssets
 {
 	using Godot;
 	using System.Threading.Tasks;
 	using GameNamespace.GameManager;
 	using GameNamespace.DataBase;
     using System.Threading;
-    using System;
-
 
     public partial class Enemy : CharacterBody2D
 	{
@@ -153,7 +151,7 @@ namespace GameNamespace.Enemies
 				}
 				catch (TaskCanceledException)
 				{
-					
+
 				}
 			});
 		}

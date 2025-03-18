@@ -1,9 +1,8 @@
-namespace GameNamespace.Player
+namespace GameNamespace.GameAssets
 {
 	using Godot;
 	using System;
 	using System.Threading.Tasks;
-	using GameNamespace.Enemies;
     using GameNamespace.DataBase;
 
     public partial class Projectile : Area2D
