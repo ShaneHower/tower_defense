@@ -88,6 +88,7 @@ region_rect = Rect2(19.0857, 0, 10.1383, 16)
 
 [node name="AOE" type="Area2D" parent="."]
 visible = false
+texture_filter = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AOE"]
 shape = SubResource("CircleShape2D_ekqk1")

@@ -26,7 +26,7 @@ namespace GameNamespace.Player
 		public string nextLevelId;
 
 		// Class vars
-		public int attackCounter = 0;
+		public int attackCounter = 1;
 		public bool canFire = true;
 		public bool beingPlaced = false;
 		private List<Enemy> targetEnemies = new();

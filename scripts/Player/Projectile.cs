@@ -63,17 +63,15 @@ namespace GameNamespace.Player
 				Vector2 dir;
 				if(aoeActive)
 				{
-					dir = new Vector2(0, 0);
+					return;
 				}
 				else {
 					// Move projectile towards the target
 					CollisionShape2D targetCollider = target.GetChild<CollisionShape2D>(1);
 					dir = (targetCollider.GlobalPosition - GlobalPosition).Normalized();
 					GlobalRotation = (float)(dir.Angle() + Math.PI / 2.0f);
+					Translate(dir * (float)delta * speed);
 				}
-
-				Translate(dir * (float)delta * speed);
-
 			}
 			catch(ObjectDisposedException)
 			{
@@ -113,6 +111,7 @@ namespace GameNamespace.Player
 		{
 			sprite.Visible = false;
 			projCollider.Visible = false;
+			aoeActive = true;
 			Area2D aoeArea = GetNode<Area2D>("AOE");
 			AnimatedSprite2D animator = aoeArea.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 			aoeArea.Visible = true;
@@ -123,7 +122,6 @@ namespace GameNamespace.Player
 			float fps = (float)animator.SpriteFrames.GetAnimationSpeed("default");
 			float animationDuration = framecount / fps;
 			await Task.Delay((int)animationDuration * 1000);
-
 		}
 
 		private void OnAoeEnter(Node body)
