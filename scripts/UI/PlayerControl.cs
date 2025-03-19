@@ -1,7 +1,7 @@
-namespace GameNamespace.Player
+namespace GameNamespace.UI
 {
     using GameNamespace.DataBase;
-
+	using GameNamespace.GameAssets;
     using GameNamespace.GameManager;
     using Godot;
 
@@ -127,7 +127,7 @@ namespace GameNamespace.Player
 		{
 			if(chosenTower is not null)
 			{
-				if(mouseButton.ButtonIndex == MouseButton.Left && ruinsHovered)
+				if(mouseButton.ButtonIndex == MouseButton.Left && ruinsHovered && towerUiActive)
 				{
 					towerUiActive = false;
 					chosenTower.beingPlaced = false;
@@ -135,7 +135,7 @@ namespace GameNamespace.Player
 					ruinsHovered = false;
 					ruins.QueueFree();
 				}
-				else if (mouseButton.ButtonIndex == MouseButton.Right)
+				else if (towerUiActive && mouseButton.ButtonIndex == MouseButton.Right)
 				{
 					towerUiActive = false;
 					chosenTower.QueueFree();

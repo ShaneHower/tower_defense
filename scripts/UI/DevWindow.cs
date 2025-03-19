@@ -1,21 +1,30 @@
-namespace GameNamespace.GameManager
+namespace GameNamespace.UI
 {
     using GameNamespace.DataBase;
-    using GameNamespace.Enemies;
+    using GameNamespace.GameAssets;
+    using GameNamespace.GameManager;
     using Godot;
 
     public partial class DevWindow : Control
 	{
+        // Spawner
+        public Panel spawner;
         public HBoxContainer enemySelect;
         public HBoxContainer hpEdit;
         public HBoxContainer speedEdit;
         public Button spawn;
         public Button exit;
 
+        // Combat Log
+        public Panel combatLog;
+        public ScrollContainer scrollContainer;
+        public VBoxContainer scrollVBox;
+
         public override void _Ready()
         {
-            Panel panel = GetNode<Panel>("Panel");
-            VBoxContainer parentVBox = panel.GetNode<VBoxContainer>("VBoxContainer");
+            // Spawner
+            spawner = GetNode<Panel>("Spawner");
+            VBoxContainer parentVBox = spawner.GetNode<VBoxContainer>("VBoxContainer");
 
             enemySelect = parentVBox.GetNode<HBoxContainer>("enemySelect");
             hpEdit = parentVBox.GetNode<HBoxContainer>("HPEdit");
@@ -27,6 +36,13 @@ namespace GameNamespace.GameManager
 
             exit = buttons.GetNode<Button>("Exit");
             exit.Pressed += TurnOff;
+
+            // Combat Log
+            combatLog = GetNode<Panel>("CombatLog");
+            scrollContainer = combatLog.GetNode<ScrollContainer>("ScrollContainer");
+            scrollVBox = scrollContainer.GetNode<VBoxContainer>("VBoxContainer");
+
+            GameCoordinator.Instance.devWindow = this;
         }
 
         private EnemyData GetUIValues()
@@ -79,6 +95,22 @@ namespace GameNamespace.GameManager
         private void TurnOff()
         {
             Visible = false;
+        }
+
+        public void WriteCombatLog(string message)
+        {
+            Label label = new();
+            label.Text = message;
+
+            // Set font size, arduous I know.
+            Theme theme = new();
+            Font font = label.GetThemeDefaultFont();
+            theme.SetFont("font", "Label", font);
+            theme.SetFontSize("font_size", "Label", 8);
+            label.Theme = theme;
+
+            scrollVBox.AddChild(label);
+            scrollContainer.ScrollVertical = (int)scrollContainer.GetVScrollBar().MaxValue;
         }
     }
 }

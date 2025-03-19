@@ -1,10 +1,10 @@
-namespace GameNamespace.Player
+namespace  GameNamespace.GameAssets
 {
 	using Godot;
 	using System.Collections.Generic;
-	using GameNamespace.Enemies;
 	using GameNamespace.GameManager;
     using GameNamespace.DataBase;
+	using Serilog;
 
     /// <summary>
     /// Basic tower class. Holds high level behavior and meta data about all towers.
@@ -26,12 +26,13 @@ namespace GameNamespace.Player
 		public string nextLevelId;
 
 		// Class vars
-		public int attackCounter = 0;
+		public int attackCounter = 1;
 		public bool canFire = true;
 		public bool beingPlaced = false;
 		private List<Enemy> targetEnemies = new();
 		private int targetOrder = 0;
 		public bool isHovered = false;
+		private static readonly ILogger log = Log.ForContext<Tower>();
 
 		// Game objects
 		public PackedScene projectile;
@@ -64,6 +65,8 @@ namespace GameNamespace.Player
 			hoverArea.MouseExited += OnMouseLeave;
 
 			towerRange = BuildTowerRange();
+
+			log.Information($"Tower {this} with name {this.Name} instantiated.");
 		}
 
 		public void SetVars()
@@ -109,11 +112,18 @@ namespace GameNamespace.Player
 
 		public override void _Input(InputEvent @event)
         {
-            if(isHovered && @event is InputEventMouseButton mouseEvent)
+            if(@event is InputEventMouseButton mouseEvent)
 			{
-				if(mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
+				if(isHovered && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
 				{
 					upgradeControl.Visible = true;
+				}
+				if(mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Right)
+				{
+					if(upgradeControl.Visible)
+					{
+						upgradeControl.Visible = false;
+					}
 				}
 			}
         }
@@ -165,6 +175,7 @@ namespace GameNamespace.Player
 				{
 					if(canFire && !target.isDying)
 					{
+						log.Information($"Tower {this} with name {this.Name} is attacking Enemy {target}");
 						canFire = false;
 
 						// Instantiate projectile
@@ -215,6 +226,7 @@ namespace GameNamespace.Player
 
 		private void Upgrade()
 		{
+			log.Information($"Tower {this} with name {this.Name} is attempting to upgrade");
 			TowerData data = GameDataBase.Instance.QueryTowerData(nextLevelId);
 			if(GameCoordinator.Instance.currentGold > data.gold)
 			{
@@ -226,7 +238,6 @@ namespace GameNamespace.Player
 				GameCoordinator.Instance.currentGold -= upgrade.gold;
 				QueueFree();
 			}
-
 		}
 
 	}

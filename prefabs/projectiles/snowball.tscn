@@ -1,6 +1,6 @@
 [gd_scene load_steps=13 format=3 uid="uid://d0jd8q2chh058"]
 
-[ext_resource type="Script" uid="uid://bb6pcwwwddkcg" path="res://scripts/Player/Projectile.cs" id="1_gguga"]
+[ext_resource type="Script" uid="uid://bb6pcwwwddkcg" path="res://scripts/GameAssets/Projectile.cs" id="1_gguga"]
 [ext_resource type="Texture2D" uid="uid://bk5c7xk2gxpc5" path="res://sprites/Projectiles-Sheet.png" id="2_w5q71"]
 [ext_resource type="Texture2D" uid="uid://cphdh5jmbq73c" path="res://sprites/Snowball Explode.png" id="3_w5q71"]
 
@@ -88,6 +88,7 @@ region_rect = Rect2(19.0857, 0, 10.1383, 16)
 
 [node name="AOE" type="Area2D" parent="."]
 visible = false
+texture_filter = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AOE"]
 shape = SubResource("CircleShape2D_ekqk1")

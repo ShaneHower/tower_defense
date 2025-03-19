@@ -1,4 +1,4 @@
-namespace GameNamespace.GameManager
+namespace GameNamespace.UI
 {
     using Godot;
 

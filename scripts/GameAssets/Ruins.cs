@@ -1,7 +1,9 @@
-namespace GameNamespace.GameManager
+namespace  GameNamespace.GameAssets
 {
-    using GameNamespace.Player;
+    using GameNamespace.UI;
     using Godot;
+    using Serilog;
+
 
     /// <summary>
     /// Ruins are nodes on the map that allow tower placement. Towers can only be placed on a ruin. There can be many
@@ -14,6 +16,7 @@ namespace GameNamespace.GameManager
         // Game objects
         public Sprite2D sprite;
         public PlayerControl playerHud;
+        private static readonly ILogger log = Log.ForContext<Ruins>();
 
         public override void _Ready()
         {
@@ -23,6 +26,8 @@ namespace GameNamespace.GameManager
 
             MouseEntered += OnMouseEnter;
             MouseExited += OnMouseExit;
+
+            log.Information($"Ruin {this} with name {this.Name} instantiated.");
         }
 
         private void OnMouseEnter()

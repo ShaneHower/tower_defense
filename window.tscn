@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=4 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=25 format=4 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://bystnf2j7c3q1" path="res://sprites/Grass Tileset-Sheet.png" id="2_bapj4"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
@@ -6,15 +6,14 @@
 [ext_resource type="Script" uid="uid://cqtp6ogjnlu38" path="res://scripts/GameManager/Level.cs" id="3_8pa5w"]
 [ext_resource type="Texture2D" uid="uid://b4vax1jv7edhe" path="res://sprites/Grass Tileset.png" id="3_l2cjk"]
 [ext_resource type="Texture2D" uid="uid://bti7gccofiq5j" path="res://sprites/DefaultTower.png" id="4_2mm1c"]
-[ext_resource type="PackedScene" uid="uid://7tdaigeri2si" path="res://prefabs/game_coordinator.tscn" id="4_2xkwv"]
-[ext_resource type="Script" uid="uid://bexa5owl55003" path="res://scripts/GameManager/UIControl.cs" id="5_it0lw"]
-[ext_resource type="Script" uid="uid://ciko5w7xhyo1r" path="res://scripts/Player/PlayerControl.cs" id="6_it0lw"]
+[ext_resource type="Script" uid="uid://bexa5owl55003" path="res://scripts/UI/UIControl.cs" id="5_6vyxk"]
+[ext_resource type="Script" uid="uid://ciko5w7xhyo1r" path="res://scripts/UI/PlayerControl.cs" id="6_ki2gb"]
 [ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="6_tg7ok"]
 [ext_resource type="Texture2D" uid="uid://dbaprek5tr52q" path="res://sprites/IceTowerLv1-Sheet.png" id="8_541gd"]
 [ext_resource type="PackedScene" uid="uid://4yvoxm5c6u73" path="res://prefabs/ruins.tscn" id="8_cv8km"]
 [ext_resource type="Texture2D" uid="uid://b5bitirqubp4s" path="res://sprites/Icons Tileset.png" id="9_6usdr"]
-[ext_resource type="Script" uid="uid://b18gtp6ogceg5" path="res://scripts/GameManager/PauseMenu.cs" id="11_u2gdt"]
-[ext_resource type="Script" uid="uid://bbhcwwkl4vi11" path="res://scripts/GameManager/DevWindow.cs" id="12_6vyxk"]
+[ext_resource type="Script" uid="uid://b18gtp6ogceg5" path="res://scripts/UI/PauseMenu.cs" id="11_vbepn"]
+[ext_resource type="Script" uid="uid://bbhcwwkl4vi11" path="res://scripts/UI/DevWindow.cs" id="12_abi4y"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fjw6b"]
 texture = ExtResource("2_bapj4")
@@ -449,7 +448,7 @@ offset_top = 797.0
 offset_right = 728.0
 offset_bottom = 797.0
 grow_vertical = 2
-script = ExtResource("5_it0lw")
+script = ExtResource("5_6vyxk")
 
 [node name="PlayerHud" type="Control" parent="UICanvas/UI"]
 texture_filter = 1
@@ -465,7 +464,7 @@ offset_right = 701.0
 offset_bottom = -817.0
 grow_horizontal = 2
 grow_vertical = 0
-script = ExtResource("6_it0lw")
+script = ExtResource("6_ki2gb")
 
 [node name="Tower" type="Button" parent="UICanvas/UI/PlayerHud"]
 texture_filter = 1
@@ -564,7 +563,7 @@ offset_left = -306.0
 offset_top = -556.0
 offset_right = -160.0
 offset_bottom = -410.0
-script = ExtResource("11_u2gdt")
+script = ExtResource("11_vbepn")
 
 [node name="Panel" type="Panel" parent="UICanvas/UI/PauseMenu"]
 texture_filter = 1
@@ -587,26 +586,26 @@ offset_left = -683.0
 offset_top = -788.0
 offset_right = -504.0
 offset_bottom = -698.0
-script = ExtResource("12_6vyxk")
+script = ExtResource("12_abi4y")
 
-[node name="Panel" type="Panel" parent="UICanvas/UI/DevWindow"]
+[node name="Spawner" type="Panel" parent="UICanvas/UI/DevWindow"]
 layout_mode = 0
 offset_left = 961.0
 offset_top = -6.0
 offset_right = 1102.0
 offset_bottom = 139.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/DevWindow/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/DevWindow/Spawner"]
 layout_mode = 0
 offset_right = 140.0
 offset_bottom = 145.0
 theme_override_constants/separation = 6
 
-[node name="enemySelect" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+[node name="enemySelect" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="PickEnemy" type="OptionButton" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/enemySelect"]
+[node name="PickEnemy" type="OptionButton" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/enemySelect"]
 layout_mode = 2
 item_count = 3
 popup/item_0/text = "Ghost"
@@ -616,42 +615,59 @@ popup/item_1/id = 102
 popup/item_2/text = "Skeleton"
 popup/item_2/id = 103
 
-[node name="HPEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+[node name="HPEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/HPEdit"]
+[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/HPEdit"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 text = "HP"
 
-[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/HPEdit"]
+[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/HPEdit"]
 layout_mode = 2
 
-[node name="SpeedEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+[node name="SpeedEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/SpeedEdit"]
+[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/SpeedEdit"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 text = "speed"
 
-[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/SpeedEdit"]
+[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/SpeedEdit"]
 layout_mode = 2
 
-[node name="Buttons" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer"]
 layout_mode = 2
 
-[node name="Spawn" type="Button" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/Buttons"]
+[node name="Spawn" type="Button" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/Buttons"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Spawn"
 
-[node name="Exit" type="Button" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/Buttons"]
+[node name="Exit" type="Button" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/Buttons"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Exit"
+
+[node name="CombatLog" type="Panel" parent="UICanvas/UI/DevWindow"]
+layout_mode = 0
+offset_left = 449.0
+offset_top = -5.0
+offset_right = 958.0
+offset_bottom = 140.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UICanvas/UI/DevWindow/CombatLog"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 3.0
+offset_right = 503.0
+offset_bottom = 142.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/DevWindow/CombatLog/ScrollContainer"]
+layout_mode = 2
 
 [node name="TowerUpgrade" type="Control" parent="UICanvas/UI"]
 anchors_preset = 0
@@ -677,8 +693,6 @@ metadata/direction = "right"
 [node name="End" parent="LevelPath" instance=ExtResource("2_mv7sc")]
 position = Vector2(1110.85, 394.665)
 metadata/direction = "right"
-
-[node name="GameCoordinator" parent="." instance=ExtResource("4_2xkwv")]
 
 [node name="levelTimer" type="Timer" parent="."]
 

@@ -1,12 +1,11 @@
-namespace GameNamespace.Enemies
+namespace GameNamespace.GameAssets
 {
 	using Godot;
 	using System.Threading.Tasks;
 	using GameNamespace.GameManager;
 	using GameNamespace.DataBase;
     using System.Threading;
-    using System;
-
+	using Serilog;
 
     public partial class Enemy : CharacterBody2D
 	{
@@ -29,6 +28,7 @@ namespace GameNamespace.Enemies
 		// Status affect tracking
 		private Task currentSlowTask;
 		private CancellationTokenSource slowCanelTokenSource;
+		private static readonly ILogger log = Log.ForContext<Enemy>();
 
 		// Game objects
 		private Path2D path;
@@ -37,15 +37,17 @@ namespace GameNamespace.Enemies
 
 		public override void _Ready()
 		{
+			// Set class vars
+			id = (string)GetMeta("enemyId");
+			SetVars();
+
 			// Direct parent and decendents.
 			pathFollow = GetParent<PathFollow2D>();
 			path = pathFollow.GetParent<Path2D>();
 			animator = GetNode<AnimatedSprite2D>("Animator");
 			animator.SpriteFrames.SetAnimationLoop("death", false);
 
-			// Set class vars
-			id = (string)GetMeta("enemyId");
-			SetVars();
+			log.Information($"Enemy {this} with name {this.Name} has spawned.");
 		}
 		private void SetVars()
 		{
@@ -86,6 +88,9 @@ namespace GameNamespace.Enemies
 			float fps = (float)animator.SpriteFrames.GetAnimationSpeed("death");
 			float animationDuration = framecount / fps;
 			await Task.Delay((int)animationDuration * 1000);
+			string msg = $"Enemy {this} with name {this.Name} is dead.";
+			log.Information(msg);
+			GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 
 			// Update the current gold
 			GameCoordinator.Instance.currentGold += gold;
@@ -94,6 +99,7 @@ namespace GameNamespace.Enemies
 
 		public void Destroy()
 		{
+			log.Information($"Destroying {this} with name {this.Name}");
 			// Remove the enemy from the coordinator's list of enemies
 			GameCoordinator.Instance.activeEnemies.Remove(this);
 			QueueFree();
@@ -102,6 +108,9 @@ namespace GameNamespace.Enemies
 		public void HitByProjectile(float damage)
 		{
 			health -= damage;
+			string msg = $"Enemy {this} with name {this.Name} hp was reduced by {damage}. Current health = {health}.";
+			log.Information(msg);
+			GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 			if(health <= 0)
 			{
 				isDead = true;
@@ -124,11 +133,17 @@ namespace GameNamespace.Enemies
 		{
 			if (!isSlowed)
 			{
+				string msg = $"Enemy {this} with name {this.Name} is slowed by {slowRate} for {duration}.";
+				log.Information(msg);
+				GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 				isSlowed = true;
 				speed *= 1-slowRate;
 			}
 			else
 			{
+				string msg = $"Enemy {this} with name {this.Name} hit by slow again, restart duration of {duration}";
+				log.Information(msg);
+				GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 				slowCanelTokenSource?.Cancel();
 				slowCanelTokenSource?.Dispose();
 			}
@@ -153,7 +168,7 @@ namespace GameNamespace.Enemies
 				}
 				catch (TaskCanceledException)
 				{
-					
+					log.Information($"Slow effect was cancelled early at Time: {Time.GetTicksMsec()}ms");
 				}
 			});
 		}

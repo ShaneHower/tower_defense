@@ -1,14 +1,16 @@
-using Godot;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
-
 namespace GameNamespace.DataBase
 {
+    using Godot;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Text.Json;
+    using Serilog;
+
     public partial class GameDataBase: Node
     {
         public static GameDataBase Instance { get; private set;}
         public string configLocation = "scripts/DataBase/Configs";
+        private static readonly ILogger log = Log.ForContext<GameDataBase>();
         public Dictionary<string, LevelData> levelData;
         public Dictionary<string, EnemyData> enemyData;
         public Dictionary<string, TowerData> towerData;
@@ -16,14 +18,9 @@ namespace GameNamespace.DataBase
 
         public override void _Ready()
         {
-            if(Instance != null)
-            {
-                QueueFree();
-                return;
-            }
-
             Instance = this;
             LoadConfigs();
+            log.Information("Database Instantiated.");
         }
 
         public void LoadConfigs()
@@ -47,6 +44,7 @@ namespace GameNamespace.DataBase
 
         public EnemyData QueryEnemyData(string id)
         {
+            log.Information($"Query Enemy Data for id: {id}");
             if(enemyData != null && enemyData.TryGetValue(id, out EnemyData data))
             {
                 return data;
@@ -59,6 +57,7 @@ namespace GameNamespace.DataBase
 
         public TowerData QueryTowerData(string id)
         {
+            log.Information($"Query Tower Data for id: {id}");
             if(towerData != null && towerData.TryGetValue(id, out TowerData data))
             {
                 return data;
@@ -71,6 +70,7 @@ namespace GameNamespace.DataBase
 
         public ProjectileData QueryProjectileData(string id)
         {
+            log.Information($"Query Projectile Data for id: {id}");
             if(projectileData != null && projectileData.TryGetValue(id, out ProjectileData data))
             {
                 return data;
@@ -83,6 +83,7 @@ namespace GameNamespace.DataBase
 
         public LevelData QueryLevelData(string id)
         {
+            log.Information($"Query Level Data for id: {id}");
             if(levelData != null && levelData.TryGetValue(id, out LevelData data))
             {
                 return data;

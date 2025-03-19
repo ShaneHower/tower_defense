@@ -1,10 +1,13 @@
-namespace GameNamespace.Player
+namespace GameNamespace.GameAssets
 {
 	using Godot;
 	using System;
 	using System.Threading.Tasks;
-	using GameNamespace.Enemies;
     using GameNamespace.DataBase;
+	using GameNamespace.GameManager;
+	using Serilog;
+    using Microsoft.VisualBasic;
+
 
     public partial class Projectile : Area2D
 	{
@@ -23,6 +26,7 @@ namespace GameNamespace.Player
 
 		// Helper Vars
 		public bool aoeActive;
+		private static readonly ILogger log = Log.ForContext<Projectile>();
 
 		// Game objects
 		private CollisionPolygon2D projCollider;
@@ -37,6 +41,8 @@ namespace GameNamespace.Player
 			SetVars();
 
 			BodyEntered += OnBodyEntered;
+
+			log.Information($"Projectile {this} with name {this.Name} has spawned.");
 		}
 
 		public void SetVars()
@@ -63,17 +69,15 @@ namespace GameNamespace.Player
 				Vector2 dir;
 				if(aoeActive)
 				{
-					dir = new Vector2(0, 0);
+					return;
 				}
 				else {
 					// Move projectile towards the target
 					CollisionShape2D targetCollider = target.GetChild<CollisionShape2D>(1);
 					dir = (targetCollider.GlobalPosition - GlobalPosition).Normalized();
 					GlobalRotation = (float)(dir.Angle() + Math.PI / 2.0f);
+					Translate(dir * (float)delta * speed);
 				}
-
-				Translate(dir * (float)delta * speed);
-
 			}
 			catch(ObjectDisposedException)
 			{
@@ -87,6 +91,9 @@ namespace GameNamespace.Player
 			{
 				if(collidedEnemy == target)
 				{
+					string msg = $"Projectile {this} with name {this.Name} has hit target {collidedEnemy}.";
+					log.Information(msg);
+					GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 					target.HitByProjectile(damage);
 					applyEffects(target);
 
@@ -105,24 +112,36 @@ namespace GameNamespace.Player
 		{
 			if(effect?.ToLower() == "slow")
 			{
+				string msg = $"Projectile {this} with name {this.Name} applying slow.";
+				log.Information(msg);
+				GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 				enemy.Slow(effectRate, 1.5f);
 			}
 		}
 
 		private async Task HandleAOE()
 		{
-			sprite.Visible = false;
-			projCollider.Visible = false;
-			Area2D aoeArea = GetNode<Area2D>("AOE");
-			AnimatedSprite2D animator = aoeArea.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-			aoeArea.Visible = true;
-			aoeArea.BodyEntered += OnAoeEnter;
+			if(aoeActive)
+			{
+				return;
+			}
+			else
+			{
+				log.Information("AOE active doing AOE work.");
+				sprite.Visible = false;
+				projCollider.Visible = false;
+				aoeActive = true;
+				Area2D aoeArea = GetNode<Area2D>("AOE");
+				AnimatedSprite2D animator = aoeArea.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+				aoeArea.Visible = true;
+				aoeArea.BodyEntered += OnAoeEnter;
 
-			animator.Play("default");
-			int framecount = animator.SpriteFrames.GetFrameCount("default");
-			float fps = (float)animator.SpriteFrames.GetAnimationSpeed("default");
-			float animationDuration = framecount / fps;
-			await Task.Delay((int)animationDuration * 1000);
+				animator.Play("default");
+				int framecount = animator.SpriteFrames.GetFrameCount("default");
+				float fps = (float)animator.SpriteFrames.GetAnimationSpeed("default");
+				float animationDuration = framecount / fps;
+				await Task.Delay((int)animationDuration * 1000);
+			}
 
 		}
 
@@ -134,6 +153,9 @@ namespace GameNamespace.Player
 				// to the original target
 				if(collidedEnemy != target)
 				{
+					string msg = $"{collidedEnemy} with name {collidedEnemy.name} has entered AOE.";
+					log.Information(msg);
+					GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 					collidedEnemy.HitByProjectile((float)(damage * aoeDamagePerc));
 					applyEffects(collidedEnemy);
 				}
