@@ -4,7 +4,10 @@ namespace GameNamespace.GameAssets
 	using System;
 	using System.Threading.Tasks;
     using GameNamespace.DataBase;
+	using GameNamespace.GameManager;
 	using Serilog;
+    using Microsoft.VisualBasic;
+
 
     public partial class Projectile : Area2D
 	{
@@ -88,7 +91,9 @@ namespace GameNamespace.GameAssets
 			{
 				if(collidedEnemy == target)
 				{
-					log.Information($"Projectile {this} with name {this.Name} has hit target {collidedEnemy}.");
+					string msg = $"Projectile {this} with name {this.Name} has hit target {collidedEnemy}.";
+					log.Information(msg);
+					GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 					target.HitByProjectile(damage);
 					applyEffects(target);
 
@@ -107,7 +112,9 @@ namespace GameNamespace.GameAssets
 		{
 			if(effect?.ToLower() == "slow")
 			{
-				log.Information($"Projectile {this} with name {this.Name} applying slow.");
+				string msg = $"Projectile {this} with name {this.Name} applying slow.";
+				log.Information(msg);
+				GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 				enemy.Slow(effectRate, 1.5f);
 			}
 		}
@@ -146,7 +153,9 @@ namespace GameNamespace.GameAssets
 				// to the original target
 				if(collidedEnemy != target)
 				{
-					log.Information($"{collidedEnemy} with name {collidedEnemy.name} has entered AOE.");
+					string msg = $"{collidedEnemy} with name {collidedEnemy.name} has entered AOE.";
+					log.Information(msg);
+					GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 					collidedEnemy.HitByProjectile((float)(damage * aoeDamagePerc));
 					applyEffects(collidedEnemy);
 				}

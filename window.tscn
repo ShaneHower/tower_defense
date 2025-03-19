@@ -588,24 +588,24 @@ offset_right = -504.0
 offset_bottom = -698.0
 script = ExtResource("12_abi4y")
 
-[node name="Panel" type="Panel" parent="UICanvas/UI/DevWindow"]
+[node name="Spawner" type="Panel" parent="UICanvas/UI/DevWindow"]
 layout_mode = 0
 offset_left = 961.0
 offset_top = -6.0
 offset_right = 1102.0
 offset_bottom = 139.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/DevWindow/Panel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/DevWindow/Spawner"]
 layout_mode = 0
 offset_right = 140.0
 offset_bottom = 145.0
 theme_override_constants/separation = 6
 
-[node name="enemySelect" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+[node name="enemySelect" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 0
 
-[node name="PickEnemy" type="OptionButton" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/enemySelect"]
+[node name="PickEnemy" type="OptionButton" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/enemySelect"]
 layout_mode = 2
 item_count = 3
 popup/item_0/text = "Ghost"
@@ -615,42 +615,59 @@ popup/item_1/id = 102
 popup/item_2/text = "Skeleton"
 popup/item_2/id = 103
 
-[node name="HPEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+[node name="HPEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/HPEdit"]
+[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/HPEdit"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 text = "HP"
 
-[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/HPEdit"]
+[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/HPEdit"]
 layout_mode = 2
 
-[node name="SpeedEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+[node name="SpeedEdit" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/SpeedEdit"]
+[node name="Label" type="Label" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/SpeedEdit"]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 text = "speed"
 
-[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/SpeedEdit"]
+[node name="LineEdit" type="LineEdit" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/SpeedEdit"]
 layout_mode = 2
 
-[node name="Buttons" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer"]
+[node name="Buttons" type="HBoxContainer" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer"]
 layout_mode = 2
 
-[node name="Spawn" type="Button" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/Buttons"]
+[node name="Spawn" type="Button" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/Buttons"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Spawn"
 
-[node name="Exit" type="Button" parent="UICanvas/UI/DevWindow/Panel/VBoxContainer/Buttons"]
+[node name="Exit" type="Button" parent="UICanvas/UI/DevWindow/Spawner/VBoxContainer/Buttons"]
 custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Exit"
+
+[node name="CombatLog" type="Panel" parent="UICanvas/UI/DevWindow"]
+layout_mode = 0
+offset_left = 449.0
+offset_top = -5.0
+offset_right = 958.0
+offset_bottom = 140.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UICanvas/UI/DevWindow/CombatLog"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 3.0
+offset_right = 503.0
+offset_bottom = 142.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/DevWindow/CombatLog/ScrollContainer"]
+layout_mode = 2
 
 [node name="TowerUpgrade" type="Control" parent="UICanvas/UI"]
 anchors_preset = 0

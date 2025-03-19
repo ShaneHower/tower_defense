@@ -88,7 +88,9 @@ namespace GameNamespace.GameAssets
 			float fps = (float)animator.SpriteFrames.GetAnimationSpeed("death");
 			float animationDuration = framecount / fps;
 			await Task.Delay((int)animationDuration * 1000);
-			log.Information($"Enemy {this} with name {this.Name} is dead.");
+			string msg = $"Enemy {this} with name {this.Name} is dead.";
+			log.Information(msg);
+			GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 
 			// Update the current gold
 			GameCoordinator.Instance.currentGold += gold;
@@ -106,7 +108,9 @@ namespace GameNamespace.GameAssets
 		public void HitByProjectile(float damage)
 		{
 			health -= damage;
-			log.Information($"Enemy {this} with name {this.Name} hp was reduced by {damage}. Current health = {health}.");
+			string msg = $"Enemy {this} with name {this.Name} hp was reduced by {damage}. Current health = {health}.";
+			log.Information(msg);
+			GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 			if(health <= 0)
 			{
 				isDead = true;
@@ -129,13 +133,17 @@ namespace GameNamespace.GameAssets
 		{
 			if (!isSlowed)
 			{
-				log.Information($"Enemy {this} with name {this.Name} is slowed by {slowRate} for {duration}.");
+				string msg = $"Enemy {this} with name {this.Name} is slowed by {slowRate} for {duration}.";
+				log.Information(msg);
+				GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 				isSlowed = true;
 				speed *= 1-slowRate;
 			}
 			else
 			{
-				log.Information($"Enemy {this} with name {this.Name} hit by slow again, restart duration of {duration}");
+				string msg = $"Enemy {this} with name {this.Name} hit by slow again, restart duration of {duration}";
+				log.Information(msg);
+				GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
 				slowCanelTokenSource?.Cancel();
 				slowCanelTokenSource?.Dispose();
 			}
