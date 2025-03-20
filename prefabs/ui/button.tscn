@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://bx7hkvr0jffan"]
-
-[node name="StartButton" type="Button"]
-offset_right = 109.0
-offset_bottom = 40.0
-text = "Start"

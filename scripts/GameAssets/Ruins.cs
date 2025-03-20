@@ -42,6 +42,5 @@ namespace  GameNamespace.GameAssets
             playerHud.ruins = null;
         }
 
-
     }
 }

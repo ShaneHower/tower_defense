@@ -2,8 +2,7 @@ namespace GameNamespace.GameManager
 {
     using System.Collections.Generic;
     using GameNamespace.GameAssets;
-    using GameNamespace.UI;
-
+    using GameNamespace.UI.DevTools;
     using Godot;
     using Serilog;
 
@@ -13,11 +12,12 @@ namespace GameNamespace.GameManager
     public partial class GameCoordinator : Node
     {
         public static GameCoordinator Instance { get; private set; }
-        public DevWindow devWindow;
+        public CombatLogConsole combatLog;
         public List<Enemy> activeEnemies = new();
         public bool enemyBreach = false;
         public int breachNum = 0;
         public int currentGold = 0;
+        public Tower towerAttemptingUpgrade;
 
         // Prefab locations
         public string prefabLoc = "res://prefabs";

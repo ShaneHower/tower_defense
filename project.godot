@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameCoordinator="*res://scripts/GameManager/GameCoordinator.cs"
 GameDataBase="*res://scripts/DataBase/GameDataBase.cs"
+UITools="*res://scripts/UI/UITools.cs"
 
 [display]
 

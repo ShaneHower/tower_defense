@@ -93,7 +93,7 @@ namespace GameNamespace.GameAssets
 				{
 					string msg = $"Projectile {this} with name {this.Name} has hit target {collidedEnemy}.";
 					log.Information(msg);
-					GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
+					GameCoordinator.Instance.combatLog.Write(msg);
 					target.HitByProjectile(damage);
 					applyEffects(target);
 
@@ -114,7 +114,7 @@ namespace GameNamespace.GameAssets
 			{
 				string msg = $"Projectile {this} with name {this.Name} applying slow.";
 				log.Information(msg);
-				GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
+				GameCoordinator.Instance.combatLog.Write(msg);
 				enemy.Slow(effectRate, 1.5f);
 			}
 		}
@@ -155,7 +155,7 @@ namespace GameNamespace.GameAssets
 				{
 					string msg = $"{collidedEnemy} with name {collidedEnemy.name} has entered AOE.";
 					log.Information(msg);
-					GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
+					GameCoordinator.Instance.combatLog.Write(msg);
 					collidedEnemy.HitByProjectile((float)(damage * aoeDamagePerc));
 					applyEffects(collidedEnemy);
 				}

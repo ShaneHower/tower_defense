@@ -5,6 +5,8 @@ namespace  GameNamespace.GameAssets
 	using GameNamespace.GameManager;
     using GameNamespace.DataBase;
 	using Serilog;
+    using GameNamespace.UI;
+
 
     /// <summary>
     /// Basic tower class. Holds high level behavior and meta data about all towers.
@@ -116,12 +118,20 @@ namespace  GameNamespace.GameAssets
 			{
 				if(isHovered && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
 				{
+					if(GameCoordinator.Instance.towerAttemptingUpgrade is not null)
+					{
+						// If there is a tower upgrade menu already open on another tower, close it and open the new tower upgrade option
+						GameCoordinator.Instance.towerAttemptingUpgrade.upgradeControl.Visible = false;
+					}
+
+					GameCoordinator.Instance.towerAttemptingUpgrade = this;
 					upgradeControl.Visible = true;
 				}
 				if(mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Right)
 				{
 					if(upgradeControl.Visible)
 					{
+						GameCoordinator.Instance.towerAttemptingUpgrade = null;
 						upgradeControl.Visible = false;
 					}
 				}
@@ -237,6 +247,10 @@ namespace  GameNamespace.GameAssets
 				upgrade.Position = Position;
 				GameCoordinator.Instance.currentGold -= upgrade.gold;
 				QueueFree();
+			}
+			else
+			{
+				UITools.Instance.SpawnWarning(message:"Not Enough Gold!", pressedButton:upgradeButton);
 			}
 		}
 
