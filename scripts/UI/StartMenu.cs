@@ -14,7 +14,7 @@ namespace GameNamespace.UI
         public void CreateStartMenu()
         {
            Button levelOne = UITools.Instance.CreateButton(text:"Demo", parent:menu, fontSize:40);
-           levelOne.Pressed += () => GetTree().ChangeSceneToFile("res://window.tscn");
+           levelOne.Pressed += () => GetTree().ChangeSceneToFile("res://scenes/window.tscn");
 
            Button quit = UITools.Instance.CreateButton(text:"Quit", parent:menu, fontSize:40);
            quit.Pressed += () => GetTree().Quit();
