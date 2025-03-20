@@ -90,7 +90,7 @@ namespace GameNamespace.GameAssets
 			await Task.Delay((int)animationDuration * 1000);
 			string msg = $"Enemy {this} with name {this.Name} is dead.";
 			log.Information(msg);
-			GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
+			GameCoordinator.Instance.combatLog.Write(msg);
 
 			// Update the current gold
 			GameCoordinator.Instance.currentGold += gold;
@@ -110,7 +110,7 @@ namespace GameNamespace.GameAssets
 			health -= damage;
 			string msg = $"Enemy {this} with name {this.Name} hp was reduced by {damage}. Current health = {health}.";
 			log.Information(msg);
-			GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
+			GameCoordinator.Instance.combatLog.Write(msg);
 			if(health <= 0)
 			{
 				isDead = true;
@@ -129,13 +129,13 @@ namespace GameNamespace.GameAssets
 		/// </summary>
 		/// <param name="slowRate"></param>
 		/// <param name="duration"></param>
-		public async void Slow(float slowRate, float duration)
+		public Task Slow(float slowRate, float duration)
 		{
 			if (!isSlowed)
 			{
 				string msg = $"Enemy {this} with name {this.Name} is slowed by {slowRate} for {duration}.";
 				log.Information(msg);
-				GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
+				GameCoordinator.Instance.combatLog.Write(msg);
 				isSlowed = true;
 				speed *= 1-slowRate;
 			}
@@ -143,34 +143,37 @@ namespace GameNamespace.GameAssets
 			{
 				string msg = $"Enemy {this} with name {this.Name} hit by slow again, restart duration of {duration}";
 				log.Information(msg);
-				GameCoordinator.Instance.devWindow.WriteCombatLog(msg);
+				GameCoordinator.Instance.combatLog.Write(msg);
 				slowCanelTokenSource?.Cancel();
 				slowCanelTokenSource?.Dispose();
 			}
 
 			slowCanelTokenSource = new CancellationTokenSource();
 			CancellationToken token = slowCanelTokenSource.Token;
+			currentSlowTask = RunSlowEffect(duration, token);
 
-			currentSlowTask = Task.Run(async () =>
+			return currentSlowTask;
+		}
+
+		private async Task RunSlowEffect(float duration, CancellationToken token)
+		{
+			try
 			{
-				try
+				float elapsed = 0;
+				while(elapsed < duration)
 				{
-					float elapsed = 0;
-					while(elapsed < duration)
-					{
-						await Task.Delay(100, token);
-						elapsed += 0.10f;
-					}
+					await Task.Delay(100, token);
+					elapsed += 0.10f;
+				}
 
-					// Wait time is up
-					speed = GameDataBase.Instance.QueryEnemyData(id).speed;
-					isSlowed = false;
-				}
-				catch (TaskCanceledException)
-				{
-					log.Information($"Slow effect was cancelled early at Time: {Time.GetTicksMsec()}ms");
-				}
-			});
+				// Wait time is up
+				speed = GameDataBase.Instance.QueryEnemyData(id).speed;
+				isSlowed = false;
+			}
+			catch (TaskCanceledException)
+			{
+				log.Information($"Slow effect was cancelled early at Time: {Time.GetTicksMsec()}ms");
+			}
 		}
 
 	}

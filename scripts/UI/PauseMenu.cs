@@ -1,71 +1,90 @@
 namespace GameNamespace.UI
 {
+	using DevTools;
     using Godot;
 
-    /// <summary>
-    /// The UI class is responsible for all UI features, buttons, labels, etc.
-    /// </summary>
     public partial class PauseMenu : UIControl
     {
-        public Panel menu;
+        public Panel mainMenu;
+		public Panel settingsMenu;
         private Control parentUI;
+		private DevWindow devWindow;
 
         public override void _Ready()
         {
-            menu = GetNode<Panel>("Panel");
+            mainMenu = GetNode<Panel>("MainMenu");
+			settingsMenu = GetNode<Panel>("SettingsMenu");
             parentUI = GetParent<Control>();
-            CreatePauseMenu();
+			devWindow = parentUI.GetNode<DevWindow>("DevWindow");
+
+            CreateMainMenu();
+			CreateSettingsMenu();
         }
 
         public override void _UnhandledInput(InputEvent @event)
 		{
 			if (@event is InputEventKey keyEvent && keyEvent.Pressed)
 			{
-				if(keyEvent.Keycode == Key.Escape)
+				if(keyEvent.Keycode == Key.Escape && mainMenu.Visible)
 				{
-					bool paused = GetTree().Paused;
-					Visible = !Visible;
-					GetTree().Paused = !paused;
+					mainMenu.Visible = false;
+					GetTree().Paused = false;
+				}
+				else if(keyEvent.Keycode == Key.Escape && settingsMenu.Visible)
+				{
+					mainMenu.Visible = true;
+					settingsMenu.Visible = false;
+				}
+				else if (keyEvent.Keycode == Key.Escape)
+				{
+					mainMenu.Visible = true;
+					GetTree().Paused = true;
 				}
 			}
 		}
 
-        private void CreatePauseMenu()
+        private void CreateMainMenu()
 		{
-			Visible = false;
+			mainMenu.Visible = false;
+			VBoxContainer buttonContainer = mainMenu.GetNode<VBoxContainer>("VBoxContainer");
 
-			// Center the Pause menu
-			menu.AnchorLeft = 0.5f;
-			menu.AnchorTop = 0.5f;
-			menu.AnchorRight = 0.5f;
-			menu.AnchorBottom = 0.5f;
-
-			// Create needed buttons
-			VBoxContainer buttonContainer = menu.GetNode<VBoxContainer>("VBoxContainer");
-
-			Button continueButton = CreateButton(text: "Continue", parent: buttonContainer);
+			Button continueButton = UITools.Instance.CreateButton(text:"Continue", parent:buttonContainer);
 			continueButton.Pressed += OnContinueButtonPressed;
 
-			CreateButton(text: "Settings", parent: buttonContainer);
+			UITools.Instance.CreateButton(text:"Save", parent:buttonContainer);
 
-			Button devButton = CreateButton(text: "Dev Mode", parent: buttonContainer);
-            devButton.Pressed += OnDevModeButtonPressed;
+			Button devButton = UITools.Instance.CreateButton(text:"Settings", parent:buttonContainer);
+            devButton.Pressed += OnSettingsButtonPressed;
 
-			CreateButton(text: "Quit", parent: buttonContainer);
+			Button quitButton = UITools.Instance.CreateButton(text:"Quit", parent:buttonContainer);
+			quitButton.Pressed += () => GetTree().Quit();
+
+		}
+
+		private void CreateSettingsMenu()
+		{
+			settingsMenu.Visible = false;
+			VBoxContainer buttonContainer = settingsMenu.GetNode<VBoxContainer>("VBoxContainer");
+
+			Button spawnBoxButton = UITools.Instance.CreateCheckBox(text:"Spawn Box", parent:buttonContainer);
+			spawnBoxButton.Pressed += () => devWindow.ToggleSpawnBox();
+
+			Button combatLogConsole = UITools.Instance.CreateCheckBox(text:"Combat Log Console", parent: buttonContainer);
+			combatLogConsole.Pressed += () => devWindow.ToggleCombatLog();
+
 		}
 
         private void OnContinueButtonPressed()
 		{
 			GetTree().Paused = false;
-			Visible = false;
+			mainMenu.Visible = false;
 		}
 
-        private void OnDevModeButtonPressed()
+
+        private void OnSettingsButtonPressed()
         {
-            Control devWindow = parentUI.GetNode<Control>("DevWindow");
-            GetTree().Paused = false;
-            Visible = false;
-            devWindow.Visible = true;
+            mainMenu.Visible = false;
+			settingsMenu.Visible = true;
         }
     }
 

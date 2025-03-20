@@ -5,6 +5,8 @@ namespace  GameNamespace.GameAssets
 	using GameNamespace.GameManager;
     using GameNamespace.DataBase;
 	using Serilog;
+    using GameNamespace.UI;
+
 
     /// <summary>
     /// Basic tower class. Holds high level behavior and meta data about all towers.
@@ -237,6 +239,10 @@ namespace  GameNamespace.GameAssets
 				upgrade.Position = Position;
 				GameCoordinator.Instance.currentGold -= upgrade.gold;
 				QueueFree();
+			}
+			else
+			{
+				UITools.Instance.SpawnWarning(message:"Not Enough Gold!", pressedButton:upgradeButton);
 			}
 		}
 
