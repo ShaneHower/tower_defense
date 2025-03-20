@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://dp07j56j0kow6"]
+[gd_scene load_steps=27 format=4 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://bystnf2j7c3q1" path="res://sprites/Grass Tileset-Sheet.png" id="2_bapj4"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
