@@ -17,6 +17,7 @@ namespace GameNamespace.GameManager
         public bool enemyBreach = false;
         public int breachNum = 0;
         public int currentGold = 0;
+        public Tower towerAttemptingUpgrade;
 
         // Prefab locations
         public string prefabLoc = "res://prefabs";

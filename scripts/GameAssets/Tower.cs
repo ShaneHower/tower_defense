@@ -118,12 +118,20 @@ namespace  GameNamespace.GameAssets
 			{
 				if(isHovered && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
 				{
+					if(GameCoordinator.Instance.towerAttemptingUpgrade is not null)
+					{
+						// If there is a tower upgrade menu already open on another tower, close it and open the new tower upgrade option
+						GameCoordinator.Instance.towerAttemptingUpgrade.upgradeControl.Visible = false;
+					}
+
+					GameCoordinator.Instance.towerAttemptingUpgrade = this;
 					upgradeControl.Visible = true;
 				}
 				if(mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Right)
 				{
 					if(upgradeControl.Visible)
 					{
+						GameCoordinator.Instance.towerAttemptingUpgrade = null;
 						upgradeControl.Visible = false;
 					}
 				}
