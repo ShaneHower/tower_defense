@@ -6,6 +6,8 @@ namespace  GameNamespace.GameAssets
     using GameNamespace.DataBase;
 	using Serilog;
     using GameNamespace.UI;
+    using System.ComponentModel;
+
 
 
     /// <summary>
@@ -34,6 +36,7 @@ namespace  GameNamespace.GameAssets
 		private List<Enemy> targetEnemies = new();
 		private int targetOrder = 0;
 		public bool isHovered = false;
+		public bool upgradeButtonHovered = false;
 		private static readonly ILogger log = Log.ForContext<Tower>();
 
 		// Game objects
@@ -60,15 +63,17 @@ namespace  GameNamespace.GameAssets
 			upgradeControl = GetNode<Control>("UpgradeControl");
 			upgradeButton = upgradeControl.GetNode<Button>("Upgrade");
 			upgradeButton.Pressed += Upgrade;
+			upgradeButton.MouseEntered += () => upgradeButtonHovered=true;
+			upgradeButton.MouseExited += () => upgradeButtonHovered=false;
 
 
 			hoverArea = GetNode<Area2D>("HoverArea");
-			hoverArea.MouseEntered += OnMouseHover;
-			hoverArea.MouseExited += OnMouseLeave;
+			hoverArea.MouseEntered += () => isHovered = true;
+			hoverArea.MouseExited += () => isHovered = false;
 
 			towerRange = BuildTowerRange();
 
-			log.Information($"Tower {this} with name {this.Name} instantiated.");
+			log.Information($"Tower {this} with name {Name} instantiated.");
 		}
 
 		public void SetVars()
@@ -114,26 +119,40 @@ namespace  GameNamespace.GameAssets
 
 		public override void _Input(InputEvent @event)
         {
+			// Mouse Inputs
             if(@event is InputEventMouseButton mouseEvent)
 			{
-				if(isHovered && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left)
+				bool towerClicked = isHovered && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left;
+				bool upgradeExitMouseR = upgradeControl.Visible && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Right;
+				bool upgradeExitMouseL = !upgradeButtonHovered && upgradeControl.Visible && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left;
+
+				if(towerClicked)
 				{
 					if(GameCoordinator.Instance.towerAttemptingUpgrade is not null)
 					{
 						// If there is a tower upgrade menu already open on another tower, close it and open the new tower upgrade option
 						GameCoordinator.Instance.towerAttemptingUpgrade.upgradeControl.Visible = false;
 					}
-
 					GameCoordinator.Instance.towerAttemptingUpgrade = this;
 					upgradeControl.Visible = true;
 				}
-				if(mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Right)
+
+				if(upgradeExitMouseR || upgradeExitMouseL)
 				{
-					if(upgradeControl.Visible)
-					{
-						GameCoordinator.Instance.towerAttemptingUpgrade = null;
-						upgradeControl.Visible = false;
-					}
+					GameCoordinator.Instance.towerAttemptingUpgrade = null;
+					upgradeControl.Visible = false;
+				}
+			}
+
+			// Key Inputs
+			if (@event is InputEventKey keyEvent && keyEvent.Pressed)
+			{
+				bool upgradeMenuKeyExit = upgradeControl.Visible && keyEvent.Keycode == Key.Escape;
+
+				if(upgradeMenuKeyExit)
+				{
+					GameCoordinator.Instance.towerAttemptingUpgrade = null;
+					upgradeControl.Visible = false;
 				}
 			}
         }
@@ -185,7 +204,7 @@ namespace  GameNamespace.GameAssets
 				{
 					if(canFire && !target.isDying)
 					{
-						log.Information($"Tower {this} with name {this.Name} is attacking Enemy {target}");
+						log.Information($"Tower {this} with name {Name} is attacking Enemy {target}");
 						canFire = false;
 
 						// Instantiate projectile
@@ -224,19 +243,9 @@ namespace  GameNamespace.GameAssets
 			targetEnemies.Remove(enemy);
 		}
 
-		private void OnMouseHover()
-		{
-			isHovered = true;
-		}
-
-		private void OnMouseLeave()
-		{
-			isHovered = false;
-		}
-
 		private void Upgrade()
 		{
-			log.Information($"Tower {this} with name {this.Name} is attempting to upgrade");
+			log.Information($"Tower {this} with name {Name} is attempting to upgrade");
 			TowerData data = GameDataBase.Instance.QueryTowerData(nextLevelId);
 			if(GameCoordinator.Instance.currentGold > data.gold)
 			{
@@ -246,6 +255,10 @@ namespace  GameNamespace.GameAssets
 				gameLevel.AddChild(upgrade);
 				upgrade.Position = Position;
 				GameCoordinator.Instance.currentGold -= upgrade.gold;
+
+				// If we don't clear out this instance, the deleted object will be stuck to it and the upgrade behavior
+				// will break.
+				GameCoordinator.Instance.towerAttemptingUpgrade = null;
 				QueueFree();
 			}
 			else
