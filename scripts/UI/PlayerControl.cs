@@ -25,13 +25,7 @@ namespace GameNamespace.UI
 		{
 			level = GetTree().Root.GetNode<Level>("Level");
 
-			foreach(Node child in GetChildren())
-			{
-				if(child is Button button)
-				{
-					button.Pressed += () => OnButtonDown(button);
-				}
-			}
+			CreatePlayerHud();
 		}
 
         public override void _Input(InputEvent @event)
@@ -81,7 +75,27 @@ namespace GameNamespace.UI
 			}
         }
 
-        private void OnButtonDown(Button pressedButton)
+		public void CreatePlayerHud()
+		{
+			HBoxContainer container = GetNode<HBoxContainer>("HBoxContainer");
+			TextureButton basicTower = UITools.Instance.CreateTextureButtonFromRegion(
+				texturePath:$"{GameCoordinator.Instance.spriteLoc}/BasicTower-Sheet.png",
+				region:new Rect2(0, 0, 48, 72)
+			);
+			basicTower.SetMeta("towerId", 101);
+			container.AddChild(basicTower);
+			basicTower.Pressed += () => OnButtonDown(basicTower);
+
+			TextureButton iceTower = UITools.Instance.CreateTextureButtonFromRegion(
+				texturePath:$"{GameCoordinator.Instance.spriteLoc}/IceTowerLv1-Sheet.png",
+				region:new Rect2(0, 0, 48, 72)
+			);
+			iceTower.SetMeta("towerId", 102);
+			container.AddChild(iceTower);
+			iceTower.Pressed += () => OnButtonDown(iceTower);
+		}
+
+        private void OnButtonDown(TextureButton pressedButton)
 		{
 			if(!towerUiActive)
 			{

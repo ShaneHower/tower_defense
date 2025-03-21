@@ -38,6 +38,45 @@ namespace GameNamespace.UI
 			return button;
 		}
 
+        public TextureButton CreateTextureButtonFromSprite(string texturePath)
+        {
+            Texture2D texture = GD.Load<Texture2D>(texturePath);
+            TextureButton button = new TextureButton
+            {
+                TextureNormal = texture,
+                TexturePressed = texture,
+                TextureHover = texture,
+                CustomMinimumSize = texture.GetSize()
+            };
+
+            button.TextureFilter = TextureFilterEnum.Nearest;
+            return button;
+        }
+
+        public TextureButton CreateTextureButtonFromRegion(string texturePath, Rect2 region)
+        {
+            Texture2D texture = GD.Load<Texture2D>(texturePath);
+
+            AtlasTexture atlasTexture = new AtlasTexture
+            {
+                Atlas = texture,
+                Region = region
+            };
+
+            TextureButton button = new TextureButton
+            {
+                TextureNormal = atlasTexture,
+                TexturePressed = atlasTexture,
+                TextureHover = atlasTexture,
+                CustomMinimumSize = region.Size,
+                MouseFilter = Control.MouseFilterEnum.Stop,
+                SizeFlagsHorizontal = Control.SizeFlags.Fill,
+                TextureFilter = TextureFilterEnum.Nearest
+            };
+
+            return button;
+        }
+
         public CheckBox CreateCheckBox(string text, Control parent, int fontSize=0)
         {
             CheckBox checkBox = new();
@@ -63,10 +102,10 @@ namespace GameNamespace.UI
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="pressedButton"></param>
-		public void SpawnWarning(string message, Button pressedButton)
+		public void SpawnWarning(string message, Control pressedButton)
 		{
 			// Create label with light red color and raise it above the parent by 20 pixels
-            Label warning = CreateLabel(text:message, parent:pressedButton);
+            Label warning = CreateLabel(text:message, parent:pressedButton, fontSize:20);
             warning.AddThemeColorOverride("font_color", new Color(0.9f, 0.3f, 0.3f));
             warning.Position -= new Vector2(0, 20);
 
