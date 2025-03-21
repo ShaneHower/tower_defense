@@ -1,6 +1,7 @@
 namespace GameNamespace.UI
 {
     using Godot;
+    using GameNamespace.GameManager;
 
     public partial class UITools: Control
 	{
@@ -38,25 +39,39 @@ namespace GameNamespace.UI
 			return button;
 		}
 
-        public TextureButton CreateTextureButtonFromSprite(string texturePath)
+        public TextureRect CreateButtonHover()
         {
-            Texture2D texture = GD.Load<Texture2D>(texturePath);
-            TextureButton button = new TextureButton
+            Texture2D hoverSheet = GD.Load<Texture2D>($"{GameCoordinator.Instance.spriteLoc}/Icons Tileset.png");
+
+            // This is a constant here because all of our buttons will have the same button overlay.
+            Rect2 hoverRegion = new Rect2(48, 0, 24, 24); // x=24, y=0, width=24, height=24
+
+            AtlasTexture hoverTexture = new AtlasTexture
             {
-                TextureNormal = texture,
-                TexturePressed = texture,
-                TextureHover = texture,
-                CustomMinimumSize = texture.GetSize()
+                Atlas = hoverSheet,
+                Region = hoverRegion
             };
 
-            button.TextureFilter = TextureFilterEnum.Nearest;
-            return button;
+            TextureRect hoverOverlay = new TextureRect
+            {
+                Texture = hoverTexture,
+                ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
+                StretchMode = TextureRect.StretchModeEnum.Scale,
+                SizeFlagsHorizontal = Control.SizeFlags.Fill,
+                SizeFlagsVertical = Control.SizeFlags.Fill,
+                MouseFilter = Control.MouseFilterEnum.Ignore,
+                TextureFilter = TextureFilterEnum.Nearest, 
+                Name = "HoverOverlay",
+                Visible = false
+            };
+
+            return hoverOverlay;
         }
 
         public TextureButton CreateTextureButtonFromRegion(string texturePath, Rect2 region)
         {
+            // Create button
             Texture2D texture = GD.Load<Texture2D>(texturePath);
-
             AtlasTexture atlasTexture = new AtlasTexture
             {
                 Atlas = texture,
@@ -73,6 +88,14 @@ namespace GameNamespace.UI
                 SizeFlagsHorizontal = Control.SizeFlags.Fill,
                 TextureFilter = TextureFilterEnum.Nearest
             };
+
+            // Attach hover behavior
+            TextureRect hoverOverlay = CreateButtonHover();
+            hoverOverlay.Size = button.Size;
+            button.AddChild(hoverOverlay);
+
+            // Keep hover size in sync with button
+            button.Resized += () => hoverOverlay.Size = button.Size;
 
             return button;
         }
