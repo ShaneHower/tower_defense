@@ -168,7 +168,10 @@ namespace GameNamespace.GameManager
 
         public async void OnWaveButton()
         {
+            // Free up for garabage collection after deletion.
             waveButton.QueueFree();
+            waveButton = null;
+
             await SpawnWave();
             wavesToGo.Remove(currentWave);
             currentWave = wavesToGo.Min();

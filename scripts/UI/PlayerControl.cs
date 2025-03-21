@@ -120,6 +120,9 @@ namespace GameNamespace.UI
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
 				ruinsHovered = false;
 				ruins.QueueFree();
+
+				// Free up for garbage collection.
+				ruins = null;
 				chosenTower = null;
 			}
 			else if (towerUiActive && mouseButton.ButtonIndex == MouseButton.Right)
