@@ -17,6 +17,7 @@ namespace GameNamespace.UI
 		// Game objects
 		private Level level;
 		public Button towerButton;
+		public TextureRect currentSelectedHoverBox;
 		public Tower chosenTower = null;
 		public Ruins ruins;
 		private InputEventMouseButton mouseEvent;
@@ -24,7 +25,6 @@ namespace GameNamespace.UI
 		public override void _Ready()
 		{
 			level = GetTree().Root.GetNode<Level>("Level");
-
 			CreatePlayerHud();
 		}
 
@@ -82,17 +82,31 @@ namespace GameNamespace.UI
 				texturePath:$"{GameCoordinator.Instance.spriteLoc}/BasicTower-Sheet.png",
 				region:new Rect2(0, 0, 48, 72)
 			);
-			basicTower.SetMeta("towerId", 101);
+			HandleTowerButtonBehavior(button:basicTower, towerId:101);
 			container.AddChild(basicTower);
-			basicTower.Pressed += () => OnButtonDown(basicTower);
 
 			TextureButton iceTower = UITools.Instance.CreateTextureButtonFromRegion(
 				texturePath:$"{GameCoordinator.Instance.spriteLoc}/IceTowerLv1-Sheet.png",
 				region:new Rect2(0, 0, 48, 72)
 			);
-			iceTower.SetMeta("towerId", 102);
+			HandleTowerButtonBehavior(button:iceTower, towerId:102);
 			container.AddChild(iceTower);
-			iceTower.Pressed += () => OnButtonDown(iceTower);
+		}
+
+		public void HandleTowerButtonBehavior(TextureButton button, int towerId)
+		{
+			TextureRect hoverOverlay = button.GetNode<TextureRect>("HoverOverlay");
+
+			button.SetMeta("towerId", towerId);
+			button.Pressed += () => OnButtonDown(button);
+
+			button.MouseEntered += () => {
+				if(chosenTower is null) hoverOverlay.Visible = true;
+			};
+
+			button.MouseExited += () => {
+				if(chosenTower is null) hoverOverlay.Visible = false;
+			};
 		}
 
         private void OnButtonDown(TextureButton pressedButton)
@@ -110,6 +124,10 @@ namespace GameNamespace.UI
 				}
 				else
 				{
+					// Make overlay visible while placement is happening.
+					currentSelectedHoverBox = pressedButton.GetNode<TextureRect>("HoverOverlay");
+					currentSelectedHoverBox.Visible = true;
+
 					// Generate the tower prefab.
 					PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.towerPrefabLoc}/{towerData.prefab}");
 					chosenTower = (Tower)prefab.Instantiate();
@@ -129,21 +147,28 @@ namespace GameNamespace.UI
 		{
 			if(mouseButton.ButtonIndex == MouseButton.Left && ruinsHovered && towerUiActive)
 			{
+				// Place Tower
 				towerUiActive = false;
 				chosenTower.beingPlaced = false;
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
 				ruinsHovered = false;
 				ruins.QueueFree();
+				currentSelectedHoverBox.Visible = false;
 
 				// Free up for garbage collection.
 				ruins = null;
 				chosenTower = null;
+				currentSelectedHoverBox = null;
+
 			}
 			else if (towerUiActive && mouseButton.ButtonIndex == MouseButton.Right)
 			{
+				// Cancel Placement
 				towerUiActive = false;
 				chosenTower.QueueFree();
+				currentSelectedHoverBox.Visible = false;
 				chosenTower = null;
+				currentSelectedHoverBox = null;
 			}
 		}
 
