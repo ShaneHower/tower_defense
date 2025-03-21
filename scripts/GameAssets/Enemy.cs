@@ -83,6 +83,9 @@ namespace GameNamespace.GameAssets
 			isDying = true;
 			animator.Play("death");
 
+			// Update the gold early so there is no lag on the UI.
+			GameCoordinator.Instance.currentGold += gold;
+
 			// Task.Delay() expects milliseconds while the animation system works in seconds.
 			int framecount = animator.SpriteFrames.GetFrameCount("death");
 			float fps = (float)animator.SpriteFrames.GetAnimationSpeed("death");
@@ -92,8 +95,6 @@ namespace GameNamespace.GameAssets
 			log.Information(msg);
 			GameCoordinator.Instance.combatLog.Write(msg);
 
-			// Update the current gold
-			GameCoordinator.Instance.currentGold += gold;
 			Destroy();
 		}
 

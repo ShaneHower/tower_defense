@@ -1,6 +1,7 @@
 namespace GameNamespace.UI
 {
     using Godot;
+	using GameManager;
 
 	/// <summary>
 	/// The UI class is responsible for all UI features, buttons, labels, etc.
@@ -11,12 +12,14 @@ namespace GameNamespace.UI
 		public Control levelState;
 		public Control waveHud;
 		public Control pauseMenu;
+		public Control playerControl;
 
 		public override void _Ready()
 		{
 			levelState = GetNode<Control>("LevelState");
 			waveHud = GetNode<Control>("WaveHud");
 			pauseMenu = GetNode<Control>("PauseMenu");
+			playerControl = GetNode<Control>("PlayerHud");
 		}
 
 		public Button CreateWaveButton(string buttonText)

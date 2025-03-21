@@ -1,6 +1,5 @@
 namespace GameNamespace.UI
 {
-    using System.Runtime.Serialization.Formatters;
     using Godot;
 
     public partial class UITools: Control
@@ -23,34 +22,75 @@ namespace GameNamespace.UI
 			return theme;
 		}
 
-        public Button CreateButton(string text, Control parent, string name=null, int fontSize = 0)
+        public void ConfigureControl(Control control, string gameObject, Control parent, int fontSize=0)
+        {
+            control.TextureFilter = TextureFilterEnum.Nearest;
+            int fontSizeOverride = fontSize == 0 ? 12 : fontSize;
+            control.Theme = GetGameFontTheme(fontSize:fontSizeOverride,  gameObject:gameObject);
+            parent.AddChild(control);
+        }
+
+        public Button CreateButton(string text, Control parent, int fontSize=0)
 		{
 			Button button = new();
 			button.Text = text;
-			button.Name = string.IsNullOrEmpty(name) ? text : name;
-			button.TextureFilter = TextureFilterEnum.Nearest;
-
-            int fontSizeOverride = fontSize == 0 ? 12 : fontSize;
-			Theme theme = GetGameFontTheme(fontSize:fontSizeOverride, gameObject:"Button");
-			button.Theme = theme;
-			parent.AddChild(button);
-
+            ConfigureControl(control:button, gameObject:"Button", parent:parent, fontSize:fontSize);
 			return button;
 		}
 
-        public CheckBox CreateCheckBox(string text, Control parent, string name=null)
+        public TextureButton CreateTextureButtonFromSprite(string texturePath)
+        {
+            Texture2D texture = GD.Load<Texture2D>(texturePath);
+            TextureButton button = new TextureButton
+            {
+                TextureNormal = texture,
+                TexturePressed = texture,
+                TextureHover = texture,
+                CustomMinimumSize = texture.GetSize()
+            };
+
+            button.TextureFilter = TextureFilterEnum.Nearest;
+            return button;
+        }
+
+        public TextureButton CreateTextureButtonFromRegion(string texturePath, Rect2 region)
+        {
+            Texture2D texture = GD.Load<Texture2D>(texturePath);
+
+            AtlasTexture atlasTexture = new AtlasTexture
+            {
+                Atlas = texture,
+                Region = region
+            };
+
+            TextureButton button = new TextureButton
+            {
+                TextureNormal = atlasTexture,
+                TexturePressed = atlasTexture,
+                TextureHover = atlasTexture,
+                CustomMinimumSize = region.Size,
+                MouseFilter = Control.MouseFilterEnum.Stop,
+                SizeFlagsHorizontal = Control.SizeFlags.Fill,
+                TextureFilter = TextureFilterEnum.Nearest
+            };
+
+            return button;
+        }
+
+        public CheckBox CreateCheckBox(string text, Control parent, int fontSize=0)
         {
             CheckBox checkBox = new();
             checkBox.Text = text;
-            checkBox.Name = string.IsNullOrEmpty(name) ? text : name;
-            checkBox.TextureFilter = TextureFilterEnum.Nearest;
-
-            Theme theme = GetGameFontTheme(fontSize: 12, gameObject: "CheckBox");
-            checkBox.Theme = theme;
-            parent.AddChild(checkBox);
-
+            ConfigureControl(control:checkBox, gameObject:"CheckBox", parent:parent, fontSize:fontSize);
             return checkBox;
+        }
 
+        public Label CreateLabel(string text, Control parent, int fontSize=0)
+        {
+            Label label = new();
+            label.Text = text;
+            ConfigureControl(control:label, gameObject:"Label", parent:parent, fontSize:fontSize);
+            return label;
         }
 
         /// <summary>
@@ -62,15 +102,14 @@ namespace GameNamespace.UI
 		/// </summary>
 		/// <param name="message"></param>
 		/// <param name="pressedButton"></param>
-		public void SpawnWarning(string message, Button pressedButton)
+		public void SpawnWarning(string message, Control pressedButton)
 		{
-			// Generate the label. TODO I should maybe do this entirely in code instead of using a prefab.
-			PackedScene prefab = GD.Load<PackedScene>($"{uiPrefabLoc}/warning_label.tscn");
-			Label warning = (Label)prefab.Instantiate();
-			warning.Text = message;
-			pressedButton.AddChild(warning);
+			// Create label with light red color and raise it above the parent by 20 pixels
+            Label warning = CreateLabel(text:message, parent:pressedButton, fontSize:20);
+            warning.AddThemeColorOverride("font_color", new Color(0.9f, 0.3f, 0.3f));
+            warning.Position -= new Vector2(0, 20);
 
-			// Animate a fade out.
+            // Animate a fade out
 			Tween warningTween = GetTree().CreateTween();
 			warningTween.TweenProperty(warning, "modulate:a", 0.0f, 2.0f);
 			warningTween.TweenCallback(Callable.From(() => warning.QueueFree()));

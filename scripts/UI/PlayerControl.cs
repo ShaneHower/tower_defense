@@ -17,7 +17,7 @@ namespace GameNamespace.UI
 		// Game objects
 		private Level level;
 		public Button towerButton;
-		public Tower chosenTower;
+		public Tower chosenTower = null;
 		public Ruins ruins;
 		private InputEventMouseButton mouseEvent;
 
@@ -25,20 +25,14 @@ namespace GameNamespace.UI
 		{
 			level = GetTree().Root.GetNode<Level>("Level");
 
-			foreach(Node child in GetChildren())
-			{
-				if(child is Button button)
-				{
-					button.Pressed += () => OnButtonDown(button);
-				}
-			}
+			CreatePlayerHud();
 		}
 
         public override void _Input(InputEvent @event)
         {
             if(@event is InputEventMouseButton mouseEvent)
 			{
-				if(mouseEvent.Pressed)
+				if(mouseEvent.Pressed && chosenTower is not null)
 				{
 					PlaceTower(mouseEvent);
 				}
@@ -81,25 +75,48 @@ namespace GameNamespace.UI
 			}
         }
 
-        private void OnButtonDown(Button pressedButton)
+		public void CreatePlayerHud()
 		{
-			// Get tower data and extract the cost so we can check if the player has enough money to buy the tower.
-			string towerId = (string)pressedButton.GetMeta("towerId");
-			TowerData towerData = GameDataBase.Instance.QueryTowerData(towerId);
+			HBoxContainer container = GetNode<HBoxContainer>("HBoxContainer");
+			TextureButton basicTower = UITools.Instance.CreateTextureButtonFromRegion(
+				texturePath:$"{GameCoordinator.Instance.spriteLoc}/BasicTower-Sheet.png",
+				region:new Rect2(0, 0, 48, 72)
+			);
+			basicTower.SetMeta("towerId", 101);
+			container.AddChild(basicTower);
+			basicTower.Pressed += () => OnButtonDown(basicTower);
 
-			if(GameCoordinator.Instance.currentGold < towerData.gold)
+			TextureButton iceTower = UITools.Instance.CreateTextureButtonFromRegion(
+				texturePath:$"{GameCoordinator.Instance.spriteLoc}/IceTowerLv1-Sheet.png",
+				region:new Rect2(0, 0, 48, 72)
+			);
+			iceTower.SetMeta("towerId", 102);
+			container.AddChild(iceTower);
+			iceTower.Pressed += () => OnButtonDown(iceTower);
+		}
+
+        private void OnButtonDown(TextureButton pressedButton)
+		{
+			if(!towerUiActive)
 			{
-				// Flash a warning message that there isn't enough gold.
-				UITools.Instance.SpawnWarning("Not Enough Gold!", pressedButton);
-			}
-			else
-			{
-				// Generate the tower prefab.
-				PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.towerPrefabLoc}/{towerData.prefab}");
-				chosenTower = (Tower)prefab.Instantiate();
-				towerUiActive = true;
-				level.AddChild(chosenTower);
-				chosenTower.beingPlaced = true;
+				// Get tower data and extract the cost so we can check if the player has enough money to buy the tower.
+				string towerId = (string)pressedButton.GetMeta("towerId");
+				TowerData towerData = GameDataBase.Instance.QueryTowerData(towerId);
+
+				if(GameCoordinator.Instance.currentGold < towerData.gold)
+				{
+					// Flash a warning message that there isn't enough gold.
+					UITools.Instance.SpawnWarning("Not Enough Gold!", pressedButton);
+				}
+				else
+				{
+					// Generate the tower prefab.
+					PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.towerPrefabLoc}/{towerData.prefab}");
+					chosenTower = (Tower)prefab.Instantiate();
+					towerUiActive = true;
+					level.AddChild(chosenTower);
+					chosenTower.beingPlaced = true;
+				}
 			}
 		}
 
@@ -110,21 +127,23 @@ namespace GameNamespace.UI
 		/// <param name="mouseButton"></param>
 		private void PlaceTower(InputEventMouseButton mouseButton)
 		{
-			if(chosenTower is not null)
+			if(mouseButton.ButtonIndex == MouseButton.Left && ruinsHovered && towerUiActive)
 			{
-				if(mouseButton.ButtonIndex == MouseButton.Left && ruinsHovered && towerUiActive)
-				{
-					towerUiActive = false;
-					chosenTower.beingPlaced = false;
-					GameCoordinator.Instance.currentGold -= chosenTower.gold;
-					ruinsHovered = false;
-					ruins.QueueFree();
-				}
-				else if (towerUiActive && mouseButton.ButtonIndex == MouseButton.Right)
-				{
-					towerUiActive = false;
-					chosenTower.QueueFree();
-				}
+				towerUiActive = false;
+				chosenTower.beingPlaced = false;
+				GameCoordinator.Instance.currentGold -= chosenTower.gold;
+				ruinsHovered = false;
+				ruins.QueueFree();
+
+				// Free up for garbage collection.
+				ruins = null;
+				chosenTower = null;
+			}
+			else if (towerUiActive && mouseButton.ButtonIndex == MouseButton.Right)
+			{
+				towerUiActive = false;
+				chosenTower.QueueFree();
+				chosenTower = null;
 			}
 		}
 
