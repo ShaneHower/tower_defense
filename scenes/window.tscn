@@ -727,3 +727,15 @@ position = Vector2(354, 417)
 
 [node name="Ruins4" parent="." instance=ExtResource("8_cv8km")]
 position = Vector2(444, 218)
+
+[node name="Ruins5" parent="." instance=ExtResource("8_cv8km")]
+position = Vector2(742, 425)
+
+[node name="Ruins6" parent="." instance=ExtResource("8_cv8km")]
+position = Vector2(1110, 356)
+
+[node name="Ruins7" parent="." instance=ExtResource("8_cv8km")]
+position = Vector2(819, 504)
+
+[node name="Ruins8" parent="." instance=ExtResource("8_cv8km")]
+position = Vector2(687, 714)

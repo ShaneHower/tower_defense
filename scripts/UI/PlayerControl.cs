@@ -78,6 +78,7 @@ namespace GameNamespace.UI
 		public void CreatePlayerHud()
 		{
 			HBoxContainer container = GetNode<HBoxContainer>("HBoxContainer");
+
 			TextureButton basicTower = UITools.Instance.CreateTextureButtonFromRegion(
 				texturePath:$"{GameCoordinator.Instance.spriteLoc}/BasicTower-Sheet.png",
 				region:new Rect2(0, 0, 48, 72)
@@ -91,6 +92,22 @@ namespace GameNamespace.UI
 			);
 			HandleTowerButtonBehavior(button:iceTower, towerId:102);
 			container.AddChild(iceTower);
+
+			TextureButton fireTower = UITools.Instance.CreateTextureButtonFromRegion(
+				texturePath:$"{GameCoordinator.Instance.spriteLoc}/FireTowerLv1-Sheet.png",
+				region:new Rect2(0, 0, 48, 72)
+			);
+			HandleTowerButtonBehavior(button:fireTower, towerId:107);
+			container.AddChild(fireTower);
+
+			TextureButton earthTower = UITools.Instance.CreateTextureButtonFromRegion(
+				texturePath:$"{GameCoordinator.Instance.spriteLoc}/EarthTowerLv1-Sheet.png",
+				region:new Rect2(0, 0, 48, 72)
+			);
+			HandleTowerButtonBehavior(button:earthTower, towerId:104);
+			container.AddChild(earthTower);
+
+
 		}
 
 		public void HandleTowerButtonBehavior(TextureButton button, int towerId)

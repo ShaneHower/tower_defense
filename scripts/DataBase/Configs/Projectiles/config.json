@@ -28,5 +28,19 @@
         "aoeRange": 10,
         "aoeDamagePerc": 0.3,
         "prefab": "snowball.tscn"
+    },
+    "104": {
+        "id": 104,
+        "name": "fire",
+        "speed": 200.0,
+        "damage": 20.0,
+        "prefab": "fire.tscn"
+    },
+    "105": {
+        "id": 105,
+        "name": "rock",
+        "speed": 200.0,
+        "damage": 20.0,
+        "prefab": "rock.tscn"
     }
 }

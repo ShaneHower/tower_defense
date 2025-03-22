@@ -60,7 +60,7 @@ namespace GameNamespace.UI
                 SizeFlagsHorizontal = Control.SizeFlags.Fill,
                 SizeFlagsVertical = Control.SizeFlags.Fill,
                 MouseFilter = Control.MouseFilterEnum.Ignore,
-                TextureFilter = TextureFilterEnum.Nearest, 
+                TextureFilter = TextureFilterEnum.Nearest,
                 Name = "HoverOverlay",
                 Visible = false
             };
@@ -137,5 +137,31 @@ namespace GameNamespace.UI
 			warningTween.TweenProperty(warning, "modulate:a", 0.0f, 2.0f);
 			warningTween.TweenCallback(Callable.From(() => warning.QueueFree()));
 		}
+
+        public Line2D CreateCircleColliderOutline(CollisionShape2D collider)
+        {
+			CircleShape2D circleCollider = (CircleShape2D)collider.Shape;
+
+			// the higher the value of points the smoother the circle
+			float scale = collider.Scale.X;
+			float radius = circleCollider.Radius * scale;
+			int points = 60;
+
+			Line2D circleLine = new();
+			circleLine.Width = 1;
+			circleLine.DefaultColor = new Color(1, 0, 0, 1);
+
+			Vector2[] circlePoints = new Vector2[points + 1];
+			for(int i = 0; i <= points; i++)
+			{
+				// Mathf.Tau = 2 * PI
+				float angle = (i / (float)points) * Mathf.Tau;
+				circlePoints[i] = new Vector2(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius);
+			}
+
+			circleLine.Points = circlePoints;
+
+			return circleLine;
+        }
     }
 }

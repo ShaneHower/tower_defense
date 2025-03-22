@@ -6,7 +6,8 @@ namespace  GameNamespace.GameAssets
     using GameNamespace.DataBase;
 	using Serilog;
     using GameNamespace.UI;
-    using System.ComponentModel;
+    using System.Threading.Tasks;
+    using System;
 
 
 
@@ -27,6 +28,7 @@ namespace  GameNamespace.GameAssets
 		public string projectileId;
 		public string attackModifier;
 		public int attackModCounter;
+		public int multiShot;
 		public string nextLevelId;
 
 		// Class vars
@@ -51,27 +53,33 @@ namespace  GameNamespace.GameAssets
 
 		public override void _Ready()
 		{
-			// Set class vars
+			// Init work
 			id = (string)GetMeta("towerId");
 			SetVars();
-
-			// Init work
 			gameLevel = GetTree().Root.GetNode<Level>("Level");
 			animator = GetNode<AnimatedSprite2D>("Animator");
 			animator.Play("idle");
 
+			// Tower range outline
+			var collider = GetNode<CollisionShape2D>("Collider");
+			towerRange = UITools.Instance.CreateCircleColliderOutline(collider);
+			AddChild(towerRange);
+
+			// Handle UI
 			upgradeControl = GetNode<Control>("UpgradeControl");
 			upgradeButton = upgradeControl.GetNode<Button>("Upgrade");
 			upgradeButton.Pressed += Upgrade;
 			upgradeButton.MouseEntered += () => upgradeButtonHovered=true;
 			upgradeButton.MouseExited += () => upgradeButtonHovered=false;
 
-
+			// Detect player mouse
 			hoverArea = GetNode<Area2D>("HoverArea");
 			hoverArea.MouseEntered += () => isHovered = true;
 			hoverArea.MouseExited += () => isHovered = false;
 
-			towerRange = BuildTowerRange();
+			// Connect signals
+			Connect("body_entered", new Callable(this, nameof(OnEnter)));
+			Connect("body_exited", new Callable(this, nameof(OnExit)));
 
 			log.Information($"Tower {this} with name {Name} instantiated.");
 		}
@@ -90,6 +98,7 @@ namespace  GameNamespace.GameAssets
 			projectileId = data.projectileId;
 			attackModifier = data.attackModifier;
 			attackModCounter = data.attackModCounter;
+			multiShot = data.multiShot;
 			nextLevelId = data.nextLevelId;
 		}
 
@@ -104,16 +113,7 @@ namespace  GameNamespace.GameAssets
 			{
 				towerRange.Visible = false;
 				hoverArea.Visible = true;
-
-				if(attackCounter * attackModCounter != 0 && attackCounter % attackModCounter == 0)
-				{
-
-					AttackTarget(attackModifier);
-				}
-				else
-				{
-					AttackTarget(projectileId);
-				}
+				CheckAndResolveAttack();
 			}
 		}
 
@@ -122,7 +122,7 @@ namespace  GameNamespace.GameAssets
 			// Mouse Inputs
             if(@event is InputEventMouseButton mouseEvent)
 			{
-				bool towerClicked = isHovered && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left;
+				bool towerClicked = nextLevelId is not null && isHovered && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left;
 				bool upgradeExitMouseR = upgradeControl.Visible && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Right;
 				bool upgradeExitMouseL = !upgradeButtonHovered && upgradeControl.Visible && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left;
 
@@ -157,90 +157,68 @@ namespace  GameNamespace.GameAssets
 			}
         }
 
-        /// <summary>
-		/// This method creates a visible circle representing the tower range.  This is visible when the tower is being
-		/// placed.
-		/// </summary>
-		/// <returns></returns>
-		private Line2D BuildTowerRange()
+		private async void CheckAndResolveAttack()
 		{
-			CollisionShape2D collider = GetNode<CollisionShape2D>("Collider");
-			CircleShape2D circleCollider = (CircleShape2D)collider.Shape;
-
-			// the higher the value of points the smoother the circle
-			float scale = collider.Scale.X;
-			float radius = circleCollider.Radius * scale;
-			int points = 60;
-
-			Line2D circleLine = new();
-			circleLine.Width = 1;
-			circleLine.DefaultColor = new Color(1, 0, 0, 1);
-
-			Vector2[] circlePoints = new Vector2[points + 1];
-			for(int i = 0; i <= points; i++)
+			if(canFire)
 			{
-				// Mathf.Tau = 2 * PI
-				float angle = (i / (float)points) * Mathf.Tau;
-				circlePoints[i] = new Vector2(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius);
+				canFire = false;
+
+				if(attackCounter * attackModCounter != 0 && attackCounter % attackModCounter == 0)
+					AttackTarget(attackModifier);
+				else
+					AttackTarget(projectileId);
+
+				// If some how the tower deletes we resolve any hanging async tasks.
+				await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
+				if (!IsInsideTree()) return;
+
+				attackCounter++;
+				canFire = true;
 			}
-
-			circleLine.Points = circlePoints;
-			AddChild(circleLine);
-
-			return circleLine;
 		}
 
-		private async void AttackTarget(string projectileId)
+		private async void AttackTarget(string projectileId, int targetIndex=0)
 		{
-			if(targetEnemies.Count > 0)
+			try
 			{
-				// Get first element of the list
-				Enemy target = targetEnemies[0];
-
-				// Sometimes an enemy may have been killed by another tower in this case the tower can get stuck
-				// looking for an enemy that no longer exists.
-				List<Enemy> activeEnemies = GameCoordinator.Instance.activeEnemies;
-				if(activeEnemies.Contains(target))
+				// Sometimes an enemy may have been killed by another tower in this case the tower can get stuck looking for an enemy that no longer exists.
+				Enemy target = targetEnemies[targetIndex];
+				bool isValidTarget = !target.isDying && GameCoordinator.Instance.activeEnemies.Contains(target);
+				if(isValidTarget)
 				{
-					if(canFire && !target.isDying)
+					log.Information($"Tower {this} with name {Name} is attacking Enemy {target}");
+					SpawnProjectile(projectileId, target);
+
+					// Resolve multishot if applicable/
+					if(targetIndex == 0 && multiShot != 0)
 					{
-						log.Information($"Tower {this} with name {Name} is attacking Enemy {target}");
-						canFire = false;
+						for(int i = 1; i < multiShot; i++)
+						{
+							// If some how the tower deletes we resolve any hanging async tasks.
+							await Task.Delay(50);
+							if (!IsInsideTree()) return;
 
-						// Instantiate projectile
-						// Get the projectile prefab
-						ProjectileData projectileData = GameDataBase.Instance.QueryProjectileData(projectileId);
-						string projectilePrefab = projectileData.prefab;
-						projectile = GD.Load<PackedScene>($"{GameCoordinator.Instance.projectilePrefabLoc}/{projectilePrefab}");
-						proj_instance = (Projectile) projectile.Instantiate();
-						AddChild(proj_instance);
-						proj_instance.target = target;
-
-						// Wait out the attack speed
-						await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
-						attackCounter++;
-						canFire = true;
+							log.Information($"Multishot triggered.");
+							AttackTarget(projectileId, targetIndex=i);
+						}
 					}
 				}
-				else
-				{
-					targetEnemies.Remove(target);
-				}
+			}
+			catch(ArgumentOutOfRangeException)
+			{
+				// if we try to fire and the target gets released halfway through the action.
+				return;
 			}
 		}
 
-		private void OnEnter(Enemy enemy)
+		private void SpawnProjectile(string projectileId, Enemy target)
 		{
-			enemy.targeted = true;
-			targetEnemies.Add(enemy);
-		}
-
-		// Called when another body exits the area
-		private void OnExit(Enemy enemy)
-		{
-			// For now I'm treating this like a stack, first in first out.
-			enemy.targeted = false;
-			targetEnemies.Remove(enemy);
+			ProjectileData projectileData = GameDataBase.Instance.QueryProjectileData(projectileId);
+			string projectilePrefab = projectileData.prefab;
+			projectile = GD.Load<PackedScene>($"{GameCoordinator.Instance.projectilePrefabLoc}/{projectilePrefab}");
+			proj_instance = (Projectile) projectile.Instantiate();
+			AddChild(proj_instance);
+			proj_instance.target = target;
 		}
 
 		private void Upgrade()
@@ -255,16 +233,41 @@ namespace  GameNamespace.GameAssets
 				gameLevel.AddChild(upgrade);
 				upgrade.Position = Position;
 				GameCoordinator.Instance.currentGold -= upgrade.gold;
-
-				// If we don't clear out this instance, the deleted object will be stuck to it and the upgrade behavior
-				// will break.
-				GameCoordinator.Instance.towerAttemptingUpgrade = null;
 				QueueFree();
 			}
 			else
 			{
 				UITools.Instance.SpawnWarning(message:"Not Enough Gold!", pressedButton:upgradeButton);
 			}
+		}
+
+		private void OnEnter(Node body)
+		{
+			if(body is Enemy enemy)
+			{
+				enemy.targeted = true;
+				targetEnemies.Add(enemy);
+			}
+		}
+
+		private void OnExit(Node body)
+		{
+			if(body is Enemy enemy)
+			{
+				// For now I'm treating this like a stack, first in first out.
+				enemy.targeted = false;
+				targetEnemies.Remove(enemy);
+			}
+
+		}
+
+		public override void _ExitTree()
+		{
+			// If we don't clear out this instance, the deleted object will be stuck to it and the upgrade behavior will break.
+			GameCoordinator.Instance.towerAttemptingUpgrade = null;
+
+			Disconnect("body_entered", new Callable(this, nameof(OnEnter)));
+			Disconnect("body_exited", new Callable(this, nameof(OnExit)));
 		}
 
 	}
