@@ -159,7 +159,7 @@ namespace  GameNamespace.GameAssets
 
 		private async void CheckAndResolveAttack()
 		{
-			if(canFire)
+			if(targetEnemies.Count != 0 && canFire)
 			{
 				canFire = false;
 
@@ -172,8 +172,8 @@ namespace  GameNamespace.GameAssets
 				await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
 				if (!IsInsideTree()) return;
 
-				attackCounter++;
 				canFire = true;
+				attackCounter ++;
 			}
 		}
 
@@ -184,6 +184,7 @@ namespace  GameNamespace.GameAssets
 				// Sometimes an enemy may have been killed by another tower in this case the tower can get stuck looking for an enemy that no longer exists.
 				Enemy target = targetEnemies[targetIndex];
 				bool isValidTarget = !target.isDying && GameCoordinator.Instance.activeEnemies.Contains(target);
+
 				if(isValidTarget)
 				{
 					log.Information($"Tower {this} with name {Name} is attacking Enemy {target}");
@@ -206,7 +207,6 @@ namespace  GameNamespace.GameAssets
 			}
 			catch(ArgumentOutOfRangeException)
 			{
-				// if we try to fire and the target gets released halfway through the action.
 				return;
 			}
 		}
