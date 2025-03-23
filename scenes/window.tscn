@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=27 format=4 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://bystnf2j7c3q1" path="res://sprites/Grass Tileset-Sheet.png" id="2_bapj4"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
@@ -10,7 +10,9 @@
 [ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="6_tg7ok"]
 [ext_resource type="PackedScene" uid="uid://4yvoxm5c6u73" path="res://prefabs/ruins.tscn" id="8_cv8km"]
 [ext_resource type="Texture2D" uid="uid://b5bitirqubp4s" path="res://sprites/Icons Tileset.png" id="9_6usdr"]
+[ext_resource type="PackedScene" uid="uid://bjfu70l4w2s5c" path="res://prefabs/ui/main_menu.tscn" id="10_qsv56"]
 [ext_resource type="Script" uid="uid://b18gtp6ogceg5" path="res://scripts/UI/PauseMenu.cs" id="11_vbepn"]
+[ext_resource type="PackedScene" uid="uid://e48wfplay4er" path="res://prefabs/ui/settings_menu.tscn" id="11_yeipv"]
 [ext_resource type="Script" uid="uid://bbhcwwkl4vi11" path="res://scripts/UI/DevTools/DevWindow.cs" id="12_ki2gb"]
 [ext_resource type="Script" uid="uid://c5ekhkgq3cd0e" path="res://scripts/UI/DevTools/SpawnBox.cs" id="13_vbepn"]
 [ext_resource type="Script" uid="uid://cvvl7a2b4b4ym" path="res://scripts/UI/DevTools/CombatLogConsole.cs" id="14_abi4y"]
@@ -433,6 +435,7 @@ rendering_quadrant_size = 24
 [node name="UICanvas" type="CanvasLayer" parent="."]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="UICanvas"]
+visible = false
 texture_filter = 1
 position = Vector2(10, 613)
 tile_map_data = PackedByteArray("AAAAAAQAAQAEAAAAAAAAAAUAAQAEAAAAAAAAAAYAAQALAAAAAAABAAYAAQAMAAAAAAACAAYAAQAMAAAAAAADAAYAAQAMAAAAAAAEAAYAAQAMAAAAAAAFAAYAAQAKAAAAAAAFAAUAAQAGAAAAAAAFAAQAAQAGAAAAAAAEAAQAAQAFAAAAAAAEAAUAAQAFAAAAAAADAAUAAQAFAAAAAAACAAUAAQAFAAAAAAABAAUAAQAFAAAAAAABAAQAAQAFAAAAAAACAAQAAQAFAAAAAAADAAQAAQAFAAAAAAAGAAQAAQAEAAAAAAAGAAUAAQAEAAAAAAAGAAYAAQALAAAAAAAHAAQAAQAFAAAAAAAIAAQAAQAFAAAAAAAJAAQAAQAFAAAAAAAKAAQAAQAFAAAAAAALAAQAAQAFAAAAAAAMAAQAAQAFAAAAAAANAAQAAQAFAAAAAAAOAAQAAQAFAAAAAAAPAAQAAQAFAAAAAAAQAAQAAQAFAAAAAAARAAQAAQAFAAAAAAASAAQAAQAFAAAAAAATAAQAAQAFAAAAAAAUAAQAAQAFAAAAAAAVAAQAAQAFAAAAAAAWAAQAAQAFAAAAAAAXAAQAAQAFAAAAAAAHAAUAAQAFAAAAAAAIAAUAAQAFAAAAAAAJAAUAAQAFAAAAAAAKAAUAAQAFAAAAAAALAAUAAQAFAAAAAAAMAAUAAQAFAAAAAAANAAUAAQAFAAAAAAAOAAUAAQAFAAAAAAAPAAUAAQAFAAAAAAAQAAUAAQAFAAAAAAARAAUAAQAFAAAAAAASAAUAAQAFAAAAAAATAAUAAQAFAAAAAAAUAAUAAQAFAAAAAAAVAAUAAQAFAAAAAAAWAAUAAQAFAAAAAAAXAAUAAQAFAAAAAAAIAAYAAQAMAAAAAAAJAAYAAQAMAAAAAAAKAAYAAQAMAAAAAAALAAYAAQAMAAAAAAAMAAYAAQAMAAAAAAANAAYAAQAMAAAAAAAOAAYAAQAMAAAAAAAPAAYAAQAMAAAAAAAQAAYAAQAMAAAAAAARAAYAAQAMAAAAAAASAAYAAQAMAAAAAAATAAYAAQAMAAAAAAAUAAYAAQAMAAAAAAAVAAYAAQAMAAAAAAAWAAYAAQAMAAAAAAAXAAYAAQAMAAAAAAAHAAYAAQAMAAAAAAAHAAMAAQACAAAAAAAIAAMAAQACAAAAAAAGAAMAAQABAAAAAAAJAAMAAQACAAAAAAAKAAMAAQACAAAAAAALAAMAAQACAAAAAAAMAAMAAQACAAAAAAANAAMAAQACAAAAAAAOAAMAAQACAAAAAAAPAAMAAQACAAAAAAAQAAMAAQACAAAAAAARAAMAAQACAAAAAAASAAMAAQACAAAAAAATAAMAAQACAAAAAAAUAAMAAQACAAAAAAAVAAMAAQACAAAAAAAWAAMAAQACAAAAAAAXAAMAAQACAAAAAAAAAAMAAQABAAAAAAABAAMAAQACAAAAAAACAAMAAQACAAAAAAADAAMAAQACAAAAAAAEAAMAAQACAAAAAAAFAAMAAQADAAAAAAAAAAEAAQABAAAAAAAAAAIAAQALAAAAAAABAAEAAQACAAAAAAACAAEAAQACAAAAAAADAAEAAQACAAAAAAAEAAEAAQACAAAAAAAFAAEAAQADAAAAAAAFAAIAAQAKAAAAAAABAAIAAQAMAAAAAAACAAIAAQAMAAAAAAADAAIAAQAMAAAAAAAEAAIAAQAMAAAAAAAYAAMAAQADAAAAAAAYAAQAAQAGAAAAAAAYAAUAAQAGAAAAAAAYAAYAAQAKAAAAAAA=")
@@ -443,9 +446,7 @@ rendering_quadrant_size = 24
 layout_mode = 3
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_top = 5.0
-offset_right = 1440.0
-offset_bottom = 5.0
+offset_right = 1281.0
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("5_6vyxk")
@@ -453,16 +454,11 @@ script = ExtResource("5_6vyxk")
 [node name="PlayerHud" type="Control" parent="UICanvas/UI"]
 texture_filter = 1
 layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -566.0
-offset_top = -131.0
-offset_right = -112.0
-offset_bottom = -34.0
-grow_horizontal = 2
+offset_top = -97.0
+offset_right = 454.0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("6_ki2gb")
@@ -477,10 +473,10 @@ offset_bottom = 94.0
 [node name="LevelState" type="Control" parent="UICanvas/UI"]
 layout_mode = 3
 anchors_preset = 0
-offset_left = 12.0
-offset_top = 634.0
-offset_right = 152.0
-offset_bottom = 677.0
+offset_left = 9.0
+offset_top = 9.0
+offset_right = 149.0
+offset_bottom = 52.0
 
 [node name="Gold" type="Sprite2D" parent="UICanvas/UI/LevelState"]
 texture_filter = 1
@@ -517,22 +513,6 @@ theme_override_fonts/font = ExtResource("6_tg7ok")
 theme_override_font_sizes/font_size = 20
 text = "10"
 
-[node name="WaveHud" type="Control" parent="UICanvas/UI"]
-show_behind_parent = true
-light_mask = 2
-visibility_layer = 2
-texture_filter = 1
-custom_minimum_size = Vector2(10, 10)
-layout_mode = 1
-anchor_left = 0.006
-anchor_top = 0.98
-anchor_right = 0.006
-anchor_bottom = 0.98
-offset_left = 4.36
-offset_top = -110.8
-offset_right = 143.36
-offset_bottom = -18.8
-
 [node name="PauseMenu" type="Control" parent="UICanvas/UI"]
 process_mode = 3
 layout_mode = 1
@@ -541,59 +521,42 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -73.0
-offset_top = -73.0
-offset_right = 73.0
-offset_bottom = 73.0
+offset_left = -124.0
+offset_top = -122.5
+offset_right = 124.0
+offset_bottom = 122.5
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("11_vbepn")
 
-[node name="MainMenu" type="Panel" parent="UICanvas/UI/PauseMenu"]
-visible = false
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -72.0
-offset_top = -72.5
-offset_right = 72.0
-offset_bottom = 72.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/PauseMenu/MainMenu"]
-texture_filter = 1
+[node name="MainMenu" parent="UICanvas/UI/PauseMenu" instance=ExtResource("10_qsv56")]
 layout_mode = 0
-offset_right = 144.0
-offset_bottom = 146.0
-alignment = 1
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 1
+grow_vertical = 1
 
-[node name="SettingsMenu" type="Panel" parent="UICanvas/UI/PauseMenu"]
+[node name="SettingsMenu" parent="UICanvas/UI/PauseMenu" instance=ExtResource("11_yeipv")]
 visible = false
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -72.0
-offset_top = -72.5
-offset_right = 72.0
-offset_bottom = 72.5
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="UICanvas/UI/PauseMenu/SettingsMenu"]
-texture_filter = 1
 layout_mode = 0
-offset_right = 144.0
-offset_bottom = 146.0
-alignment = 1
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 150.0
+offset_bottom = 150.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="DevWindow" type="Control" parent="UICanvas/UI"]
 process_mode = 3
@@ -694,6 +657,21 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
+[node name="WaveHud" type="Control" parent="UICanvas/UI"]
+show_behind_parent = true
+light_mask = 2
+visibility_layer = 2
+texture_filter = 1
+custom_minimum_size = Vector2(10, 10)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -69.5
+offset_right = 69.5
+offset_bottom = 92.0
+grow_horizontal = 2
+
 [node name="LevelPath" type="Path2D" parent="."]
 position = Vector2(0.0861426, 0.575739)
 scale = Vector2(1.054, 0.996313)
@@ -717,12 +695,15 @@ metadata/direction = "right"
 [node name="levelTimer" type="Timer" parent="."]
 
 [node name="Ruins1" parent="." instance=ExtResource("8_cv8km")]
+texture_filter = 1
 position = Vector2(347, 119)
 
 [node name="Ruins2" parent="." instance=ExtResource("8_cv8km")]
+texture_filter = 1
 position = Vector2(31, 184)
 
 [node name="Ruins3" parent="." instance=ExtResource("8_cv8km")]
+texture_filter = 1
 position = Vector2(354, 417)
 
 [node name="Ruins4" parent="." instance=ExtResource("8_cv8km")]

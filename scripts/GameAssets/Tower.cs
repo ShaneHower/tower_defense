@@ -117,6 +117,11 @@ namespace  GameNamespace.GameAssets
 			}
 		}
 
+		/// <summary>
+		/// Currently this input method is controlling the interactable tower UI.  This allows the player to bring up
+		/// the upgrade menu when they click the tower.
+		/// </summary>
+		/// <param name="event"></param>
 		public override void _Input(InputEvent @event)
         {
 			// Mouse Inputs

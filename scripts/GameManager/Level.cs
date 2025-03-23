@@ -41,7 +41,7 @@ namespace GameNamespace.GameManager
         public Path2D levelPath;
         public UIControl uiControl;
         private Control waveHud;
-        private Button waveButton;
+        private TextureButton waveButton;
 
 		/// <summary>
         /// This is the first bit of code to run in the scene.  Establishes the base-line health, economy, and wave

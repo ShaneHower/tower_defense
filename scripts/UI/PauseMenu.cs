@@ -1,11 +1,14 @@
 namespace GameNamespace.UI
 {
 	using DevTools;
+    using GameNamespace.GameManager;
+
     using Godot;
 
     public partial class PauseMenu : UIControl
     {
         public Panel mainMenu;
+		public VBoxContainer buttonContainer;
 		public Panel settingsMenu;
         private Control parentUI;
 		private DevWindow devWindow;
@@ -13,6 +16,9 @@ namespace GameNamespace.UI
         public override void _Ready()
         {
             mainMenu = GetNode<Panel>("MainMenu");
+			buttonContainer = mainMenu.GetNode<VBoxContainer>("VBoxContainer");
+			buttonContainer.Alignment = BoxContainer.AlignmentMode.Center;
+
 			settingsMenu = GetNode<Panel>("SettingsMenu");
             parentUI = GetParent<Control>();
 			devWindow = parentUI.GetNode<DevWindow>("DevWindow");
@@ -46,19 +52,26 @@ namespace GameNamespace.UI
         private void CreateMainMenu()
 		{
 			mainMenu.Visible = false;
-			VBoxContainer buttonContainer = mainMenu.GetNode<VBoxContainer>("VBoxContainer");
 
-			Button continueButton = UITools.Instance.CreateButton(text:"Continue", parent:buttonContainer);
+			TextureButton continueButton = CreateMenuButton("Continue");
 			continueButton.Pressed += OnContinueButtonPressed;
 
-			UITools.Instance.CreateButton(text:"Save", parent:buttonContainer);
+			TextureButton saveButton = CreateMenuButton("Save");
 
-			Button devButton = UITools.Instance.CreateButton(text:"Settings", parent:buttonContainer);
-            devButton.Pressed += OnSettingsButtonPressed;
+			TextureButton settingsButton = CreateMenuButton("Settings");
+			settingsButton.Pressed += OnSettingsButtonPressed;
 
-			Button quitButton = UITools.Instance.CreateButton(text:"Quit", parent:buttonContainer);
+			TextureButton quitButton = CreateMenuButton("Quit");
 			quitButton.Pressed += () => GetTree().Quit();
+		}
 
+		private TextureButton CreateMenuButton(string text)
+		{
+			TextureButton button = UITools.Instance.CreateTextureButtonFromRegion(parent:buttonContainer, buttonType:"Menu");
+			Label buttonLabel = UITools.Instance.CreateLabel(text:text, parent:button, fontSize:25);
+			buttonLabel.Size = button.Size;
+
+			return button;
 		}
 
 		private void CreateSettingsMenu()

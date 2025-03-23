@@ -17,7 +17,6 @@ namespace GameNamespace.UI
 		// Game objects
 		private Level level;
 		public Button towerButton;
-		public TextureRect currentSelectedHoverBox;
 		public Tower chosenTower = null;
 		public Ruins ruins;
 		private InputEventMouseButton mouseEvent;
@@ -79,51 +78,32 @@ namespace GameNamespace.UI
 		{
 			HBoxContainer container = GetNode<HBoxContainer>("HBoxContainer");
 
-			TextureButton basicTower = UITools.Instance.CreateTextureButtonFromRegion(
-				texturePath:$"{GameCoordinator.Instance.spriteLoc}/BasicTower-Sheet.png",
-				region:new Rect2(0, 0, 48, 72)
-			);
-			HandleTowerButtonBehavior(button:basicTower, towerId:101);
-			container.AddChild(basicTower);
+			TextureButton basicTower = UITools.Instance.CreateTextureButtonFromRegion(parent:container, buttonType:"Tower");
+			HandleTowerButtonBehavior(button:basicTower, towerId:101, spriteSheet:"BasicTower-Sheet.png");
 
-			TextureButton iceTower = UITools.Instance.CreateTextureButtonFromRegion(
-				texturePath:$"{GameCoordinator.Instance.spriteLoc}/IceTowerLv1-Sheet.png",
-				region:new Rect2(0, 0, 48, 72)
-			);
-			HandleTowerButtonBehavior(button:iceTower, towerId:102);
-			container.AddChild(iceTower);
+			TextureButton iceTower = UITools.Instance.CreateTextureButtonFromRegion(parent:container, buttonType:"Tower");
+			HandleTowerButtonBehavior(button:iceTower, towerId:102, spriteSheet:"IceTowerLv1-Sheet.png");
 
-			TextureButton fireTower = UITools.Instance.CreateTextureButtonFromRegion(
-				texturePath:$"{GameCoordinator.Instance.spriteLoc}/FireTowerLv1-Sheet.png",
-				region:new Rect2(0, 0, 48, 72)
-			);
-			HandleTowerButtonBehavior(button:fireTower, towerId:107);
-			container.AddChild(fireTower);
+			TextureButton fireTower = UITools.Instance.CreateTextureButtonFromRegion(parent:container, buttonType:"Tower");
+			HandleTowerButtonBehavior(button:fireTower, towerId:107, spriteSheet:"FireTowerLv1-Sheet.png");
 
-			TextureButton earthTower = UITools.Instance.CreateTextureButtonFromRegion(
-				texturePath:$"{GameCoordinator.Instance.spriteLoc}/EarthTowerLv1-Sheet.png",
-				region:new Rect2(0, 0, 48, 72)
-			);
-			HandleTowerButtonBehavior(button:earthTower, towerId:104);
-			container.AddChild(earthTower);
-
-
+			TextureButton earthTower = UITools.Instance.CreateTextureButtonFromRegion(parent:container, buttonType:"Tower");
+			HandleTowerButtonBehavior(button:earthTower, towerId:104, spriteSheet:"EarthTowerLv1-Sheet.png");
 		}
 
-		public void HandleTowerButtonBehavior(TextureButton button, int towerId)
+		public void HandleTowerButtonBehavior(TextureButton button, int towerId, string spriteSheet)
 		{
-			TextureRect hoverOverlay = button.GetNode<TextureRect>("HoverOverlay");
+			var spritePath = $"{GameCoordinator.Instance.spriteLoc}/{spriteSheet}";
+			var region = new Rect2(0, 0, 48, 72);
+
+			TextureRect tower = UITools.Instance.GetTextureRect(texturePath:spritePath, parent:button, region:region);
+			tower.OffsetLeft = -button.Size.X / 2f;
+            tower.OffsetTop = -button.Size.Y / 2f;
+            tower.OffsetRight = button.Size.X / 2f;
+            tower.OffsetBottom = button.Size.Y / 2f;
 
 			button.SetMeta("towerId", towerId);
 			button.Pressed += () => OnButtonDown(button);
-
-			button.MouseEntered += () => {
-				if(chosenTower is null) hoverOverlay.Visible = true;
-			};
-
-			button.MouseExited += () => {
-				if(chosenTower is null) hoverOverlay.Visible = false;
-			};
 		}
 
         private void OnButtonDown(TextureButton pressedButton)
@@ -141,10 +121,6 @@ namespace GameNamespace.UI
 				}
 				else
 				{
-					// Make overlay visible while placement is happening.
-					currentSelectedHoverBox = pressedButton.GetNode<TextureRect>("HoverOverlay");
-					currentSelectedHoverBox.Visible = true;
-
 					// Generate the tower prefab.
 					PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.towerPrefabLoc}/{towerData.prefab}");
 					chosenTower = (Tower)prefab.Instantiate();
@@ -170,12 +146,10 @@ namespace GameNamespace.UI
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
 				ruinsHovered = false;
 				ruins.QueueFree();
-				currentSelectedHoverBox.Visible = false;
 
 				// Free up for garbage collection.
 				ruins = null;
 				chosenTower = null;
-				currentSelectedHoverBox = null;
 
 			}
 			else if (towerUiActive && mouseButton.ButtonIndex == MouseButton.Right)
@@ -183,9 +157,7 @@ namespace GameNamespace.UI
 				// Cancel Placement
 				towerUiActive = false;
 				chosenTower.QueueFree();
-				currentSelectedHoverBox.Visible = false;
 				chosenTower = null;
-				currentSelectedHoverBox = null;
 			}
 		}
 
