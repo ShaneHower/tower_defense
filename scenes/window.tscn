@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=35 format=4 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://bystnf2j7c3q1" path="res://sprites/Grass Tileset-Sheet.png" id="2_bapj4"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
@@ -8,7 +8,9 @@
 [ext_resource type="Script" uid="uid://bexa5owl55003" path="res://scripts/UI/UIControl.cs" id="5_6vyxk"]
 [ext_resource type="Script" uid="uid://ciko5w7xhyo1r" path="res://scripts/UI/PlayerControl.cs" id="6_ki2gb"]
 [ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="6_tg7ok"]
+[ext_resource type="Texture2D" uid="uid://b0vuoqsqlmx8t" path="res://sprites/MagicRock-Sheet.png" id="7_iu5r1"]
 [ext_resource type="PackedScene" uid="uid://4yvoxm5c6u73" path="res://prefabs/ruins.tscn" id="8_cv8km"]
+[ext_resource type="Texture2D" uid="uid://bd8nvufcspsd4" path="res://sprites/MagicRock.png" id="8_wq1mn"]
 [ext_resource type="Texture2D" uid="uid://b5bitirqubp4s" path="res://sprites/Icons Tileset.png" id="9_6usdr"]
 [ext_resource type="PackedScene" uid="uid://bjfu70l4w2s5c" path="res://prefabs/ui/main_menu.tscn" id="10_qsv56"]
 [ext_resource type="Script" uid="uid://b18gtp6ogceg5" path="res://scripts/UI/PauseMenu.cs" id="11_vbepn"]
@@ -397,6 +399,54 @@ texture_region_size = Vector2i(24, 24)
 tile_size = Vector2i(24, 24)
 sources/1 = SubResource("TileSetAtlasSource_nlt83")
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_5m75j"]
+atlas = ExtResource("7_iu5r1")
+region = Rect2(0, 0, 56, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gsv3"]
+atlas = ExtResource("7_iu5r1")
+region = Rect2(56, 0, 56, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p04xt"]
+atlas = ExtResource("7_iu5r1")
+region = Rect2(112, 0, 56, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_be4un"]
+atlas = ExtResource("7_iu5r1")
+region = Rect2(168, 0, 56, 80)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e0nld"]
+atlas = ExtResource("8_wq1mn")
+region = Rect2(0, 0, 56, 80)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ql28w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5m75j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2gsv3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p04xt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_be4un")
+}],
+"loop": true,
+"name": &"default",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e0nld")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
+
 [sub_resource type="Curve2D" id="Curve2D_1qtef"]
 _data = {
 "points": PackedVector2Array(0, 0, 0, 0, -1.59526, 157.122, 0, 0, 0, 0, 376.789, 155.154, 0, 0, 0, 0, 374.518, 396.637, 0, 0, 0, 0, 1413.56, 396.637)
@@ -457,18 +507,32 @@ layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_top = -97.0
-offset_right = 454.0
+offset_left = 84.0
+offset_top = -102.0
+offset_right = 538.0
+offset_bottom = -5.0
 grow_vertical = 0
 mouse_filter = 2
 script = ExtResource("6_ki2gb")
 
+[node name="TowerDeck" type="Area2D" parent="UICanvas/UI/PlayerHud"]
+position = Vector2(-87, 0)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UICanvas/UI/PlayerHud/TowerDeck"]
+position = Vector2(36, 45)
+sprite_frames = SubResource("SpriteFrames_ql28w")
+animation = &"idle"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="UICanvas/UI/PlayerHud/TowerDeck"]
+position = Vector2(38, 53)
+polygon = PackedVector2Array(-11, -24, -19, -7, -20, -1, -21, 2, -27, 12, -25, 20, -17, 27, -6, 28, 2, 25, 15, 25, 24, 21, 22, 14, 22, 7, 24, 2, 22, -8, 17, -18, 9, -22, 1, -29, -7, -29)
+
 [node name="HBoxContainer" type="HBoxContainer" parent="UICanvas/UI/PlayerHud"]
 layout_mode = 0
-offset_left = 2.0
-offset_top = 5.0
-offset_right = 454.0
-offset_bottom = 94.0
+offset_left = -18.0
+offset_top = 9.0
+offset_right = 434.0
+offset_bottom = 98.0
 
 [node name="LevelState" type="Control" parent="UICanvas/UI"]
 layout_mode = 3
