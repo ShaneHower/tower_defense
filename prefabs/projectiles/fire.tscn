@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://cteexqp6oaqqc"]
+
+[ext_resource type="Script" uid="uid://bb6pcwwwddkcg" path="res://scripts/GameAssets/Projectile.cs" id="1_ax2w5"]
+[ext_resource type="Texture2D" uid="uid://bk5c7xk2gxpc5" path="res://sprites/Projectiles-Sheet.png" id="2_nhevh"]
+
+[node name="fire" type="Area2D"]
+script = ExtResource("1_ax2w5")
+metadata/projectileId = "104"
+
+[node name="Collider" type="CollisionPolygon2D" parent="."]
+position = Vector2(1, 0)
+scale = Vector2(1.28125, 2.5)
+polygon = PackedVector2Array(-4.68293, -1.6, -2.34146, -1.6, -2.34146, -2, 0, -2, 0, -2.4, 3.12195, -2.4, 3.12195, -2, 2.34146, -2, 2.34146, -1.6, 0.780488, -1.6, 0.780488, -1.2, 3.12195, -1.2, 3.12195, -1.6, 4.68293, -1.6, 4.68293, -1.2, 3.90244, -1.2, 3.90244, 0, 2.34146, 0, 2.34146, 0.4, 3.12195, 0.4, 3.12195, 0.8, 1.56098, 0.8, 1.56098, 1.2, 3.12195, 1.18864, 3.12195, 1.6, -4.68293, 1.6, -4.68293, 1.2, -5.46341, 1.2, -5.46341, 0.8, -6.2439, 0.8, -6.2439, -0.8, -5.46341, -0.8, -5.46341, -1.2, -4.68293, -1.2)
+
+[node name="Sprite" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_nhevh")
+region_enabled = true
+region_rect = Rect2(207.876, 0, 16.4732, 16.2807)

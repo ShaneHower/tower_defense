@@ -1,48 +1,48 @@
-[gd_scene load_steps=11 format=3 uid="uid://bbplfx4tge8a8"]
+[gd_scene load_steps=11 format=3 uid="uid://cbcgguuriv87s"]
 
-[ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/GameAssets/Tower.cs" id="1_bcxmp"]
-[ext_resource type="Texture2D" uid="uid://bwljcppnofggm" path="res://sprites/BasicTower-Sheet.png" id="2_na66u"]
-[ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="3_2oh2c"]
+[ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/GameAssets/Tower.cs" id="1_n1wnt"]
+[ext_resource type="Texture2D" uid="uid://dahwgly6wl3sn" path="res://sprites/FireTowerLv1-Sheet.png" id="2_n1wnt"]
+[ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="3_f7d1k"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bdhud"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_c6f86"]
-atlas = ExtResource("2_na66u")
+[sub_resource type="AtlasTexture" id="AtlasTexture_tct4a"]
+atlas = ExtResource("2_n1wnt")
 region = Rect2(0, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_robxr"]
-atlas = ExtResource("2_na66u")
+[sub_resource type="AtlasTexture" id="AtlasTexture_f7d1k"]
+atlas = ExtResource("2_n1wnt")
 region = Rect2(48, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rjaap"]
-atlas = ExtResource("2_na66u")
+[sub_resource type="AtlasTexture" id="AtlasTexture_k5pun"]
+atlas = ExtResource("2_n1wnt")
 region = Rect2(96, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_36y1b"]
-atlas = ExtResource("2_na66u")
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ivnk"]
+atlas = ExtResource("2_n1wnt")
 region = Rect2(144, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_bf6dp"]
-atlas = ExtResource("2_na66u")
+[sub_resource type="AtlasTexture" id="AtlasTexture_sidld"]
+atlas = ExtResource("2_n1wnt")
 region = Rect2(192, 0, 48, 72)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_y27yo"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_c6f86")
+"texture": SubResource("AtlasTexture_tct4a")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_robxr")
+"texture": SubResource("AtlasTexture_f7d1k")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_rjaap")
+"texture": SubResource("AtlasTexture_k5pun")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_36y1b")
+"texture": SubResource("AtlasTexture_4ivnk")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_bf6dp")
+"texture": SubResource("AtlasTexture_sidld")
 }],
 "loop": true,
 "name": &"idle",
@@ -51,8 +51,8 @@ animations = [{
 
 [node name="tower" type="Area2D"]
 texture_filter = 1
-script = ExtResource("1_bcxmp")
-metadata/towerId = "101"
+script = ExtResource("1_n1wnt")
+metadata/towerId = "107"
 
 [node name="Collider" type="CollisionShape2D" parent="."]
 texture_filter = 1
@@ -69,7 +69,7 @@ frame_progress = 0.642995
 [node name="HoverArea" type="Area2D" parent="."]
 
 [node name="Collider" type="CollisionPolygon2D" parent="HoverArea"]
-polygon = PackedVector2Array(-10, -7, -14, 23, -4, 32, 4, 32, 15, 24, 10, -5, 16, -10, 2, -22, 10, -27, 0, -32, -2, -23, -15, -12, -11, -6)
+polygon = PackedVector2Array(-10, -7, -21, 28, -7, 36, 8, 36, 21, 30, 10, -5, 16, -10, 2, -22, 10, -27, 0, -32, -2, -23, -15, -12, -11, -6)
 
 [node name="UpgradeControl" type="Control" parent="."]
 visible = false
@@ -85,5 +85,5 @@ texture_filter = 1
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
-theme_override_fonts/font = ExtResource("3_2oh2c")
+theme_override_fonts/font = ExtResource("3_f7d1k")
 text = "Upgrade"

@@ -22,16 +22,22 @@ namespace GameNamespace.UI
 			playerControl = GetNode<Control>("PlayerHud");
 		}
 
-		public Button CreateWaveButton(string buttonText)
+		public TextureButton CreateWaveButton(string buttonText)
 		{
-			Button button = UITools.Instance.CreateButton(text:buttonText, parent:waveHud, fontSize:25);
+			TextureButton button = UITools.Instance.CreateTextureButtonFromRegion(parent:waveHud, buttonType:"Menu");
+			Label label = UITools.Instance.CreateLabel(text:buttonText, parent:button, fontSize:25);
+			label.Size = button.Size;
 
 			float windowWidth = waveHud.Size.X;
 			float windowHeight = waveHud.Size.Y;
 			float xPos = (windowWidth - button.Size.X) / 2;
 			float yPos = (windowHeight - button.Size.Y) / 2;
-
 			button.Position = new Vector2(xPos, yPos);
+
+			label.OffsetLeft = -button.Size.X / 2;
+			label.OffsetTop = -button.Size.Y / 2;
+			label.OffsetRight = button.Size.X / 2;
+			label.OffsetBottom = button.Size.Y / 2;
 
 			return button;
 		}

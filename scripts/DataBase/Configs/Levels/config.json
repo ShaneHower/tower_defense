@@ -2,7 +2,7 @@
     "1": {
         "levelId": 1,
         "levelHealth": 5,
-        "startGold": 100,
+        "startGold": 1000,
         "waves": {
             "1": [
                 {"enemyId": "101", "multiplier": "3"},

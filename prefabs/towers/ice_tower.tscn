@@ -86,6 +86,3 @@ offset_right = 8.0
 offset_bottom = 8.0
 theme_override_fonts/font = ExtResource("3_pacu6")
 text = "Upgrade"
-
-[connection signal="body_entered" from="." to="." method="OnEnter"]
-[connection signal="body_exited" from="." to="." method="OnExit"]

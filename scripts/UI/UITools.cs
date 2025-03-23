@@ -2,6 +2,7 @@ namespace GameNamespace.UI
 {
     using Godot;
     using GameNamespace.GameManager;
+    using System;
 
     public partial class UITools: Control
 	{
@@ -39,63 +40,56 @@ namespace GameNamespace.UI
 			return button;
 		}
 
-        public TextureRect CreateButtonHover()
+        public TextureButton CreateTextureButtonFromRegion(Control parent, string buttonType="Menu")
         {
-            Texture2D hoverSheet = GD.Load<Texture2D>($"{GameCoordinator.Instance.spriteLoc}/Icons Tileset.png");
+            string spriteSheet;
+            Rect2 idleRegion;
+            Rect2 pressedRegion;
 
-            // This is a constant here because all of our buttons will have the same button overlay.
-            Rect2 hoverRegion = new Rect2(48, 0, 24, 24); // x=24, y=0, width=24, height=24
-
-            AtlasTexture hoverTexture = new AtlasTexture
+            if (buttonType == "Menu")
             {
-                Atlas = hoverSheet,
-                Region = hoverRegion
-            };
-
-            TextureRect hoverOverlay = new TextureRect
+                spriteSheet = $"{GameCoordinator.Instance.spriteLoc}/Button-Sheet.png";
+                idleRegion = new Rect2(0, 0, 120, 35);
+                pressedRegion = new Rect2(120, 0, 120, 35);
+            }
+            else if (buttonType == "Tower")
             {
-                Texture = hoverTexture,
-                ExpandMode = TextureRect.ExpandModeEnum.IgnoreSize,
-                StretchMode = TextureRect.StretchModeEnum.Scale,
-                SizeFlagsHorizontal = Control.SizeFlags.Fill,
-                SizeFlagsVertical = Control.SizeFlags.Fill,
-                MouseFilter = Control.MouseFilterEnum.Ignore,
-                TextureFilter = TextureFilterEnum.Nearest, 
-                Name = "HoverOverlay",
-                Visible = false
-            };
+                spriteSheet = $"{GameCoordinator.Instance.spriteLoc}/TowerButton-Sheet.png";
+                idleRegion = new Rect2(0, 0, 56, 80);
+                pressedRegion = new Rect2(56, 0, 56, 80);
+            }
+            else
+            {
+                throw new Exception("CreateUITextureButtonFromRegion buttonType not valid.");
 
-            return hoverOverlay;
-        }
+            }
 
-        public TextureButton CreateTextureButtonFromRegion(string texturePath, Rect2 region)
-        {
-            // Create button
-            Texture2D texture = GD.Load<Texture2D>(texturePath);
-            AtlasTexture atlasTexture = new AtlasTexture
+            Texture2D texture = GD.Load<Texture2D>(spriteSheet);
+            AtlasTexture atlasIdleTexture = new AtlasTexture
             {
                 Atlas = texture,
-                Region = region
+                Region = idleRegion
+            };
+
+            AtlasTexture atlasPressedTexture = new AtlasTexture
+            {
+                Atlas = texture,
+                Region = pressedRegion
             };
 
             TextureButton button = new TextureButton
             {
-                TextureNormal = atlasTexture,
-                TexturePressed = atlasTexture,
-                TextureHover = atlasTexture,
-                CustomMinimumSize = region.Size,
+                TextureNormal = atlasIdleTexture,
+                TexturePressed = atlasPressedTexture,
+                TextureHover = atlasIdleTexture,
+                CustomMinimumSize = idleRegion.Size,
                 MouseFilter = Control.MouseFilterEnum.Stop,
                 SizeFlagsHorizontal = Control.SizeFlags.Fill,
                 TextureFilter = TextureFilterEnum.Nearest
             };
 
-            // Attach hover behavior
-            TextureRect hoverOverlay = CreateButtonHover();
-            hoverOverlay.Size = button.Size;
-            button.AddChild(hoverOverlay);
-
-            // Keep hover size in sync with button
-            button.Resized += () => hoverOverlay.Size = button.Size;
+            button.StretchMode = TextureButton.StretchModeEnum.KeepCentered;
+            parent.AddChild(button);
 
             return button;
         }
@@ -113,7 +107,36 @@ namespace GameNamespace.UI
             Label label = new();
             label.Text = text;
             ConfigureControl(control:label, gameObject:"Label", parent:parent, fontSize:fontSize);
+            label.SetAnchorsPreset(Control.LayoutPreset.Center);
+            label.HorizontalAlignment = HorizontalAlignment.Center;
+            label.VerticalAlignment = VerticalAlignment.Center;
             return label;
+        }
+
+        public TextureRect GetTextureRect(string texturePath, Control parent, Rect2 region)
+        {
+            Texture2D texture = GD.Load<Texture2D>(texturePath);
+            AtlasTexture atlasTexture = new AtlasTexture
+            {
+                Atlas = texture,
+                Region = region
+            };
+
+            var textureRect = new TextureRect
+            {
+                Texture = atlasTexture,
+                StretchMode = TextureRect.StretchModeEnum.KeepCentered
+            };
+
+            // Center the image
+            textureRect.AnchorLeft = 0.5f;
+            textureRect.AnchorTop = 0.5f;
+            textureRect.AnchorRight = 0.5f;
+            textureRect.AnchorBottom = 0.5f;
+
+            parent.AddChild(textureRect);
+
+            return textureRect;
         }
 
         /// <summary>
@@ -137,5 +160,31 @@ namespace GameNamespace.UI
 			warningTween.TweenProperty(warning, "modulate:a", 0.0f, 2.0f);
 			warningTween.TweenCallback(Callable.From(() => warning.QueueFree()));
 		}
+
+        public Line2D CreateCircleColliderOutline(CollisionShape2D collider)
+        {
+			CircleShape2D circleCollider = (CircleShape2D)collider.Shape;
+
+			// the higher the value of points the smoother the circle
+			float scale = collider.Scale.X;
+			float radius = circleCollider.Radius * scale;
+			int points = 60;
+
+			Line2D circleLine = new();
+			circleLine.Width = 1;
+			circleLine.DefaultColor = new Color(1, 0, 0, 1);
+
+			Vector2[] circlePoints = new Vector2[points + 1];
+			for(int i = 0; i <= points; i++)
+			{
+				// Mathf.Tau = 2 * PI
+				float angle = (i / (float)points) * Mathf.Tau;
+				circlePoints[i] = new Vector2(Mathf.Cos(angle) * radius, Mathf.Sin(angle) * radius);
+			}
+
+			circleLine.Points = circlePoints;
+
+			return circleLine;
+        }
     }
 }

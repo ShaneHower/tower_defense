@@ -13,6 +13,7 @@ namespace GameNamespace.DataBase
         public string projectileId { get; set; }
         public string attackModifier { get; set; }
         public int attackModCounter { get; set; }
+        public int multiShot { get; set; }
         public string nextLevelId { get; set; }
     }
 
