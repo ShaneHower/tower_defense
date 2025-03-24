@@ -228,28 +228,17 @@ animations = [{
 radius = 8.3244
 height = 16.6488
 
-[node name="ghost" type="PathFollow2D"]
-position = Vector2(-0.13526, 157.122)
-rotation = -0.00247216
-h_offset = 1.46
-rotates = false
-loop = false
-
-[node name="ghost" type="CharacterBody2D" parent="."]
+[node name="ghost" type="CharacterBody2D"]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_3r7sd")
 metadata/enemyId = "101"
 
-[node name="Animator" type="AnimatedSprite2D" parent="ghost"]
+[node name="Animator" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_1yxwd")
 animation = &"left"
 
-[node name="Collision" type="CollisionShape2D" parent="ghost"]
+[node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0.0510862, 0.988907)
 shape = SubResource("CapsuleShape2D_nfyvd")
-
-[node name="_Timer_61821" type="Timer" parent="."]
-wait_time = 0.2
-one_shot = true

@@ -228,27 +228,17 @@ animations = [{
 radius = 5.98807
 height = 15.9187
 
-[node name="skeleton" type="PathFollow2D"]
-position = Vector2(-1.59526, 157.122)
-rotation = -0.00247216
-rotates = false
-loop = false
-
-[node name="skeleton" type="CharacterBody2D" parent="."]
+[node name="skeleton" type="CharacterBody2D"]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_5bthj")
 metadata/enemyId = "103"
 
-[node name="Animator" type="AnimatedSprite2D" parent="skeleton"]
+[node name="Animator" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 scale = Vector2(0.807, 1)
 sprite_frames = SubResource("SpriteFrames_wlojk")
 animation = &"death"
 
-[node name="Collider" type="CollisionShape2D" parent="skeleton"]
+[node name="Collider" type="CollisionShape2D" parent="."]
 shape = SubResource("CapsuleShape2D_p5tra")
-
-[node name="_Timer_61820" type="Timer" parent="."]
-wait_time = 0.2
-one_shot = true

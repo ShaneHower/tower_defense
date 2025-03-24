@@ -8,8 +8,7 @@ size = Vector2(3.92188, 3.69627)
 [node name="PathIndex" type="Area2D"]
 script = ExtResource("1_vvesw")
 metadata/direction = "down"
-metadata/tag = &"path_index"
-metadata/active = false
+metadata/order = 0
 
 [node name="collider" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_w8xgk")

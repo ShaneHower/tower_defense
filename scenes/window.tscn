@@ -18,6 +18,7 @@
 [ext_resource type="Script" uid="uid://bbhcwwkl4vi11" path="res://scripts/UI/DevTools/DevWindow.cs" id="12_ki2gb"]
 [ext_resource type="Script" uid="uid://c5ekhkgq3cd0e" path="res://scripts/UI/DevTools/SpawnBox.cs" id="13_vbepn"]
 [ext_resource type="Script" uid="uid://cvvl7a2b4b4ym" path="res://scripts/UI/DevTools/CombatLogConsole.cs" id="14_abi4y"]
+[ext_resource type="Script" uid="uid://oro0k6vpttsg" path="res://scripts/GameManager/LevelPath.cs" id="17_wq1mn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fjw6b"]
 texture = ExtResource("2_bapj4")
@@ -447,12 +448,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="Curve2D" id="Curve2D_1qtef"]
-_data = {
-"points": PackedVector2Array(0, 0, 0, 0, -1.59526, 157.122, 0, 0, 0, 0, 376.789, 155.154, 0, 0, 0, 0, 374.518, 396.637, 0, 0, 0, 0, 1413.56, 396.637)
-}
-point_count = 4
-
 [node name="Level" type="Node2D"]
 script = ExtResource("3_8pa5w")
 metadata/levelId = 1
@@ -594,6 +589,7 @@ grow_vertical = 2
 script = ExtResource("11_vbepn")
 
 [node name="MainMenu" parent="UICanvas/UI/PauseMenu" instance=ExtResource("10_qsv56")]
+visible = false
 layout_mode = 0
 anchors_preset = 0
 anchor_left = 0.0
@@ -736,25 +732,33 @@ offset_right = 69.5
 offset_bottom = 92.0
 grow_horizontal = 2
 
-[node name="LevelPath" type="Path2D" parent="."]
-position = Vector2(0.0861426, 0.575739)
-scale = Vector2(1.054, 0.996313)
-curve = SubResource("Curve2D_1qtef")
+[node name="LevelPath" type="Area2D" parent="."]
+script = ExtResource("17_wq1mn")
+
+[node name="Spawn" type="Node2D" parent="LevelPath"]
+y_sort_enabled = true
+position = Vector2(6, 153)
 
 [node name="PathIndex" parent="LevelPath" instance=ExtResource("2_mv7sc")]
-position = Vector2(376.032, 156.14)
-
-[node name="PathIndex2" parent="LevelPath" instance=ExtResource("2_mv7sc")]
-position = Vector2(1.59526, 158.104)
+position = Vector2(395, 153)
+scale = Vector2(1.054, 0.996313)
 metadata/direction = "right"
+metadata/order = 1
 
 [node name="PathIndex3" parent="LevelPath" instance=ExtResource("2_mv7sc")]
-position = Vector2(375.275, 396.637)
-metadata/direction = "right"
+position = Vector2(395, 395)
+scale = Vector2(1.054, 0.996313)
+metadata/order = 2
 
 [node name="End" parent="LevelPath" instance=ExtResource("2_mv7sc")]
-position = Vector2(1110.85, 394.665)
+position = Vector2(1170.92, 395)
+scale = Vector2(1.054, 0.996313)
 metadata/direction = "right"
+metadata/order = 3
+
+[node name="Collider" type="CollisionPolygon2D" parent="LevelPath"]
+position = Vector2(11, 157)
+polygon = PackedVector2Array(-9, -19, 396, -19, 402, -11, 401, 216, 409, 223, 424, 221, 1163, 221, 1165, 253, 1160, 256, 886, 254, 736, 253, 374, 256, 366, 247, 368, 18, 353, 14, -12, 16, -20, -17)
 
 [node name="levelTimer" type="Timer" parent="."]
 
