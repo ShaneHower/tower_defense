@@ -1,8 +1,5 @@
 namespace GameNamespace.UI
 {
-    using System.Runtime.CompilerServices;
-    using System.Security.Cryptography;
-
     using System.Threading.Tasks;
     using GameNamespace.DataBase;
 	using GameNamespace.GameAssets;
@@ -33,32 +30,10 @@ namespace GameNamespace.UI
 		{
 			level = GetTree().Root.GetNode<Level>("Level");
 			towerButtonContainer = GetNode<HBoxContainer>("HBoxContainer");
-
 			towerDeck = GetNode<Area2D>("TowerDeck");
-			AnimatedSprite2D animator = towerDeck.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
-			animator.Play("idle");
-			towerDeck.MouseEntered += () => {
-				towerDeckHovered = true;
-				animator.Play("default");
-			};
-			towerDeck.MouseExited += () => {
-				towerDeckHovered = false;
-				animator.Play("idle");
-			};
-			towerDeck.InputEvent += (viewport, ev, shapeIdx) => {
-				if(ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
-				{
-					if(towerButtonsVisible)
-					    AnimateDeckHide(); // reverse
-					else
-						AnimateDeckReveal(); // reveal
 
-					towerButtonsVisible = !towerButtonsVisible;
-				}
-			};
-
+			InitTowerDeck();
 			CreatePlayerHud();
-			HideTowerButtons();
 		}
 
         public override void _Input(InputEvent @event)
@@ -137,19 +112,39 @@ namespace GameNamespace.UI
 
 			button.SetMeta("towerId", towerId);
 			button.Pressed += () => OnButtonDown(button);
+
+			// The tower deck reveals/hides buttons so we make the button invisible initially.
+			button.Visible = false;
+			button.Modulate = new Color(1, 1, 1, 0);
+			button.Scale = new Vector2(0.8f, 0.8f);
 		}
 
-		public void HideTowerButtons()
+		private void InitTowerDeck()
 		{
-			foreach(var node in towerButtonContainer.GetChildren())
-			{
-				if(node is TextureButton button)
+			AnimatedSprite2D animator = towerDeck.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+			animator.Play("idle");
+
+			towerDeck.MouseEntered += () => {
+				towerDeckHovered = true;
+				animator.Play("default");
+			};
+
+			towerDeck.MouseExited += () => {
+				towerDeckHovered = false;
+				animator.Play("idle");
+			};
+
+			towerDeck.InputEvent += (viewport, ev, shapeIdx) => {
+				if(ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
 				{
-					button.Visible = false;
-					button.Modulate = new Color(1, 1, 1, 0);
-					button.Scale = new Vector2(0.8f, 0.8f);
+					if(towerButtonsVisible)
+					    _ = AnimateDeckHide();
+					else
+						_ = AnimateDeckReveal();
+
+					towerButtonsVisible = !towerButtonsVisible;
 				}
-			}
+			};
 		}
 
 		public async Task AnimateDeckReveal()
@@ -157,6 +152,7 @@ namespace GameNamespace.UI
 			var tween = CreateTween();
 			float delayBetween = 0.01f;
 			int index = 0;
+			float step = 0.02f;
 
 			foreach(var node in towerButtonContainer.GetChildren())
 			{
@@ -165,10 +161,10 @@ namespace GameNamespace.UI
 					button.Visible = true;
 
 					// Animate fade in
-					tween.TweenProperty(button, "modulate:a", 1.0f, 0.02f).SetDelay(delayBetween);
+					tween.TweenProperty(button, "modulate:a", 1.0f, step).SetDelay(delayBetween);
 
 					// Animate scale
-					tween.TweenProperty(button, "scale", Vector2.One, 0.02f).SetDelay(delayBetween);
+					tween.TweenProperty(button, "scale", Vector2.One, step).SetDelay(delayBetween);
 					index++;
 				}
 			}
@@ -181,6 +177,7 @@ namespace GameNamespace.UI
 			var tween = CreateTween();
 			float delayBetween = 0.01f;
 			int index = 0;
+			float step = 0.02f;
 
 			for(int i = towerButtonContainer.GetChildCount() - 1; i >= 0; i--)
 			{
@@ -188,10 +185,10 @@ namespace GameNamespace.UI
 				if(node is TextureButton button)
 				{
 					// Fade out
-					tween.TweenProperty(button, "modulate:a", 0.0f, 0.02f).SetDelay(index * delayBetween);
+					tween.TweenProperty(button, "modulate:a", 0.0f, step).SetDelay(index * delayBetween);
 
 					// Shrink scale
-					tween.TweenProperty(button, "scale", new Vector2(0.8f, 0.8f), 0.02f).SetDelay(index * delayBetween);
+					tween.TweenProperty(button, "scale", new Vector2(0.8f, 0.8f), step).SetDelay(index * delayBetween);
 					index++;
 				}
 			}
