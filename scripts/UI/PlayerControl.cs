@@ -1,5 +1,6 @@
 namespace GameNamespace.UI
 {
+    using System.Threading.Tasks;
     using GameNamespace.DataBase;
 	using GameNamespace.GameAssets;
     using GameNamespace.GameManager;
@@ -19,11 +20,19 @@ namespace GameNamespace.UI
 		public Button towerButton;
 		public Tower chosenTower = null;
 		public Ruins ruins;
+		public Area2D towerDeck;
+		public HBoxContainer towerButtonContainer;
+		public bool towerDeckHovered = false;
+		public bool towerButtonsVisible = false;
 		private InputEventMouseButton mouseEvent;
 
 		public override void _Ready()
 		{
 			level = GetTree().Root.GetNode<Level>("Level");
+			towerButtonContainer = GetNode<HBoxContainer>("HBoxContainer");
+			towerDeck = GetNode<Area2D>("TowerDeck");
+
+			InitTowerDeck();
 			CreatePlayerHud();
 		}
 
@@ -31,6 +40,7 @@ namespace GameNamespace.UI
         {
             if(@event is InputEventMouseButton mouseEvent)
 			{
+
 				if(mouseEvent.Pressed && chosenTower is not null)
 				{
 					PlaceTower(mouseEvent);
@@ -76,18 +86,16 @@ namespace GameNamespace.UI
 
 		public void CreatePlayerHud()
 		{
-			HBoxContainer container = GetNode<HBoxContainer>("HBoxContainer");
-
-			TextureButton basicTower = UITools.Instance.CreateTextureButtonFromRegion(parent:container, buttonType:"Tower");
+			TextureButton basicTower = UITools.Instance.CreateTextureButtonFromRegion(parent:towerButtonContainer, buttonType:"Tower");
 			HandleTowerButtonBehavior(button:basicTower, towerId:101, spriteSheet:"BasicTower-Sheet.png");
 
-			TextureButton iceTower = UITools.Instance.CreateTextureButtonFromRegion(parent:container, buttonType:"Tower");
+			TextureButton iceTower = UITools.Instance.CreateTextureButtonFromRegion(parent:towerButtonContainer, buttonType:"Tower");
 			HandleTowerButtonBehavior(button:iceTower, towerId:102, spriteSheet:"IceTowerLv1-Sheet.png");
 
-			TextureButton fireTower = UITools.Instance.CreateTextureButtonFromRegion(parent:container, buttonType:"Tower");
+			TextureButton fireTower = UITools.Instance.CreateTextureButtonFromRegion(parent:towerButtonContainer, buttonType:"Tower");
 			HandleTowerButtonBehavior(button:fireTower, towerId:107, spriteSheet:"FireTowerLv1-Sheet.png");
 
-			TextureButton earthTower = UITools.Instance.CreateTextureButtonFromRegion(parent:container, buttonType:"Tower");
+			TextureButton earthTower = UITools.Instance.CreateTextureButtonFromRegion(parent:towerButtonContainer, buttonType:"Tower");
 			HandleTowerButtonBehavior(button:earthTower, towerId:104, spriteSheet:"EarthTowerLv1-Sheet.png");
 		}
 
@@ -104,6 +112,96 @@ namespace GameNamespace.UI
 
 			button.SetMeta("towerId", towerId);
 			button.Pressed += () => OnButtonDown(button);
+
+			// The tower deck reveals/hides buttons so we make the button invisible initially.
+			button.Visible = false;
+			button.Modulate = new Color(1, 1, 1, 0);
+			button.Scale = new Vector2(0.8f, 0.8f);
+		}
+
+		private void InitTowerDeck()
+		{
+			AnimatedSprite2D animator = towerDeck.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+			animator.Play("idle");
+
+			towerDeck.MouseEntered += () => {
+				towerDeckHovered = true;
+				animator.Play("default");
+			};
+
+			towerDeck.MouseExited += () => {
+				towerDeckHovered = false;
+				animator.Play("idle");
+			};
+
+			towerDeck.InputEvent += (viewport, ev, shapeIdx) => {
+				if(ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
+				{
+					if(towerButtonsVisible)
+					    _ = AnimateDeckHide();
+					else
+						_ = AnimateDeckReveal();
+
+					towerButtonsVisible = !towerButtonsVisible;
+				}
+			};
+		}
+
+		public async Task AnimateDeckReveal()
+		{
+			var tween = CreateTween();
+			float delayBetween = 0.01f;
+			int index = 0;
+			float step = 0.02f;
+
+			foreach(var node in towerButtonContainer.GetChildren())
+			{
+				if(node is TextureButton button)
+				{
+					button.Visible = true;
+
+					// Animate fade in
+					tween.TweenProperty(button, "modulate:a", 1.0f, step).SetDelay(delayBetween);
+
+					// Animate scale
+					tween.TweenProperty(button, "scale", Vector2.One, step).SetDelay(delayBetween);
+					index++;
+				}
+			}
+
+			await ToSignal(tween, "finished");
+		}
+
+		public async Task AnimateDeckHide()
+		{
+			var tween = CreateTween();
+			float delayBetween = 0.01f;
+			int index = 0;
+			float step = 0.02f;
+
+			for(int i = towerButtonContainer.GetChildCount() - 1; i >= 0; i--)
+			{
+				var node = towerButtonContainer.GetChild(i);
+				if(node is TextureButton button)
+				{
+					// Fade out
+					tween.TweenProperty(button, "modulate:a", 0.0f, step).SetDelay(index * delayBetween);
+
+					// Shrink scale
+					tween.TweenProperty(button, "scale", new Vector2(0.8f, 0.8f), step).SetDelay(index * delayBetween);
+					index++;
+				}
+			}
+
+			await ToSignal(tween, "finished");
+
+			foreach (var node in towerButtonContainer.GetChildren())
+			{
+				if(node is TextureButton button)
+				{
+					button.Visible = false;
+				}
+			}
 		}
 
         private void OnButtonDown(TextureButton pressedButton)
