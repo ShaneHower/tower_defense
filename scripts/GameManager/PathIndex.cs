@@ -14,26 +14,35 @@ namespace GameNamespace.GameManager
     public partial class PathIndex : Area2D
     {
         // Class vars
-        public string indexDirection;
+        public string direction;
+        public int order;
         public bool active;
         public bool stopAnimation;
+        private LevelPath levelPath;
         private static readonly ILogger log = Log.ForContext<PathIndex>();
 
         public override void _Ready()
         {
             // The direction is stored on the game object within godot.
-            indexDirection = (string)GetMeta("direction");
-            log.Information($"PathIndex {this} with direction {indexDirection} instatiated.");
+            direction = (string)GetMeta("direction");
+            order = (int)GetMeta("order");
+
+            levelPath = GetParent<LevelPath>();
+            levelPath.pathIndices[order] = this;
+
+            log.Information($"PathIndex {this} with direction {direction} instatiated.");
         }
 
         private void OnEnter(Enemy enemy)
         {
             active = true;
-            enemy.direction = indexDirection;
-            log.Information($"Changing enemy {enemy} direction to {indexDirection}.");
+            enemy.pathIndexTarget ++;
+            log.Information($"Changing enemy {enemy} direction to {direction}.");
 
             if(Name == "End")
             {
+                enemy.reachedEnd = true;
+                
                 // Remove enemy from active enemies and store ending trigger
                 GameCoordinator.Instance.enemyBreach = true;
                 GameCoordinator.Instance.breachNum++;

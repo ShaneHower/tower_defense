@@ -311,28 +311,17 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_xgjnx"]
 radius = 7.63159
 
-[node name="slime" type="PathFollow2D"]
-position = Vector2(-0.13526, 157.122)
-rotation = -0.00520098
-h_offset = 1.46
-rotates = false
-loop = false
-
-[node name="slime" type="CharacterBody2D" parent="."]
+[node name="slime" type="CharacterBody2D"]
 collision_layer = 3
 collision_mask = 3
 script = ExtResource("1_6ax6t")
 metadata/enemyId = "102"
 
-[node name="Animator" type="AnimatedSprite2D" parent="slime"]
+[node name="Animator" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ixwve")
 animation = &"death"
 
-[node name="Collision" type="CollisionShape2D" parent="slime"]
+[node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(-0.0102725, 1.97438)
 shape = SubResource("CircleShape2D_xgjnx")
-
-[node name="_Timer_61822" type="Timer" parent="."]
-wait_time = 0.2
-one_shot = true

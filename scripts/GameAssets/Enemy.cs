@@ -7,6 +7,7 @@ namespace GameNamespace.GameAssets
     using System.Threading;
 	using Serilog;
 
+
     public partial class Enemy : CharacterBody2D
 	{
 		// Class vars
@@ -22,7 +23,9 @@ namespace GameNamespace.GameAssets
 		public float speed;
 		public string direction;
 		public bool targeted;
+		public bool reachedEnd;
 		public bool isSlowed = false;
+		public int pathIndexTarget = 1;
 		public EnemyData passedData;
 
 		// Status affect tracking
@@ -31,8 +34,7 @@ namespace GameNamespace.GameAssets
 		private static readonly ILogger log = Log.ForContext<Enemy>();
 
 		// Game objects
-		private Path2D path;
-		private PathFollow2D pathFollow;
+		private LevelPath levelPath;
 		private AnimatedSprite2D animator;
 
 		public override void _Ready()
@@ -42,8 +44,8 @@ namespace GameNamespace.GameAssets
 			SetVars();
 
 			// Direct parent and decendents.
-			pathFollow = GetParent<PathFollow2D>();
-			path = pathFollow.GetParent<Path2D>();
+			var spawn = GetParent<Node2D>();
+			levelPath = spawn.GetParent<LevelPath>();
 			animator = GetNode<AnimatedSprite2D>("Animator");
 			animator.SpriteFrames.SetAnimationLoop("death", false);
 
@@ -65,16 +67,18 @@ namespace GameNamespace.GameAssets
 			{
 				await AnimateDeath();
 			}
+			else if(reachedEnd)
+			{
+				return;
+			}
 			else
 			{
-				AnimateMovement((float)delta, speed);
+				PathIndex pathIndex = levelPath.pathIndices[pathIndexTarget];
+				animator.Play(pathIndex.direction);
+				Vector2 target = pathIndex.Position;
+				Vector2 dir = (target - GlobalPosition).Normalized();
+				GlobalPosition += dir * speed * (float)delta;
 			}
-		}
-
-		public void AnimateMovement(float delta, float defaultSpeedRatio)
-		{
-			animator.Play(direction);
-			pathFollow.ProgressRatio += defaultSpeedRatio * delta;
 		}
 
 		public async Task AnimateDeath()

@@ -2,7 +2,7 @@ namespace GameNamespace.DataBase
 {
     public class TowerData
     {
-        public int id { get; set; }
+        public string id { get; set; }
         public string type { get; set; }
         public string name { get; set; }
         public int level { get; set; }

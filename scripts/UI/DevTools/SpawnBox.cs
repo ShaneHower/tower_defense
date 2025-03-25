@@ -1,12 +1,11 @@
 namespace GameNamespace.UI.DevTools
 {
     using GameNamespace.DataBase;
-    using GameNamespace.GameAssets;
     using GameNamespace.GameManager;
     using Godot;
     public partial class SpawnBox: Panel
     {
-
+        public LevelPath levelPath;
         public HBoxContainer enemySelect;
         public HBoxContainer hpEdit;
         public HBoxContainer speedEdit;
@@ -15,6 +14,7 @@ namespace GameNamespace.UI.DevTools
 
         public override void _Ready()
         {
+            levelPath = GetTree().Root.GetNode<LevelPath>("Level/LevelPath");
             VBoxContainer vBox = GetNode<VBoxContainer>("SpawnerVBox");
 
             // Get all components of spawner UI Box
@@ -25,25 +25,13 @@ namespace GameNamespace.UI.DevTools
 
             // Set buttons
             spawn = buttons.GetNode<Button>("Spawn");
-            spawn.Pressed += SpawnEnemy;
+            spawn.Pressed += () => {
+                EnemyData enemyData = GetUIValues();
+                levelPath.SpawnEnemy(enemyId:enemyData.id, passedData:enemyData);
+            };
 
             exit = buttons.GetNode<Button>("Exit");
             exit.Pressed += () => Visible = false;
-        }
-
-        private void SpawnEnemy()
-        {
-            EnemyData enemyData = GetUIValues();
-
-            Path2D levelPath = GetTree().Root.GetNode<Path2D>("Level/LevelPath");
-            PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.enemyPrefabLoc}/{enemyData.prefab}");
-            PathFollow2D enemyPathFollow = (PathFollow2D) prefab.Instantiate();
-            Enemy enemy = enemyPathFollow.GetNode<Enemy>(enemyData.name);
-            enemy.passedData = enemyData;
-            levelPath.AddChild(enemyPathFollow);
-
-            // Pass data to the game coordinator
-            GameCoordinator.Instance.activeEnemies.Add(enemy);
         }
 
         private EnemyData GetUIValues()
