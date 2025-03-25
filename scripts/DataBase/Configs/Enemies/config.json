@@ -1,6 +1,6 @@
 {
     "101": {
-        "id": 101,
+        "id": "101",
         "name": "ghost",
         "health": 40.0,
         "gold": 2,
@@ -8,7 +8,7 @@
         "prefab": "ghost.tscn"
     },
     "102": {
-        "id": 102,
+        "id": "102",
         "name": "slime",
         "health": 65.0,
         "gold": 4,
@@ -16,7 +16,7 @@
         "prefab": "slime.tscn"
     },
     "103": {
-        "id": 103,
+        "id": "103",
         "name": "skeleton",
         "health": 100.0,
         "gold": 6,

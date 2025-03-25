@@ -2,6 +2,8 @@ namespace GameNamespace.GameManager
 {
     using Godot;
     using System.Collections.Generic;
+    using GameNamespace.DataBase;
+    using GameNamespace.GameAssets;
 
     /// <summary>
     /// The PathIndex object is responsible for signalling to the enemies when they need to change animations. They are
@@ -22,6 +24,20 @@ namespace GameNamespace.GameManager
             collider = GetNode<CollisionPolygon2D>("Collider");
             spawn = GetNode<Node2D>("Spawn");
         }
+
+        public void SpawnEnemy(string enemyId, EnemyData passedData=null)
+		{
+            EnemyData enemyData = passedData ?? GameDataBase.Instance.QueryEnemyData(enemyId);
+
+            // Spawn a single enemy to the level's path. First we need to grab the enemy data.
+			PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.enemyPrefabLoc}/{enemyData.prefab}");
+			Enemy enemy = (Enemy)prefab.Instantiate();
+            enemy.passedData = enemyData;
+            spawn.AddChild(enemy);
+
+            // Pass data to the game coordinator
+            GameCoordinator.Instance.activeEnemies.Add(enemy);
+		}
 
     }
 }

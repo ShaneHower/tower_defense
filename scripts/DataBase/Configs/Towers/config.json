@@ -1,6 +1,6 @@
 {
     "101": {
-        "id": 101,
+        "id": "101",
         "name": "basic",
         "radius": 1.0,
         "gold": 25,
@@ -9,7 +9,7 @@
         "projectileId": "101"
     },
     "102": {
-        "id": 102,
+        "id": "102",
         "type": "ice",
         "name": "ice",
         "level": 1,
@@ -21,7 +21,7 @@
         "nextLevelId": "103"
     },
     "103": {
-        "id": 103,
+        "id": "103",
         "type": "ice",
         "name": "snowball",
         "level": 2,
@@ -34,7 +34,7 @@
         "attackModCounter": 3
     },
     "104": {
-        "id": 104,
+        "id": "104",
         "name": "earth",
         "radius": 1.0,
         "gold": 25,
@@ -44,7 +44,7 @@
         "nextLevelId": "105"
     },
     "105": {
-        "id": 105,
+        "id": "105",
         "name": "earth2",
         "radius": 1.0,
         "gold": 50,
@@ -54,7 +54,7 @@
         "nextLevelId": "106"
     },
     "106": {
-        "id": 106,
+        "id": "106",
         "name": "earth3",
         "radius": 1.0,
         "gold": 50,
@@ -63,7 +63,7 @@
         "projectileId": "105"
     },
     "107": {
-        "id": 107,
+        "id": "107",
         "name": "fire",
         "radius": 1.0,
         "gold": 50,
@@ -73,7 +73,7 @@
         "nextLevelId": "108"
     },
     "108": {
-        "id": 108,
+        "id": "108",
         "name": "fire2",
         "radius": 1.0,
         "gold": 50,

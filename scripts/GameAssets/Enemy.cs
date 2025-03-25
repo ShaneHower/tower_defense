@@ -6,7 +6,6 @@ namespace GameNamespace.GameAssets
 	using GameNamespace.DataBase;
     using System.Threading;
 	using Serilog;
-    using System.Numerics;
 
 
     public partial class Enemy : CharacterBody2D
@@ -76,8 +75,8 @@ namespace GameNamespace.GameAssets
 			{
 				PathIndex pathIndex = levelPath.pathIndices[pathIndexTarget];
 				animator.Play(pathIndex.direction);
-				Godot.Vector2 target = pathIndex.Position;
-				Godot.Vector2 dir = (target - GlobalPosition).Normalized();
+				Vector2 target = pathIndex.Position;
+				Vector2 dir = (target - GlobalPosition).Normalized();
 				GlobalPosition += dir * speed * (float)delta;
 			}
 		}

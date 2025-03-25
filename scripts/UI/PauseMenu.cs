@@ -1,8 +1,6 @@
 namespace GameNamespace.UI
 {
 	using DevTools;
-    using GameNamespace.GameManager;
-
     using Godot;
 
     public partial class PauseMenu : UIControl

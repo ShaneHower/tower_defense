@@ -1,7 +1,6 @@
 namespace GameNamespace.UI
 {
     using Godot;
-	using GameManager;
 
 	/// <summary>
 	/// The UI class is responsible for all UI features, buttons, labels, etc.

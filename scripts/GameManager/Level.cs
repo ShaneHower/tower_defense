@@ -40,7 +40,7 @@ namespace GameNamespace.GameManager
         private static readonly ILogger log = Log.ForContext<Level>();
 
         // Game objects
-        public Area2D levelPath;
+        public LevelPath levelPath;
         public UIControl uiControl;
         private Control waveHud;
         private TextureButton waveButton;
@@ -58,7 +58,7 @@ namespace GameNamespace.GameManager
             // Set game objects.
             CanvasLayer uiCanvas = GetNode<CanvasLayer>("UICanvas");
             uiControl = uiCanvas.GetNode<UIControl>("UI");
-            levelPath = GetNode<Area2D>("LevelPath");
+            levelPath = GetNode<LevelPath>("LevelPath");
 
             // Init work.
             CreateWaveButton();
@@ -145,24 +145,11 @@ namespace GameNamespace.GameManager
                 for (int i= 1; i <= multiplier; i++)
                 {
                     // Spawn enemy every second
-                    SpawnEnemy(spawnData.enemyId);
+                    levelPath.SpawnEnemy(spawnData.enemyId);
                     await Task.Delay(1000);
                 }
             }
         }
-
-        public void SpawnEnemy(string enemyId)
-		{
-            // Spawn a single enemy to the level's path. First we need to grab the enemy data.
-            EnemyData enemyData = GameDataBase.Instance.QueryEnemyData(enemyId);
-			PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.enemyPrefabLoc}/{enemyData.prefab}");
-			Enemy enemy = (Enemy)prefab.Instantiate();
-            var spawn = levelPath.GetNode<Node2D>("Spawn");
-            spawn.AddChild(enemy);
-
-            // Pass data to the game coordinator
-            GameCoordinator.Instance.activeEnemies.Add(enemy);
-		}
 
         public async void OnWaveButton()
         {

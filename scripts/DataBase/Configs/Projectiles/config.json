@@ -1,13 +1,13 @@
 {
     "101": {
-        "id": 101,
+        "id": "101",
         "name": "arrow",
         "speed": 200.0,
         "damage": 20.0,
         "prefab": "arrow.tscn"
     },
     "102": {
-        "id": 102,
+        "id": "102",
         "name": "ice",
         "speed": 200.0,
         "damage": 22.0,
@@ -17,7 +17,7 @@
         "prefab": "ice.tscn"
     },
     "103": {
-        "id": 102,
+        "id": "103",
         "name": "snowball",
         "speed": 200.0,
         "damage": 22.0,
@@ -30,14 +30,14 @@
         "prefab": "snowball.tscn"
     },
     "104": {
-        "id": 104,
+        "id": "104",
         "name": "fire",
         "speed": 200.0,
         "damage": 20.0,
         "prefab": "fire.tscn"
     },
     "105": {
-        "id": 105,
+        "id": "105",
         "name": "rock",
         "speed": 200.0,
         "damage": 20.0,

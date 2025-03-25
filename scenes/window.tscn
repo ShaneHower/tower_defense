@@ -740,13 +740,13 @@ y_sort_enabled = true
 position = Vector2(6, 153)
 
 [node name="PathIndex" parent="LevelPath" instance=ExtResource("2_mv7sc")]
-position = Vector2(395, 153)
+position = Vector2(398, 153)
 scale = Vector2(1.054, 0.996313)
 metadata/direction = "right"
 metadata/order = 1
 
 [node name="PathIndex3" parent="LevelPath" instance=ExtResource("2_mv7sc")]
-position = Vector2(395, 395)
+position = Vector2(398, 395)
 scale = Vector2(1.054, 0.996313)
 metadata/order = 2
 
