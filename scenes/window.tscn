@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=4 uid="uid://b1df4inbor0s1"]
+[gd_scene load_steps=36 format=4 uid="uid://b1df4inbor0s1"]
 
 [ext_resource type="Texture2D" uid="uid://bystnf2j7c3q1" path="res://sprites/Grass Tileset-Sheet.png" id="2_bapj4"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="2_mv7sc"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://bd8nvufcspsd4" path="res://sprites/MagicRock.png" id="8_wq1mn"]
 [ext_resource type="Texture2D" uid="uid://b5bitirqubp4s" path="res://sprites/Icons Tileset.png" id="9_6usdr"]
 [ext_resource type="PackedScene" uid="uid://bjfu70l4w2s5c" path="res://prefabs/ui/main_menu.tscn" id="10_qsv56"]
+[ext_resource type="Texture2D" uid="uid://imea5wpo01vj" path="res://sprites/Heart.png" id="11_5m75j"]
 [ext_resource type="Script" uid="uid://b18gtp6ogceg5" path="res://scripts/UI/PauseMenu.cs" id="11_vbepn"]
 [ext_resource type="PackedScene" uid="uid://e48wfplay4er" path="res://prefabs/ui/settings_menu.tscn" id="11_yeipv"]
 [ext_resource type="Script" uid="uid://bbhcwwkl4vi11" path="res://scripts/UI/DevTools/DevWindow.cs" id="12_ki2gb"]
@@ -558,16 +559,15 @@ text = "1000"
 texture_filter = 1
 position = Vector2(11, 29)
 scale = Vector2(0.9, 0.9)
-texture = ExtResource("9_6usdr")
-region_enabled = true
-region_rect = Rect2(144.079, 0, 24.1184, 24)
+texture = ExtResource("11_5m75j")
+region_rect = Rect2(1.099, 0, 167.098, 14.5)
 
 [node name="HealthValue" type="Label" parent="UICanvas/UI/LevelState/Health"]
 texture_filter = 1
-offset_left = 12.2222
-offset_top = -11.1111
-offset_right = 52.2222
-offset_bottom = 6.88889
+offset_left = 11.1111
+offset_top = -10.0
+offset_right = 51.1111
+offset_bottom = 8.0
 theme_override_fonts/font = ExtResource("6_tg7ok")
 theme_override_font_sizes/font_size = 20
 text = "10"
