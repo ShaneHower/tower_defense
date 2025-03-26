@@ -5,19 +5,28 @@
         "startGold": 1000,
         "waves": {
             "1": [
-                {"enemyId": "101", "multiplier": "3"},
-                {"enemyId": "103", "multiplier": "3"},
-                {"enemyId": "102", "multiplier": "3"}
+                {"enemyId": "101", "count": 1, "spawnDelay":0},
+                {"enemyId": "103", "count": 1, "spawnDelay":0},
+                {"enemyId": "102", "count": 1, "spawnDelay":0},
+                {"enemyId": "103", "count": 3, "spawnDelay":0.5},
+                {"enemyId": "102", "count": 5, "spawnDelay":0.2},
+                {"enemyId": "101", "count": 6, "spawnDelay":1}
             ],
             "2": [
-                {"enemyId": "101", "multiplier": "3"},
-                {"enemyId": "103", "multiplier": "3"},
-                {"enemyId": "102", "multiplier": "3"}
+                {"enemyId": "101", "count": 1, "spawnDelay":0},
+                {"enemyId": "103", "count": 1, "spawnDelay":0},
+                {"enemyId": "102", "count": 1, "spawnDelay":0},
+                {"enemyId": "103", "count": 3, "spawnDelay":0.5},
+                {"enemyId": "102", "count": 5, "spawnDelay":0.2},
+                {"enemyId": "101", "count": 6, "spawnDelay":1}
             ],
             "3": [
-                {"enemyId": "101", "multiplier": "3"},
-                {"enemyId": "103", "multiplier": "3"},
-                {"enemyId": "102", "multiplier": "3"}
+                {"enemyId": "101", "count": 1, "spawnDelay":0},
+                {"enemyId": "103", "count": 1, "spawnDelay":0},
+                {"enemyId": "102", "count": 1, "spawnDelay":0},
+                {"enemyId": "103", "count": 3, "spawnDelay":0.5},
+                {"enemyId": "102", "count": 5, "spawnDelay":0.2},
+                {"enemyId": "101", "count": 6, "spawnDelay":1}
             ]
         }
     }

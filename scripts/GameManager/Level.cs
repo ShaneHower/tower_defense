@@ -138,15 +138,19 @@ namespace GameNamespace.GameManager
             waveActive = true;
             List<SpawnData> waveData = waves[currentWave];
 
-            // This is an example of spawnData - {"name": "ghost", "multiplier": "3"}
+            // This is an example of spawnData - {"name": "ghost", "count": 3, spawnDelay: 0.2}
             foreach(SpawnData spawnData in waveData)
             {
-                int multiplier = int.Parse(spawnData.multiplier);
-                for (int i= 1; i <= multiplier; i++)
+                // Wait the delay timer in between spawnData elements.
+                await Task.Delay((int)(spawnData.spawnDelay * 1000));
+
+                for (int i= 1; i <= spawnData.count; i++)
                 {
-                    // Spawn enemy every second
                     levelPath.SpawnEnemy(spawnData.enemyId);
-                    await Task.Delay(1000);
+
+                    // If there are clusters of enemies we have a flat wait rate of 0.2 seconds. otherwise break the loop.
+                    if(spawnData.count == 1) break;
+                    await Task.Delay(200);
                 }
             }
         }
