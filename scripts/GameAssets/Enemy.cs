@@ -128,10 +128,16 @@ namespace GameNamespace.GameAssets
 
 		public async Task Stun(float duration)
 		{
-			// await delay is in milliseconds, we have to multiply the duration by 1000 to convert.
 			speed = 0;
+			var stunEffectNode = GetNode<Node2D>("StunEffect");
+			stunEffectNode.Visible = true;
+			AnimatedSprite2D stunAnim = stunEffectNode.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+			stunAnim.Play("default");
+
+			// await delay is in milliseconds, we have to multiply the duration by 1000 to convert.
 			await Task.Delay((int)(1000 * duration));
 			speed = GameDataBase.Instance.QueryEnemyData(id).speed;
+			stunEffectNode.Visible = false;
 		}
 
 	    /// <summary>
