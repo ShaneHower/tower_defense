@@ -1,6 +1,7 @@
-[gd_scene load_steps=36 format=3 uid="uid://c00yk2s5rsca1"]
+[gd_scene load_steps=44 format=3 uid="uid://c00yk2s5rsca1"]
 
 [ext_resource type="Script" uid="uid://dtudiok5s4uwj" path="res://scripts/GameAssets/Enemy.cs" id="1_3r7sd"]
+[ext_resource type="Texture2D" uid="uid://ccgu6fog04p8w" path="res://sprites/StunIcon.png" id="2_pbumw"]
 [ext_resource type="Texture2D" uid="uid://cet8mo1i2pmnm" path="res://sprites/Death Animation-Sheet.png" id="2_tfuub"]
 [ext_resource type="Texture2D" uid="uid://c7uj6yg04p6so" path="res://sprites/Ghost F-Sheet.png" id="3_3xtn6"]
 [ext_resource type="Texture2D" uid="uid://ytfvtxqq14m2" path="res://sprites/Ghost L-Sheet.png" id="4_2tlhk"]
@@ -228,6 +229,56 @@ animations = [{
 radius = 8.3244
 height = 16.6488
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_gd6hx"]
+atlas = ExtResource("2_pbumw")
+region = Rect2(0, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n5w7r"]
+atlas = ExtResource("2_pbumw")
+region = Rect2(28, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2sts"]
+atlas = ExtResource("2_pbumw")
+region = Rect2(56, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lnaxs"]
+atlas = ExtResource("2_pbumw")
+region = Rect2(84, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_feypn"]
+atlas = ExtResource("2_pbumw")
+region = Rect2(112, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1fce"]
+atlas = ExtResource("2_pbumw")
+region = Rect2(140, 0, 28, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_20lp2"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gd6hx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n5w7r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2sts")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lnaxs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_feypn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1fce")
+}],
+"loop": true,
+"name": &"default",
+"speed": 25.0
+}]
+
 [node name="ghost" type="CharacterBody2D"]
 collision_layer = 3
 collision_mask = 3
@@ -237,8 +288,17 @@ metadata/enemyId = "101"
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_1yxwd")
-animation = &"left"
+animation = &"down"
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(0.0510862, 0.988907)
 shape = SubResource("CapsuleShape2D_nfyvd")
+
+[node name="StunEffect" type="Node2D" parent="."]
+visible = false
+position = Vector2(-1, -17)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StunEffect"]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_20lp2")
+frame_progress = 0.90876

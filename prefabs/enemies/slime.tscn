@@ -1,6 +1,7 @@
-[gd_scene load_steps=48 format=3 uid="uid://8y4l7w4kvwcj"]
+[gd_scene load_steps=56 format=3 uid="uid://8y4l7w4kvwcj"]
 
 [ext_resource type="Script" uid="uid://dtudiok5s4uwj" path="res://scripts/GameAssets/Enemy.cs" id="1_6ax6t"]
+[ext_resource type="Texture2D" uid="uid://ccgu6fog04p8w" path="res://sprites/StunIcon.png" id="2_frcbo"]
 [ext_resource type="Texture2D" uid="uid://cet8mo1i2pmnm" path="res://sprites/Death Animation-Sheet.png" id="2_hrr3h"]
 [ext_resource type="Texture2D" uid="uid://uawtglwqky2l" path="res://sprites/Green Slime F-Sheet.png" id="3_lxwyu"]
 [ext_resource type="Texture2D" uid="uid://ce53q6eb3aa5q" path="res://sprites/Green Slime L-Sheet.png" id="4_a0pw5"]
@@ -311,6 +312,56 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_xgjnx"]
 radius = 7.63159
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_gd6hx"]
+atlas = ExtResource("2_frcbo")
+region = Rect2(0, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n5w7r"]
+atlas = ExtResource("2_frcbo")
+region = Rect2(28, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f2sts"]
+atlas = ExtResource("2_frcbo")
+region = Rect2(56, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lnaxs"]
+atlas = ExtResource("2_frcbo")
+region = Rect2(84, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_feypn"]
+atlas = ExtResource("2_frcbo")
+region = Rect2(112, 0, 28, 14)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m1fce"]
+atlas = ExtResource("2_frcbo")
+region = Rect2(140, 0, 28, 14)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5gjnb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gd6hx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n5w7r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f2sts")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lnaxs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_feypn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m1fce")
+}],
+"loop": true,
+"name": &"default",
+"speed": 25.0
+}]
+
 [node name="slime" type="CharacterBody2D"]
 collision_layer = 3
 collision_mask = 3
@@ -320,8 +371,17 @@ metadata/enemyId = "102"
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ixwve")
-animation = &"death"
+animation = &"down"
 
 [node name="Collision" type="CollisionShape2D" parent="."]
 position = Vector2(-0.0102725, 1.97438)
 shape = SubResource("CircleShape2D_xgjnx")
+
+[node name="StunEffect" type="Node2D" parent="."]
+visible = false
+position = Vector2(-1, -11)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="StunEffect"]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_5gjnb")
+frame_progress = 0.239666

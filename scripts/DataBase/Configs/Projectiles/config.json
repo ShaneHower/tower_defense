@@ -34,6 +34,9 @@
         "name": "fire",
         "speed": 200.0,
         "damage": 20.0,
+        "effect": "burn",
+        "effectRate": 0.1,
+        "effectDuration": 1,
         "prefab": "fire.tscn"
     },
     "105": {
@@ -41,6 +44,8 @@
         "name": "rock",
         "speed": 200.0,
         "damage": 20.0,
+        "effect": "stun",
+        "effectDuration": 0.2,
         "prefab": "rock.tscn"
     }
 }
