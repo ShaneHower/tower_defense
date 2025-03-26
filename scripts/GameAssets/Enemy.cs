@@ -25,12 +25,15 @@ namespace GameNamespace.GameAssets
 		public bool targeted;
 		public bool reachedEnd;
 		public bool isSlowed = false;
+		public bool isBurned = false;
 		public int pathIndexTarget = 1;
 		public EnemyData passedData;
 
 		// Status affect tracking
 		private Task currentSlowTask;
-		private CancellationTokenSource slowCanelTokenSource;
+		private Task currentBurnTask;
+		private CancellationTokenSource slowCancelTokenSource;
+		private CancellationTokenSource burnCancelTokenSource;
 		private static readonly ILogger log = Log.ForContext<Enemy>();
 
 		// Game objects
@@ -61,12 +64,13 @@ namespace GameNamespace.GameAssets
 			name = enemyData.name;
 		}
 
-		public override async void _PhysicsProcess(double delta)
+		public override void _Process(double delta)
 		{
 			if (isDead)
 			{
-				await AnimateDeath();
+				AnimateDeath();
 			}
+
 			else if(reachedEnd)
 			{
 				return;
@@ -122,6 +126,14 @@ namespace GameNamespace.GameAssets
 			}
 		}
 
+		public async Task Stun(float duration)
+		{
+			// await delay is in milliseconds, we have to multiply the duration by 1000 to convert.
+			speed = 0;
+			await Task.Delay((int)(1000 * duration));
+			speed = GameDataBase.Instance.QueryEnemyData(id).speed;
+		}
+
 	    /// <summary>
 		/// I learned something new here so lets explain it.  Obviously async tasks are tasks that can happen many times
 		/// over in parallel.  Sometimes there is a task happening that should take precident over every other of it's
@@ -149,12 +161,12 @@ namespace GameNamespace.GameAssets
 				string msg = $"Enemy {this} with name {this.Name} hit by slow again, restart duration of {duration}";
 				log.Information(msg);
 				GameCoordinator.Instance.combatLog.Write(msg);
-				slowCanelTokenSource?.Cancel();
-				slowCanelTokenSource?.Dispose();
+				slowCancelTokenSource?.Cancel();
+				slowCancelTokenSource?.Dispose();
 			}
 
-			slowCanelTokenSource = new CancellationTokenSource();
-			CancellationToken token = slowCanelTokenSource.Token;
+			slowCancelTokenSource = new CancellationTokenSource();
+			CancellationToken token = slowCancelTokenSource.Token;
 			currentSlowTask = RunSlowEffect(duration, token);
 
 			return currentSlowTask;
@@ -164,6 +176,7 @@ namespace GameNamespace.GameAssets
 		{
 			try
 			{
+				animator.Modulate = new Color(0.4f, 0.8f, 1f, 1f);
 				float elapsed = 0;
 				while(elapsed < duration)
 				{
@@ -174,11 +187,60 @@ namespace GameNamespace.GameAssets
 				// Wait time is up
 				speed = GameDataBase.Instance.QueryEnemyData(id).speed;
 				isSlowed = false;
+				animator.Modulate = new Color(1, 1, 1, 1);
 			}
 			catch (TaskCanceledException)
 			{
 				log.Information($"Slow effect was cancelled early at Time: {Time.GetTicksMsec()}ms");
 			}
+		}
+
+		public Task Burn(float burnDamage, float duration)
+		{
+			if(!isBurned)
+			{
+				string msg = $"Enemy {this} with name {this.Name} is burned by {burnDamage} for {duration}.";
+				log.Information(msg);
+				GameCoordinator.Instance.combatLog.Write(msg);
+				isBurned = true;
+			}
+			else
+			{
+				string msg = $"Enemy {this} with name {this.Name} hit by burn again, restart duration of {duration}";
+				log.Information(msg);
+				GameCoordinator.Instance.combatLog.Write(msg);
+				burnCancelTokenSource?.Cancel();
+				burnCancelTokenSource?.Dispose();
+			}
+
+			burnCancelTokenSource = new CancellationTokenSource();
+			CancellationToken token = burnCancelTokenSource.Token;
+			currentBurnTask = RunBurnEffect(burnDamage, duration, token);
+
+			return currentBurnTask;
+		}
+
+		private async Task RunBurnEffect(float damage, float duration, CancellationToken token)
+		{
+			try
+			{
+				animator.Modulate = new Color(1f, 0.6f, 0.6f, 1f);
+				float elapsed = 0;
+				while(elapsed < duration)
+				{
+					await Task.Delay(100, token);
+					HitByProjectile(damage);
+					elapsed += 0.10f;
+				}
+
+				animator.Modulate = new Color(1f, 1f, 1f, 1f);
+				isBurned = false;
+			}
+			catch (TaskCanceledException)
+			{
+				log.Information($"Burn effect was cancelled early at Time: {Time.GetTicksMsec()}ms");
+			}
+
 		}
 
 	}

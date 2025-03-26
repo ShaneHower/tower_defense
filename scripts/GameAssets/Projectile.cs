@@ -117,6 +117,22 @@ namespace GameNamespace.GameAssets
 				GameCoordinator.Instance.combatLog.Write(msg);
 				enemy.Slow(effectRate, 1.5f);
 			}
+
+			if(effect?.ToLower() == "stun")
+			{
+				string msg = $"Projectile {this} with name {this.Name} applying stun.";
+				log.Information(msg);
+				GameCoordinator.Instance.combatLog.Write(msg);
+				enemy.Stun(effectDuration);
+			}
+
+			if(effect?.ToLower() == "burn")
+			{
+				string msg = $"Projectile {this} with name {this.Name} applying burn.";
+				log.Information(msg);
+				GameCoordinator.Instance.combatLog.Write(msg);
+				enemy.Burn(effectRate * damage, effectDuration);
+			}
 		}
 
 		private async Task HandleAOE()
