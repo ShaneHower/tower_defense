@@ -13,6 +13,7 @@ namespace GameNamespace.DataBase
     public class SpawnData
     {
         public string enemyId { get; set; }
-        public string multiplier { get; set; }
+        public int count { get; set; }
+        public float spawnDelay { get; set; }
     }
 }
