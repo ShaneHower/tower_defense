@@ -2,7 +2,7 @@ namespace GameNamespace.UI
 {
     using Godot;
 
-    public partial class StartMenu : UIControl
+    public partial class StartMenu : Control
     {
         public VBoxContainer menu;
         public override void _Ready()

@@ -2,6 +2,8 @@ namespace GameNamespace.GameManager
 {
     using System.Collections.Generic;
     using GameNamespace.GameAssets;
+    using GameNamespace.UI;
+
     using GameNamespace.UI.DevTools;
     using Godot;
     using Serilog;
@@ -17,7 +19,7 @@ namespace GameNamespace.GameManager
         public bool enemyBreach = false;
         public int breachNum = 0;
         public int currentGold = 0;
-        public Tower towerAttemptingUpgrade;
+        public TowerUI towerUIActive;
 
         // Prefab locations
         public string prefabLoc = "res://prefabs";

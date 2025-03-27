@@ -38,7 +38,6 @@ namespace  GameNamespace.GameAssets
 		private List<Enemy> targetEnemies = new();
 		private int targetOrder = 0;
 		public bool isHovered = false;
-		public bool upgradeButtonHovered = false;
 		private static readonly ILogger log = Log.ForContext<Tower>();
 
 		// Game objects
@@ -47,16 +46,17 @@ namespace  GameNamespace.GameAssets
 		public AnimatedSprite2D animator;
 		private Line2D towerRange;
 		private Area2D hoverArea;
-		private Control upgradeControl;
-		private Button upgradeButton;
-		private Level gameLevel;
+		public Ruins ruins;
+
+		// Tower UI
+		public bool upgradeButtonHovered = false;
 
 		public override void _Ready()
 		{
 			// Init work
 			id = (string)GetMeta("towerId");
 			SetVars();
-			gameLevel = GetTree().Root.GetNode<Level>("Level");
+
 			animator = GetNode<AnimatedSprite2D>("Animator");
 			animator.Play("idle");
 
@@ -64,13 +64,6 @@ namespace  GameNamespace.GameAssets
 			var collider = GetNode<CollisionShape2D>("Collider");
 			towerRange = UITools.Instance.CreateCircleColliderOutline(collider);
 			AddChild(towerRange);
-
-			// Handle UI
-			upgradeControl = GetNode<Control>("UpgradeControl");
-			upgradeButton = upgradeControl.GetNode<Button>("Upgrade");
-			upgradeButton.Pressed += Upgrade;
-			upgradeButton.MouseEntered += () => upgradeButtonHovered=true;
-			upgradeButton.MouseExited += () => upgradeButtonHovered=false;
 
 			// Detect player mouse
 			hoverArea = GetNode<Area2D>("HoverArea");
@@ -116,51 +109,6 @@ namespace  GameNamespace.GameAssets
 				CheckAndResolveAttack();
 			}
 		}
-
-		/// <summary>
-		/// Currently this input method is controlling the interactable tower UI.  This allows the player to bring up
-		/// the upgrade menu when they click the tower.
-		/// </summary>
-		/// <param name="event"></param>
-		public override void _Input(InputEvent @event)
-        {
-			// Mouse Inputs
-            if(@event is InputEventMouseButton mouseEvent)
-			{
-				bool towerClicked = nextLevelId is not null && isHovered && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left;
-				bool upgradeExitMouseR = upgradeControl.Visible && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Right;
-				bool upgradeExitMouseL = !upgradeButtonHovered && upgradeControl.Visible && mouseEvent.Pressed && mouseEvent.ButtonIndex == MouseButton.Left;
-
-				if(towerClicked)
-				{
-					if(GameCoordinator.Instance.towerAttemptingUpgrade is not null)
-					{
-						// If there is a tower upgrade menu already open on another tower, close it and open the new tower upgrade option
-						GameCoordinator.Instance.towerAttemptingUpgrade.upgradeControl.Visible = false;
-					}
-					GameCoordinator.Instance.towerAttemptingUpgrade = this;
-					upgradeControl.Visible = true;
-				}
-
-				if(upgradeExitMouseR || upgradeExitMouseL)
-				{
-					GameCoordinator.Instance.towerAttemptingUpgrade = null;
-					upgradeControl.Visible = false;
-				}
-			}
-
-			// Key Inputs
-			if (@event is InputEventKey keyEvent && keyEvent.Pressed)
-			{
-				bool upgradeMenuKeyExit = upgradeControl.Visible && keyEvent.Keycode == Key.Escape;
-
-				if(upgradeMenuKeyExit)
-				{
-					GameCoordinator.Instance.towerAttemptingUpgrade = null;
-					upgradeControl.Visible = false;
-				}
-			}
-        }
 
 		private async void CheckAndResolveAttack()
 		{
@@ -226,26 +174,6 @@ namespace  GameNamespace.GameAssets
 			proj_instance.target = target;
 		}
 
-		private void Upgrade()
-		{
-			log.Information($"Tower {this} with name {Name} is attempting to upgrade");
-			TowerData data = GameDataBase.Instance.QueryTowerData(nextLevelId);
-			if(GameCoordinator.Instance.currentGold > data.gold)
-			{
-				// Generate the tower prefab.
-				PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.towerPrefabLoc}/{data.prefab}");
-				Tower upgrade = (Tower)prefab.Instantiate();
-				gameLevel.AddChild(upgrade);
-				upgrade.Position = Position;
-				GameCoordinator.Instance.currentGold -= upgrade.gold;
-				QueueFree();
-			}
-			else
-			{
-				UITools.Instance.SpawnWarning(message:"Not Enough Gold!", pressedButton:upgradeButton);
-			}
-		}
-
 		private void OnEnter(Node body)
 		{
 			if(body is Enemy enemy)
@@ -268,9 +196,6 @@ namespace  GameNamespace.GameAssets
 
 		public override void _ExitTree()
 		{
-			// If we don't clear out this instance, the deleted object will be stuck to it and the upgrade behavior will break.
-			GameCoordinator.Instance.towerAttemptingUpgrade = null;
-
 			Disconnect("body_entered", new Callable(this, nameof(OnEnter)));
 			Disconnect("body_exited", new Callable(this, nameof(OnExit)));
 		}

@@ -243,7 +243,8 @@ namespace GameNamespace.UI
 				chosenTower.beingPlaced = false;
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
 				ruinsHovered = false;
-				ruins.QueueFree();
+				chosenTower.ruins = ruins;
+				ruins.Visible = false;
 
 				// Free up for garbage collection.
 				ruins = null;
