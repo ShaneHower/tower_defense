@@ -1,8 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://c4pef8cmvplya"]
+[gd_scene load_steps=19 format=3 uid="uid://c4pef8cmvplya"]
 
 [ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/GameAssets/Tower.cs" id="1_7fqkj"]
 [ext_resource type="Texture2D" uid="uid://d07amxdblje4o" path="res://sprites/FireTowerLv2-Sheet.png" id="2_7fqkj"]
-[ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="3_hku7k"]
+[ext_resource type="Script" uid="uid://dnqsvvhlg4b40" path="res://scripts/UI/TowerUI.cs" id="3_hku7k"]
+[ext_resource type="Texture2D" uid="uid://ba4fg3bocjrfw" path="res://sprites/TowerUI.png" id="4_xd4om"]
+[ext_resource type="Texture2D" uid="uid://bxfpqyvqpin22" path="res://sprites/TowerUIButton.png" id="5_ip3fh"]
+[ext_resource type="Texture2D" uid="uid://crn4lsrgxav71" path="res://sprites/UpgradeArrow.png" id="6_ip3fh"]
+[ext_resource type="Texture2D" uid="uid://boqdwu2cpvjy0" path="res://sprites/MoneySign.png" id="7_e8bpr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bdhud"]
 
@@ -49,6 +53,21 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_1s6kq"]
+atlas = ExtResource("5_ip3fh")
+region = Rect2(0, 0, 20, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e23aq"]
+atlas = ExtResource("5_ip3fh")
+region = Rect2(20, 0, 20, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0jutn"]
+atlas = ExtResource("5_ip3fh")
+region = Rect2(0, 0, 20, 0)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0yuyu"]
+atlas = SubResource("AtlasTexture_0jutn")
+
 [node name="tower" type="Area2D"]
 texture_filter = 1
 script = ExtResource("1_7fqkj")
@@ -71,19 +90,86 @@ frame_progress = 0.268204
 [node name="Collider" type="CollisionPolygon2D" parent="HoverArea"]
 polygon = PackedVector2Array(-10, -7, -21, 28, -7, 36, 8, 36, 21, 30, 10, -5, 16, -10, 2, -22, 10, -27, 0, -32, -2, -23, -15, -12, -11, -6)
 
-[node name="UpgradeControl" type="Control" parent="."]
-visible = false
+[node name="TowerUIControl" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
-offset_left = -23.0
-offset_top = -57.0
-offset_right = 27.0
-offset_bottom = -35.0
+offset_left = -36.0
+offset_top = -111.0
+offset_right = 37.0
+offset_bottom = -32.0
+script = ExtResource("3_hku7k")
 
-[node name="Upgrade" type="Button" parent="UpgradeControl"]
+[node name="TowerUI" type="TextureRect" parent="TowerUIControl"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -33.5
+offset_right = 31.0
+offset_bottom = 33.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xd4om")
+
+[node name="Upgrade" type="TextureButton" parent="TowerUIControl/TowerUI"]
 texture_filter = 1
 layout_mode = 0
-offset_right = 8.0
-offset_bottom = 8.0
-theme_override_fonts/font = ExtResource("3_hku7k")
-text = "Upgrade"
+offset_left = 21.0
+offset_top = -6.0
+offset_right = 41.0
+offset_bottom = 14.0
+texture_normal = SubResource("AtlasTexture_1s6kq")
+texture_pressed = SubResource("AtlasTexture_e23aq")
+texture_hover = SubResource("AtlasTexture_0yuyu")
+
+[node name="TextureRect" type="TextureRect" parent="TowerUIControl/TowerUI/Upgrade"]
+layout_mode = 0
+offset_left = 4.5
+offset_top = 3.0
+offset_right = 13.5
+offset_bottom = 16.0
+texture = ExtResource("6_ip3fh")
+
+[node name="Sell" type="TextureButton" parent="TowerUIControl/TowerUI"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 21.0
+offset_top = 52.0
+offset_right = 41.0
+offset_bottom = 72.0
+texture_normal = SubResource("AtlasTexture_1s6kq")
+texture_pressed = SubResource("AtlasTexture_e23aq")
+texture_hover = SubResource("AtlasTexture_0yuyu")
+
+[node name="TextureRect" type="TextureRect" parent="TowerUIControl/TowerUI/Sell"]
+offset_left = 4.5
+offset_top = 3.0
+offset_right = 13.5
+offset_bottom = 16.0
+texture = ExtResource("7_e8bpr")
+
+[node name="SpecialSkillTree" type="TextureButton" parent="TowerUIControl/TowerUI"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 48.0
+offset_top = 23.0
+offset_right = 68.0
+offset_bottom = 43.0
+texture_normal = SubResource("AtlasTexture_1s6kq")
+texture_pressed = SubResource("AtlasTexture_e23aq")
+texture_hover = SubResource("AtlasTexture_0yuyu")
+
+[node name="BasicSkillTree" type="TextureButton" parent="TowerUIControl/TowerUI"]
+texture_filter = 1
+layout_mode = 0
+offset_left = -7.0
+offset_top = 23.0
+offset_right = 13.0
+offset_bottom = 43.0
+texture_normal = SubResource("AtlasTexture_1s6kq")
+texture_pressed = SubResource("AtlasTexture_e23aq")
+texture_hover = SubResource("AtlasTexture_0yuyu")
