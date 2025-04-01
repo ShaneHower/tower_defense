@@ -1,13 +1,79 @@
-[gd_scene load_steps=3 format=3 uid="uid://4yvoxm5c6u73"]
+[gd_scene load_steps=12 format=3 uid="uid://4yvoxm5c6u73"]
 
 [ext_resource type="Script" uid="uid://chtf46tqqpd71" path="res://scripts/GameAssets/Ruins.cs" id="1_5d4fu"]
-[ext_resource type="Texture2D" uid="uid://rmpd3167fjpp" path="res://sprites/Flag.png" id="2_00isa"]
+[ext_resource type="Texture2D" uid="uid://2d8pgtj0uu16" path="res://sprites/Ruins-Sheet.png" id="3_00isa"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdc2t"]
+atlas = ExtResource("3_00isa")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vfn02"]
+atlas = ExtResource("3_00isa")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e4fyx"]
+atlas = ExtResource("3_00isa")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qc6uq"]
+atlas = ExtResource("3_00isa")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_abt6b"]
+atlas = ExtResource("3_00isa")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gqm4w"]
+atlas = ExtResource("3_00isa")
+region = Rect2(240, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_26erx"]
+atlas = ExtResource("3_00isa")
+region = Rect2(288, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_30p33"]
+atlas = ExtResource("3_00isa")
+region = Rect2(336, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_0hmsh"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdc2t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vfn02")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e4fyx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qc6uq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_abt6b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gqm4w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_26erx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_30p33")
+}],
+"loop": true,
+"name": &"pick_me",
+"speed": 7.0
+}]
 
 [node name="Ruins1" type="Area2D"]
 script = ExtResource("1_5d4fu")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-polygon = PackedVector2Array(-1, -8, -4, -6, -9, -4, -14, 0, -10, 5, -4, 8, 4, 8, 8, 6, 14, 0, 11, -3, 5, -6, 9, -8, 7, -9, 2, -9, 1, -12, -1, -12)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, -1)
+sprite_frames = SubResource("SpriteFrames_0hmsh")
+animation = &"pick_me"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_00isa")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(2, -9, -5, -6, -11, -1, -18, 15, -11, 18, -3, 19, 12, 20, 23, 15, 18, -2, 15, -10, 8, -12)
