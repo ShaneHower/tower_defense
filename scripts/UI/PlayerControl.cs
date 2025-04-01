@@ -73,11 +73,13 @@ namespace GameNamespace.UI
 				{
 					// Get current animation meta data for the tower.
 					string currentAnimation = chosenTower.animator.Animation;
-					SpriteFrames towerSpriteFames = chosenTower.animator.SpriteFrames;
-					Vector2 towerSpriteSize = towerSpriteFames.GetFrameTexture(currentAnimation, 0).GetSize();
+					SpriteFrames towerSpriteFrames = chosenTower.animator.SpriteFrames;
+					Vector2 towerSpriteSize = towerSpriteFrames.GetFrameTexture(currentAnimation, 0).GetSize();
 
 					// Calculate tower offset and snap tower to ruins.
-					Vector2 ruinsSpriteSize = ruins.sprite.Texture.GetSize();
+					string ruinsCurrentAnimation = ruins.animator.Animation;
+					SpriteFrames ruinsSpriteFrames = ruins.animator.SpriteFrames;
+					Vector2 ruinsSpriteSize = ruinsSpriteFrames.GetFrameTexture(ruinsCurrentAnimation, 0).GetSize();
 					float yDiff = (towerSpriteSize.Y / 2) - (ruinsSpriteSize.Y / 2);
 					chosenTower.GlobalPosition = ruins.GlobalPosition - new Vector2(0, yDiff);
 				}
@@ -138,9 +140,15 @@ namespace GameNamespace.UI
 				if(ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
 				{
 					if(towerButtonsVisible)
+					{
 					    _ = AnimateDeckHide();
+						StopAnimateRuins();
+					}
 					else
+					{
 						_ = AnimateDeckReveal();
+						PlayAnimateRuins();
+					}
 
 					towerButtonsVisible = !towerButtonsVisible;
 				}
@@ -200,6 +208,28 @@ namespace GameNamespace.UI
 				if(node is TextureButton button)
 				{
 					button.Visible = false;
+				}
+			}
+		}
+
+		private void PlayAnimateRuins()
+		{
+			foreach(var child in level.GetChildren())
+			{
+				if(child is Ruins r)
+				{
+					r.animator.Play("pick_me");
+				}
+			}
+		}
+
+		private void StopAnimateRuins()
+		{
+			foreach(var child in level.GetChildren())
+			{
+				if(child is Ruins r)
+				{
+					r.animator.Stop();
 				}
 			}
 		}

@@ -14,7 +14,7 @@ namespace  GameNamespace.GameAssets
     public partial class Ruins : Area2D
     {
         // Game objects
-        public Sprite2D sprite;
+        public AnimatedSprite2D animator;
         public PlayerControl playerHud;
         private static readonly ILogger log = Log.ForContext<Ruins>();
 
@@ -22,7 +22,7 @@ namespace  GameNamespace.GameAssets
         {
             UIControl ui = GetTree().Root.GetNode<UIControl>("Level/UICanvas/UI");
             playerHud = ui.GetNode<PlayerControl>("PlayerHud");
-            sprite = GetNode<Sprite2D>("Sprite2D");
+            animator = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
             MouseEntered += OnMouseEnter;
             MouseExited += OnMouseExit;
