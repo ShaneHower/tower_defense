@@ -1,5 +1,7 @@
 namespace GameNamespace.UI
 {
+    using System.Collections.Generic;
+
     using System.Threading.Tasks;
     using GameNamespace.DataBase;
 	using GameNamespace.GameAssets;
@@ -12,18 +14,19 @@ namespace GameNamespace.UI
     public partial class PlayerControl : Control
 	{
 		// Class vars
-		public bool towerUiActive = false;
+		// public bool towerUiActive = false;
 		public bool ruinsHovered = false;
 
 		// Game objects
 		private Level level;
-		public Button towerButton;
-		public Tower chosenTower = null;
+		public Tower chosenTower;
 		public Ruins ruins;
 		public Area2D towerDeck;
 		public HBoxContainer towerButtonContainer;
 		public bool towerDeckHovered = false;
 		public bool towerButtonsVisible = false;
+		public GameButton activeTowerButton;
+		public List<GameButton> towerButtons = new();
 		private InputEventMouseButton mouseEvent;
 
 		public override void _Ready()
@@ -33,7 +36,7 @@ namespace GameNamespace.UI
 			towerDeck = GetNode<Area2D>("TowerDeck");
 
 			InitTowerDeck();
-			CreatePlayerHud();
+			CreateTowerButtons();
 		}
 
         public override void _Input(InputEvent @event)
@@ -66,7 +69,7 @@ namespace GameNamespace.UI
 		/// <param name="delta"></param>
         public override void _Process(double delta)
         {
-			if(towerUiActive)
+			if(chosenTower is not null)
 			{
 				chosenTower.GlobalPosition = GetGlobalMousePosition();
 				if(ruinsHovered)
@@ -82,26 +85,42 @@ namespace GameNamespace.UI
 					Vector2 ruinsSpriteSize = ruinsSpriteFrames.GetFrameTexture(ruinsCurrentAnimation, 0).GetSize();
 					float yDiff = (towerSpriteSize.Y / 2) - (ruinsSpriteSize.Y / 2);
 					chosenTower.GlobalPosition = ruins.GlobalPosition - new Vector2(0, yDiff);
+
+					ruins.Modulate = new Color(1, 1, 1, 0);
+				}
+
+				if(activeTowerButton is not null && chosenTower.gold > GameCoordinator.Instance.currentGold)
+				{
+					activeTowerButton.ResetToInitPosition();
+					UITools.Instance.SpawnWarning("Not Enough Gold!", activeTowerButton);
+					chosenTower.QueueFree();
+					activeTowerButton = null;
+					chosenTower = null;
+					StopAnimateRuins();
 				}
 			}
         }
 
-		public void CreatePlayerHud()
+		public void CreateTowerButtons()
 		{
-			TextureButton basicTower = UITools.Instance.CreateTextureButtonFromRegion(parent:towerButtonContainer, buttonType:"Tower");
+			GameButton basicTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
 			HandleTowerButtonBehavior(button:basicTower, towerId:101, spriteSheet:"BasicTower-Sheet.png");
+			towerButtons.Add(basicTower);
 
-			TextureButton iceTower = UITools.Instance.CreateTextureButtonFromRegion(parent:towerButtonContainer, buttonType:"Tower");
+			GameButton iceTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
 			HandleTowerButtonBehavior(button:iceTower, towerId:102, spriteSheet:"IceTowerLv1-Sheet.png");
+			towerButtons.Add(iceTower);
 
-			TextureButton fireTower = UITools.Instance.CreateTextureButtonFromRegion(parent:towerButtonContainer, buttonType:"Tower");
+			GameButton fireTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
 			HandleTowerButtonBehavior(button:fireTower, towerId:107, spriteSheet:"FireTowerLv1-Sheet.png");
+			towerButtons.Add(fireTower);
 
-			TextureButton earthTower = UITools.Instance.CreateTextureButtonFromRegion(parent:towerButtonContainer, buttonType:"Tower");
+			GameButton earthTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
 			HandleTowerButtonBehavior(button:earthTower, towerId:104, spriteSheet:"EarthTowerLv1-Sheet.png");
+			towerButtons.Add(earthTower);
 		}
 
-		public void HandleTowerButtonBehavior(TextureButton button, int towerId, string spriteSheet)
+		public void HandleTowerButtonBehavior(GameButton button, int towerId, string spriteSheet)
 		{
 			var spritePath = $"{GameCoordinator.Instance.spriteLoc}/{spriteSheet}";
 			var region = new Rect2(0, 0, 48, 72);
@@ -136,18 +155,19 @@ namespace GameNamespace.UI
 				animator.Play("idle");
 			};
 
+			// Set deck reveal and deck hide behavior triggers
 			towerDeck.InputEvent += (viewport, ev, shapeIdx) => {
 				if(ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
 				{
+					float step = 0.02f;
+					float delay = 0.01f;
 					if(towerButtonsVisible)
 					{
-					    _ = AnimateDeckHide();
-						StopAnimateRuins();
+					    _ = AnimateDeckHide(step, delay);
 					}
 					else
 					{
-						_ = AnimateDeckReveal();
-						PlayAnimateRuins();
+						_ = AnimateDeckReveal(step, delay);
 					}
 
 					towerButtonsVisible = !towerButtonsVisible;
@@ -155,55 +175,45 @@ namespace GameNamespace.UI
 			};
 		}
 
-		public async Task AnimateDeckReveal()
+		private async Task AnimateDeckReveal(float step, float delay)
 		{
 			var tween = CreateTween();
-			float delayBetween = 0.01f;
-			int index = 0;
-			float step = 0.02f;
-
-			foreach(var node in towerButtonContainer.GetChildren())
+			foreach(var node in towerButtons)
 			{
 				if(node is TextureButton button)
 				{
 					button.Visible = true;
 
 					// Animate fade in
-					tween.TweenProperty(button, "modulate:a", 1.0f, step).SetDelay(delayBetween);
+					tween.TweenProperty(button, "modulate:a", 1.0f, step).SetDelay(delay);
 
 					// Animate scale
-					tween.TweenProperty(button, "scale", Vector2.One, step).SetDelay(delayBetween);
-					index++;
+					tween.TweenProperty(button, "scale", Vector2.One, step).SetDelay(delay);
 				}
 			}
 
 			await ToSignal(tween, "finished");
 		}
 
-		public async Task AnimateDeckHide()
+		private async Task AnimateDeckHide(float step, float delay)
 		{
 			var tween = CreateTween();
-			float delayBetween = 0.01f;
-			int index = 0;
-			float step = 0.02f;
-
-			for(int i = towerButtonContainer.GetChildCount() - 1; i >= 0; i--)
+			for(int i = towerButtons.Count - 1; i >= 0; i--)
 			{
 				var node = towerButtonContainer.GetChild(i);
 				if(node is TextureButton button)
 				{
 					// Fade out
-					tween.TweenProperty(button, "modulate:a", 0.0f, step).SetDelay(index * delayBetween);
+					tween.TweenProperty(button, "modulate:a", 0.0f, step).SetDelay(delay);
 
 					// Shrink scale
-					tween.TweenProperty(button, "scale", new Vector2(0.8f, 0.8f), step).SetDelay(index * delayBetween);
-					index++;
+					tween.TweenProperty(button, "scale", new Vector2(0.8f, 0.8f), step).SetDelay(delay);
 				}
 			}
 
 			await ToSignal(tween, "finished");
 
-			foreach (var node in towerButtonContainer.GetChildren())
+			foreach (var node in towerButtons)
 			{
 				if(node is TextureButton button)
 				{
@@ -234,9 +244,9 @@ namespace GameNamespace.UI
 			}
 		}
 
-        private void OnButtonDown(TextureButton pressedButton)
+        private void OnButtonDown(GameButton pressedButton)
 		{
-			if(!towerUiActive)
+			if(activeTowerButton is null)
 			{
 				// Get tower data and extract the cost so we can check if the player has enough money to buy the tower.
 				string towerId = (string)pressedButton.GetMeta("towerId");
@@ -252,10 +262,21 @@ namespace GameNamespace.UI
 					// Generate the tower prefab.
 					PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.towerPrefabLoc}/{towerData.prefab}");
 					chosenTower = (Tower)prefab.Instantiate();
-					towerUiActive = true;
 					level.AddChild(chosenTower);
 					chosenTower.beingPlaced = true;
+					pressedButton.ShiftPositionUp();
+					activeTowerButton = pressedButton;
+					PlayAnimateRuins();
 				}
+			}
+			else
+			{
+				// Reset the active button and rerun the procedure to load up the newly selected towerData.
+				activeTowerButton.ResetToInitPosition();
+				chosenTower.QueueFree();
+				activeTowerButton = null;
+				chosenTower = null;
+				OnButtonDown(pressedButton);
 			}
 		}
 
@@ -266,27 +287,31 @@ namespace GameNamespace.UI
 		/// <param name="mouseButton"></param>
 		private void PlaceTower(InputEventMouseButton mouseButton)
 		{
-			if(mouseButton.ButtonIndex == MouseButton.Left && ruinsHovered && towerUiActive)
+
+
+			if(mouseButton.ButtonIndex == MouseButton.Left && ruinsHovered)
 			{
 				// Place Tower
-				towerUiActive = false;
 				chosenTower.beingPlaced = false;
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
-				ruinsHovered = false;
 				chosenTower.ruins = ruins;
 				ruins.Visible = false;
 
-				// Free up for garbage collection.
-				ruins = null;
-				chosenTower = null;
-
+				// Clean Up
+				// ruins = null;
+				// chosenTower = null;
+				// activeTowerButton.ShiftPositionDown();
+				// activeTowerButton = null;
+				// StopAnimateRuins();
 			}
-			else if (towerUiActive && mouseButton.ButtonIndex == MouseButton.Right)
+			else if (mouseButton.ButtonIndex == MouseButton.Right)
 			{
 				// Cancel Placement
-				towerUiActive = false;
+				activeTowerButton.ResetToInitPosition();
 				chosenTower.QueueFree();
+				activeTowerButton = null;
 				chosenTower = null;
+				StopAnimateRuins();
 			}
 		}
 
