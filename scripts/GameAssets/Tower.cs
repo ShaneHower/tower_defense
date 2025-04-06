@@ -112,14 +112,20 @@ namespace  GameNamespace.GameAssets
 
 		private async void CheckAndResolveAttack()
 		{
+			// GD.Print($"canFire: {canFire}; attackCounter: {attackCounter}");
+
 			if(targetEnemies.Count != 0 && canFire)
 			{
 				canFire = false;
 
 				if(attackCounter * attackModCounter != 0 && attackCounter % attackModCounter == 0)
+				{
 					AttackTarget(attackModifier);
+				}
 				else
+				{
 					AttackTarget(projectileId);
+				}
 
 				// If some how the tower deletes we resolve any hanging async tasks.
 				await ToSignal(GetTree().CreateTimer(20/attackSpeed), "timeout");
@@ -136,9 +142,13 @@ namespace  GameNamespace.GameAssets
 			{
 				// Sometimes an enemy may have been killed by another tower in this case the tower can get stuck looking for an enemy that no longer exists.
 				Enemy target = targetEnemies[targetIndex];
-				bool isValidTarget = !target.isDying && GameCoordinator.Instance.activeEnemies.Contains(target);
+				if(target.isDying)
+				{
+					// If the target is dying move onto the next target
+					target = targetEnemies[targetIndex+1];
+				}
 
-				if(isValidTarget)
+				if(GameCoordinator.Instance.activeEnemies.Contains(target))
 				{
 					log.Information($"Tower {this} with name {Name} is attacking Enemy {target}");
 					SpawnProjectile(projectileId, target);
