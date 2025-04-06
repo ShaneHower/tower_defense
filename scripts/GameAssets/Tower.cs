@@ -112,8 +112,6 @@ namespace  GameNamespace.GameAssets
 
 		private async void CheckAndResolveAttack()
 		{
-			// GD.Print($"canFire: {canFire}; attackCounter: {attackCounter}");
-
 			if(targetEnemies.Count != 0 && canFire)
 			{
 				canFire = false;
@@ -201,6 +199,21 @@ namespace  GameNamespace.GameAssets
 				enemy.targeted = false;
 				targetEnemies.Remove(enemy);
 			}
+
+		}
+
+		public async Task AnimateSpawn()
+		{
+			var origPosition = Position;
+			Position = new Vector2(Position.X, Position.Y - 12);
+			string spawnAnim = "spawn";
+			animator.Play(spawnAnim);
+			int framecount = animator.SpriteFrames.GetFrameCount(spawnAnim);
+			float fps = (float)animator.SpriteFrames.GetAnimationSpeed(spawnAnim);
+			float animationDuration = framecount / fps;
+			await Task.Delay((int)(animationDuration * 1000));
+			Position = origPosition;
+			animator.Play("idle");
 
 		}
 

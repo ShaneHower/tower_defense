@@ -68,6 +68,7 @@ animations = [{
 }]
 
 [node name="Ruins1" type="Area2D"]
+texture_filter = 1
 script = ExtResource("1_5d4fu")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

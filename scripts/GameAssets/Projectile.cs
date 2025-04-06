@@ -150,13 +150,26 @@ namespace GameNamespace.GameAssets
 				Area2D aoeArea = GetNode<Area2D>("AOE");
 				AnimatedSprite2D animator = aoeArea.GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 				aoeArea.Visible = true;
-				aoeArea.BodyEntered += OnAoeEnter;
+				// aoeArea.BodyEntered += OnAoeEnter;
+
+				foreach (var body in aoeArea.GetOverlappingBodies())
+				{
+					if(body is Enemy collidedEnemy && collidedEnemy != target)
+					{
+						string msg = $"{collidedEnemy} with name {collidedEnemy.name} has entered AOE.";
+						log.Information(msg);
+						GameCoordinator.Instance.combatLog.Write(msg);
+						collidedEnemy.HitByProjectile((float)(damage * aoeDamagePerc));
+						applyEffects(collidedEnemy);
+					}
+				}
 
 				animator.Play("default");
 				int framecount = animator.SpriteFrames.GetFrameCount("default");
 				float fps = (float)animator.SpriteFrames.GetAnimationSpeed("default");
 				float animationDuration = framecount / fps;
 				await Task.Delay((int)animationDuration * 1000);
+				log.Information($"AOE FINISHED.");
 			}
 
 		}
