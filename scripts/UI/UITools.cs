@@ -70,7 +70,6 @@ namespace GameNamespace.UI
             button.StretchMode = TextureButton.StretchModeEnum.KeepCentered;
 
             parent.AddChild(button);
-            button.initPosition = button.Position;
             return button;
         }
 

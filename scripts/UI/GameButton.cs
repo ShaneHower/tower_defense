@@ -1,5 +1,7 @@
 namespace GameNamespace.UI
 {
+    using System;
+
     using GameNamespace.GameManager;
     using Godot;
 
@@ -31,6 +33,9 @@ namespace GameNamespace.UI
 
         public void ShiftPositionUp()
         {
+            if(shifted) {return;}
+
+            initPosition = Position;
             int shiftHalf = (int)spriteDimensions.Y / 2;
             Position = new Vector2(Position.X, Position.Y - shiftHalf);
             shifted = true;
@@ -38,6 +43,9 @@ namespace GameNamespace.UI
 
         public void ShiftPositionDown()
         {
+            if(shifted) {return;}
+
+            initPosition = Position;
             int shiftHalf = (int)spriteDimensions.Y / 2;
             Position = new Vector2(Position.X, Position.Y + shiftHalf);
             shifted = true;
@@ -45,8 +53,16 @@ namespace GameNamespace.UI
 
         public void ResetToInitPosition()
         {
-            Position = initPosition;
-            shifted = false;
+            if (shifted)
+            {
+                Position = initPosition;
+                shifted = false;
+            }
+            else
+            {
+                return;
+            }
+
         }
 
     }

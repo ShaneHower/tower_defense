@@ -1081,3 +1081,6 @@ position = Vector2(725, 500)
 
 [node name="Ruins9" parent="." instance=ExtResource("20_y3pui")]
 position = Vector2(559, 207)
+
+[node name="Towers" type="Node2D" parent="."]
+y_sort_enabled = true
