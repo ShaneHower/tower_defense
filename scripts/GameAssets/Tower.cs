@@ -122,7 +122,7 @@ namespace  GameNamespace.GameAssets
 					AttackTarget(projectileId);
 
 				// If some how the tower deletes we resolve any hanging async tasks.
-				await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
+				await ToSignal(GetTree().CreateTimer(20/attackSpeed), "timeout");
 				if (!IsInsideTree()) return;
 
 				canFire = true;

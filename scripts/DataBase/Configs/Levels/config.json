@@ -5,12 +5,9 @@
         "startGold": 100,
         "waves": {
             "1": [
-                {"enemyId": "101", "count": 1, "spawnDelay":0},
-                {"enemyId": "103", "count": 1, "spawnDelay":0},
-                {"enemyId": "102", "count": 1, "spawnDelay":0},
-                {"enemyId": "103", "count": 3, "spawnDelay":0.5},
-                {"enemyId": "102", "count": 5, "spawnDelay":0.2},
-                {"enemyId": "101", "count": 6, "spawnDelay":1}
+                {"enemyId": "101", "count": 5, "spawnDelay":0},
+                {"enemyId": "103", "count": 1, "spawnDelay":5},
+                {"enemyId": "101", "count": 3, "spawnDelay":0}
             ],
             "2": [
                 {"enemyId": "101", "count": 1, "spawnDelay":0},

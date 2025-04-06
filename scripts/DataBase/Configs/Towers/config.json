@@ -4,7 +4,7 @@
         "name": "basic",
         "radius": 1.0,
         "gold": 25,
-        "attackSpeed": 1.0,
+        "attackSpeed": 100,
         "prefab": "basic_tower.tscn",
         "projectileId": "101"
     },
@@ -14,8 +14,8 @@
         "name": "ice",
         "level": 1,
         "radius": 1.0,
-        "gold": 25,
-        "attackSpeed": 2,
+        "gold": 30,
+        "attackSpeed": 30,
         "prefab": "ice_tower.tscn",
         "projectileId": "102",
         "nextLevelId": "103"
@@ -77,7 +77,7 @@
         "name": "fire2",
         "radius": 1.0,
         "gold": 50,
-        "attackSpeed": 1.0,
+        "attackSpeed": 1.5,
         "prefab": "fire_towerlvl2.tscn",
         "projectileId": "104",
         "multiShot": 2
