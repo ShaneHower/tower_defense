@@ -23,7 +23,7 @@ namespace GameNamespace.UI
 
 		public TextureButton CreateWaveButton(string buttonText)
 		{
-			TextureButton button = UITools.Instance.CreateTextureButtonFromRegion(parent:waveHud, buttonType:"Menu");
+			GameButton button = UITools.Instance.CreateGameButtonFromRegion(parent:waveHud, buttonType:"Menu");
 			Label label = UITools.Instance.CreateLabel(text:buttonText, parent:button, fontSize:25);
 			label.Size = button.Size;
 

@@ -8,7 +8,6 @@ namespace GameNamespace.UI
 	{
         public static UITools Instance { get; private set; }
         private string fontLoc = "res://misc/font/CelticTime.ttf";
-        public string uiPrefabLoc = "res://prefabs/ui";
 
         public override void _Ready()
         {
@@ -40,57 +39,37 @@ namespace GameNamespace.UI
 			return button;
 		}
 
-        public TextureButton CreateTextureButtonFromRegion(Control parent, string buttonType="Menu")
+        public GameButton CreateGameButtonFromRegion(Control parent, string buttonType="Menu")
         {
-            string spriteSheet;
-            Rect2 idleRegion;
-            Rect2 pressedRegion;
 
-            if (buttonType == "Menu")
-            {
-                spriteSheet = $"{GameCoordinator.Instance.spriteLoc}/Button-Sheet.png";
-                idleRegion = new Rect2(0, 0, 120, 35);
-                pressedRegion = new Rect2(120, 0, 120, 35);
-            }
-            else if (buttonType == "Tower")
-            {
-                spriteSheet = $"{GameCoordinator.Instance.spriteLoc}/TowerButton-Sheet.png";
-                idleRegion = new Rect2(0, 0, 56, 80);
-                pressedRegion = new Rect2(56, 0, 56, 80);
-            }
-            else
-            {
-                throw new Exception("CreateUITextureButtonFromRegion buttonType not valid.");
+            PackedScene buttonScene = GD.Load<PackedScene>($"{GameCoordinator.Instance.uiPrefabLoc}/game_button.tscn");
+            GameButton button = buttonScene.Instantiate<GameButton>();
+            button.SetVars(buttonType:buttonType);
 
-            }
-
-            Texture2D texture = GD.Load<Texture2D>(spriteSheet);
+            // Slice up the sprite sheets to get the different button states
+            Texture2D texture = GD.Load<Texture2D>(button.spriteSheet);
             AtlasTexture atlasIdleTexture = new AtlasTexture
             {
                 Atlas = texture,
-                Region = idleRegion
+                Region = new Rect2(0, 0, button.spriteDimensions.X, button.spriteDimensions.Y)
             };
 
             AtlasTexture atlasPressedTexture = new AtlasTexture
             {
                 Atlas = texture,
-                Region = pressedRegion
+                Region = new Rect2(button.spriteDimensions.X, 0, button.spriteDimensions.X, button.spriteDimensions.Y)
             };
 
-            TextureButton button = new TextureButton
-            {
-                TextureNormal = atlasIdleTexture,
-                TexturePressed = atlasPressedTexture,
-                TextureHover = atlasIdleTexture,
-                CustomMinimumSize = idleRegion.Size,
-                MouseFilter = Control.MouseFilterEnum.Stop,
-                SizeFlagsHorizontal = Control.SizeFlags.Fill,
-                TextureFilter = TextureFilterEnum.Nearest
-            };
-
+            button.TextureNormal = atlasIdleTexture;
+            button.TexturePressed = atlasPressedTexture;
+            button.TextureHover = atlasIdleTexture;
+            button.CustomMinimumSize = button.spriteDimensions;
+            button.MouseFilter = MouseFilterEnum.Stop;
+            button.SizeFlagsHorizontal = SizeFlags.Fill;
+            button.TextureFilter = TextureFilterEnum.Nearest;
             button.StretchMode = TextureButton.StretchModeEnum.KeepCentered;
-            parent.AddChild(button);
 
+            parent.AddChild(button);
             return button;
         }
 
@@ -107,7 +86,7 @@ namespace GameNamespace.UI
             Label label = new();
             label.Text = text;
             ConfigureControl(control:label, gameObject:"Label", parent:parent, fontSize:fontSize);
-            label.SetAnchorsPreset(Control.LayoutPreset.Center);
+            label.SetAnchorsPreset(LayoutPreset.Center);
             label.HorizontalAlignment = HorizontalAlignment.Center;
             label.VerticalAlignment = VerticalAlignment.Center;
             return label;

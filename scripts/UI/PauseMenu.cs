@@ -65,7 +65,7 @@ namespace GameNamespace.UI
 
 		private TextureButton CreateMenuButton(string text)
 		{
-			TextureButton button = UITools.Instance.CreateTextureButtonFromRegion(parent:buttonContainer, buttonType:"Menu");
+			TextureButton button = UITools.Instance.CreateGameButtonFromRegion(parent:buttonContainer, buttonType:"Menu");
 			Label buttonLabel = UITools.Instance.CreateLabel(text:text, parent:button, fontSize:25);
 			buttonLabel.Size = button.Size;
 
