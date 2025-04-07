@@ -234,6 +234,7 @@ namespace GameNamespace.GameAssets
 				float elapsed = 0;
 				while(elapsed < duration)
 				{
+					// TODO change to every second
 					await Task.Delay(100, token);
 					HitByProjectile(damage);
 					elapsed += 0.10f;

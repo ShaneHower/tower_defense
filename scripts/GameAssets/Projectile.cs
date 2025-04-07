@@ -168,7 +168,7 @@ namespace GameNamespace.GameAssets
 				int framecount = animator.SpriteFrames.GetFrameCount("default");
 				float fps = (float)animator.SpriteFrames.GetAnimationSpeed("default");
 				float animationDuration = framecount / fps;
-				await Task.Delay((int)animationDuration * 1000);
+				await Task.Delay((int)(animationDuration * 1000));
 				log.Information($"AOE FINISHED.");
 			}
 

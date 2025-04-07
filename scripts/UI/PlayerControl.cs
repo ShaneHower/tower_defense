@@ -158,7 +158,7 @@ namespace GameNamespace.UI
 				tower.ruins = ruins;
 				ruins.Visible = false;
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
-				_ = tower.AnimateSpawn();
+				if(tower.id == "101"){ _ = tower.AnimateSpawn(); }
 			}
 			else
 			{
@@ -265,12 +265,11 @@ namespace GameNamespace.UI
 			chosenTower = null;
 		}
 
-		private Tower CreateTowerFromPrefab(string towerPrefab, bool placementTower=false)
+		private Tower CreateTowerFromPrefab(string towerPrefab)
 		{
 			PackedScene prefab = GD.Load<PackedScene>($"{GameCoordinator.Instance.towerPrefabLoc}/{towerPrefab}");
 			Tower tower = (Tower)prefab.Instantiate();
 			Node2D towerGroupNode = level.GetNode<Node2D>("Towers");
-			tower.beingPlaced = placementTower;
 			towerGroupNode.AddChild(tower);
 			return tower;
 		}
