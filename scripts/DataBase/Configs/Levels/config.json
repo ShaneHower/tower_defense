@@ -23,6 +23,14 @@
                 {"enemyId": "103", "count": 2, "spawnDelay":0.5},
                 {"enemyId": "102", "count": 3, "spawnDelay":0.2},
                 {"enemyId": "101", "count": 4, "spawnDelay":1}
+            ],
+            "4": [
+                {"enemyId": "103", "count": 2, "spawnDelay":0},
+                {"enemyId": "103", "count": 3, "spawnDelay":0.4},
+                {"enemyId": "103", "count": 2, "spawnDelay":2},
+                {"enemyId": "101", "count": 6, "spawnDelay":3},
+                {"enemyId": "102", "count": 2, "spawnDelay":3},
+                {"enemyId": "101", "count": 3, "spawnDelay":0}
             ]
         }
     }

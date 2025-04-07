@@ -95,7 +95,8 @@ namespace GameNamespace.GameManager
                 int breachNum = GameCoordinator.Instance.breachNum;
                 if (levelHealth <= breachNum)
                 {
-                    GD.Print("GAME OVER");
+                    uiControl.ShowGameOverScreen();
+                    GetTree().Paused = true;
                 }
                 int health = levelHealth - breachNum;
                 uiControl.UpdateHealthValue(health);
