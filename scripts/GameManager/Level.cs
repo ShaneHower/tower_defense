@@ -84,7 +84,8 @@ namespace GameNamespace.GameManager
         {
             if (currentWave is null && GameCoordinator.Instance.activeEnemies.Count == 0)
             {
-                GD.Print("YOU WON!");
+                uiControl.ShowGameWonScreen();
+                GetTree().Paused = true;
             }
             TrackHealth();
             TrackWaveState();
@@ -134,9 +135,12 @@ namespace GameNamespace.GameManager
 
         public void CreateWaveButton()
         {
-            string name = $"Start Wave {currentWave}";
-            waveButton = uiControl.CreateWaveButton(name);
-            waveButton.Pressed += OnWaveButton;
+            if(currentWave is not null)
+            {
+                string name = $"Start Wave {currentWave}";
+                waveButton = uiControl.CreateWaveButton(name);
+                waveButton.Pressed += OnWaveButton;
+            }
         }
 
         private async Task SpawnWave()
