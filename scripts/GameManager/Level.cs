@@ -51,6 +51,7 @@ namespace GameNamespace.GameManager
         /// </summary>
 		public override void _Ready()
 		{
+            GameCoordinator.Instance.Reset();
             // Set class Vars.
             levelId = (string)GetMeta("levelId");
             SetVars();
@@ -81,6 +82,10 @@ namespace GameNamespace.GameManager
 
         public override void _Process(double delta)
         {
+            if (currentWave is null && GameCoordinator.Instance.activeEnemies.Count == 0)
+            {
+                GD.Print("YOU WON!");
+            }
             TrackHealth();
             TrackWaveState();
             TrackGold();

@@ -2,7 +2,7 @@
     "101": {
         "id": "101",
         "name": "ghost",
-        "health": 40.0,
+        "health": 30.0,
         "gold": 30,
         "speed": 100,
         "prefab": "ghost.tscn"

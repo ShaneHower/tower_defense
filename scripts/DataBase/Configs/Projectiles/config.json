@@ -3,7 +3,7 @@
         "id": "101",
         "name": "arrow",
         "speed": 200.0,
-        "damage": 20.0,
+        "damage": 15.0,
         "prefab": "arrow.tscn"
     },
     "102": {

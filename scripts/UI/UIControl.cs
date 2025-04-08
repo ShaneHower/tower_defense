@@ -1,5 +1,7 @@
 namespace GameNamespace.UI
 {
+    using GameNamespace.GameManager;
+
     using Godot;
 
 	/// <summary>
@@ -16,7 +18,6 @@ namespace GameNamespace.UI
 
 		public override void _Ready()
 		{
-
 			uiCanvasLayer = GetParent<CanvasLayer>();
 			levelState = GetNode<Control>("LevelState");
 			waveHud = GetNode<Control>("WaveHud");
@@ -61,6 +62,7 @@ namespace GameNamespace.UI
 		public void ShowGameOverScreen()
 		{
 			VBoxContainer vBox = new VBoxContainer();
+			vBox.ProcessMode = ProcessModeEnum.Always;
 			vBox.Alignment = BoxContainer.AlignmentMode.Center;
 			vBox.AnchorLeft = 0.5f;
 			vBox.AnchorTop = 0.5f;
@@ -85,11 +87,19 @@ namespace GameNamespace.UI
 			Label restartLabel = UITools.Instance.CreateLabel(text:"Restart", parent:restartButton, fontSize:25);
 			restartLabel.Size = restartButton.Size;
 			restartButton.SizeFlagsHorizontal = SizeFlags.Expand;
+			restartButton.Pressed += () => {
+				GetTree().Paused = false;
+				GetTree().ReloadCurrentScene();
+			};
 
 			GameButton exitButton = UITools.Instance.CreateGameButtonFromRegion(parent:buttonBox, buttonType:"Menu");
 			Label exitLabel = UITools.Instance.CreateLabel(text:"Exit", parent:exitButton, fontSize:25);
 			exitLabel.Size = exitButton.Size;
 			exitButton.SizeFlagsHorizontal = SizeFlags.Expand;
+			exitButton.Pressed += () => {
+				GetTree().Paused = false;
+				GetTree().ChangeSceneToFile("res://scenes/start_menu.tscn");
+			};
 
 		}
 	}
