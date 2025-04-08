@@ -158,6 +158,7 @@ namespace GameNamespace.UI
 				tower.ruins = ruins;
 				ruins.Visible = false;
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
+				if(tower.id == "101"){ _ = tower.AnimateSpawn(); }
 			}
 			else
 			{

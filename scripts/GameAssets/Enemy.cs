@@ -234,9 +234,10 @@ namespace GameNamespace.GameAssets
 				float elapsed = 0;
 				while(elapsed < duration)
 				{
-					await Task.Delay(100, token);
+					// TODO change to every second
+					await Task.Delay(1000, token);
 					HitByProjectile(damage);
-					elapsed += 0.10f;
+					elapsed ++;
 				}
 
 				animator.Modulate = new Color(1f, 1f, 1f, 1f);

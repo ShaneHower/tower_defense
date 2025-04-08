@@ -3,14 +3,14 @@
         "id": "101",
         "name": "arrow",
         "speed": 200.0,
-        "damage": 20.0,
+        "damage": 15.0,
         "prefab": "arrow.tscn"
     },
     "102": {
         "id": "102",
         "name": "ice",
         "speed": 200.0,
-        "damage": 22.0,
+        "damage": 20.0,
         "effect": "slow",
         "effectRate": 0.5,
         "effectDuration": 1.5,
@@ -33,10 +33,10 @@
         "id": "104",
         "name": "fire",
         "speed": 200.0,
-        "damage": 20.0,
+        "damage": 10.0,
         "effect": "burn",
-        "effectRate": 0.1,
-        "effectDuration": 1,
+        "effectRate": 0.5,
+        "effectDuration": 4,
         "prefab": "fire.tscn"
     },
     "105": {

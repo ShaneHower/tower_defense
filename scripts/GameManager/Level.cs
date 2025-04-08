@@ -51,6 +51,7 @@ namespace GameNamespace.GameManager
         /// </summary>
 		public override void _Ready()
 		{
+            GameCoordinator.Instance.Reset();
             // Set class Vars.
             levelId = (string)GetMeta("levelId");
             SetVars();
@@ -81,6 +82,11 @@ namespace GameNamespace.GameManager
 
         public override void _Process(double delta)
         {
+            if (currentWave is null && GameCoordinator.Instance.activeEnemies.Count == 0)
+            {
+                uiControl.ShowGameWonScreen();
+                GetTree().Paused = true;
+            }
             TrackHealth();
             TrackWaveState();
             TrackGold();
@@ -95,7 +101,8 @@ namespace GameNamespace.GameManager
                 int breachNum = GameCoordinator.Instance.breachNum;
                 if (levelHealth <= breachNum)
                 {
-                    GD.Print("GAME OVER");
+                    uiControl.ShowGameOverScreen();
+                    GetTree().Paused = true;
                 }
                 int health = levelHealth - breachNum;
                 uiControl.UpdateHealthValue(health);
@@ -128,9 +135,12 @@ namespace GameNamespace.GameManager
 
         public void CreateWaveButton()
         {
-            string name = $"Start Wave {currentWave}";
-            waveButton = uiControl.CreateWaveButton(name);
-            waveButton.Pressed += OnWaveButton;
+            if(currentWave is not null)
+            {
+                string name = $"Start Wave {currentWave}";
+                waveButton = uiControl.CreateWaveButton(name);
+                waveButton.Pressed += OnWaveButton;
+            }
         }
 
         private async Task SpawnWave()

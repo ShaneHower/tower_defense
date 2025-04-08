@@ -42,6 +42,15 @@ namespace GameNamespace.GameManager
             log.Information("Game started.");
         }
 
+        public void Reset()
+        {
+            enemyBreach = false;
+            breachNum = 0;
+            currentGold = 0;
+            towerUIActive = null;
+            activeEnemies = new();
+        }
+
         public override void _ExitTree()
         {
             log.Information($"[GameCoordinator] _ExitTree at {Time.GetTicksMsec()}");

@@ -117,12 +117,16 @@ namespace  GameNamespace.GameAssets
 				canFire = false;
 
 				if(attackCounter * attackModCounter != 0 && attackCounter % attackModCounter == 0)
+				{
 					AttackTarget(attackModifier);
+				}
 				else
+				{
 					AttackTarget(projectileId);
+				}
 
 				// If some how the tower deletes we resolve any hanging async tasks.
-				await ToSignal(GetTree().CreateTimer(attackSpeed), "timeout");
+				await ToSignal(GetTree().CreateTimer(20/attackSpeed), "timeout");
 				if (!IsInsideTree()) return;
 
 				canFire = true;
@@ -136,9 +140,13 @@ namespace  GameNamespace.GameAssets
 			{
 				// Sometimes an enemy may have been killed by another tower in this case the tower can get stuck looking for an enemy that no longer exists.
 				Enemy target = targetEnemies[targetIndex];
-				bool isValidTarget = !target.isDying && GameCoordinator.Instance.activeEnemies.Contains(target);
+				if(target.isDying)
+				{
+					// If the target is dying move onto the next target
+					target = targetEnemies[targetIndex+1];
+				}
 
-				if(isValidTarget)
+				if(GameCoordinator.Instance.activeEnemies.Contains(target))
 				{
 					log.Information($"Tower {this} with name {Name} is attacking Enemy {target}");
 					SpawnProjectile(projectileId, target);
@@ -191,6 +199,21 @@ namespace  GameNamespace.GameAssets
 				enemy.targeted = false;
 				targetEnemies.Remove(enemy);
 			}
+
+		}
+
+		public async Task AnimateSpawn()
+		{
+			var origPosition = Position;
+			Position = new Vector2(Position.X, Position.Y - 12);
+			string spawnAnim = "spawn";
+			animator.Play(spawnAnim);
+			int framecount = animator.SpriteFrames.GetFrameCount(spawnAnim);
+			float fps = (float)animator.SpriteFrames.GetAnimationSpeed(spawnAnim);
+			float animationDuration = framecount / fps;
+			await Task.Delay((int)(animationDuration * 1000));
+			Position = origPosition;
+			animator.Play("idle");
 
 		}
 

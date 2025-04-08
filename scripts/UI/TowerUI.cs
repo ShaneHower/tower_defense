@@ -144,7 +144,6 @@ namespace GameNamespace.UI
 			}
 			else
 			{
-                GD.Print("not enough");
 				UITools.Instance.SpawnWarning(message:"Not Enough Gold!", pressedButton:upgradeButton);
 			}
 		}
