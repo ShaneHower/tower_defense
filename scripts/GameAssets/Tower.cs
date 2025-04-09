@@ -46,8 +46,6 @@ namespace  GameNamespace.GameAssets
 		public AnimatedSprite2D animator;
 		private Line2D towerRange;
 		private Area2D hoverArea;
-		public Ruins ruins;
-
 		// Tower UI
 		public bool upgradeButtonHovered = false;
 

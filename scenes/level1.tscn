@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://d3l76ld5du6ay"]
+[gd_scene load_steps=26 format=4 uid="uid://d3l76ld5du6ay"]
 
 [ext_resource type="Script" uid="uid://cqtp6ogjnlu38" path="res://scripts/GameManager/Level.cs" id="1_3w4mx"]
 [ext_resource type="Texture2D" uid="uid://hfyhr1iwu453" path="res://sprites/Forest Tileset.png" id="2_jvkml"]
@@ -17,7 +17,6 @@
 [ext_resource type="Script" uid="uid://cvvl7a2b4b4ym" path="res://scripts/UI/DevTools/CombatLogConsole.cs" id="17_6xmqk"]
 [ext_resource type="Script" uid="uid://oro0k6vpttsg" path="res://scripts/GameManager/LevelPath.cs" id="18_hvrd6"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="19_1vjko"]
-[ext_resource type="PackedScene" uid="uid://4yvoxm5c6u73" path="res://prefabs/ruins.tscn" id="20_y3pui"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_3w4mx"]
 texture = ExtResource("2_jvkml")
@@ -1061,33 +1060,6 @@ metadata/order = 9
 [node name="Collider" type="CollisionPolygon2D" parent="LevelPath"]
 position = Vector2(11, 157)
 polygon = PackedVector2Array(244, 319, 247, 57, 517, 56, 522, 320, 630, 317, 630, 4, 974, 9, 977, 150, 1287, 148, 1287, 207, 922, 207, 915, 64, 688, 64, 686, 374, 464, 374, 460, 117, 306, 115, 309, 379, -11, 377, -10, 320)
-
-[node name="Ruins" parent="." instance=ExtResource("20_y3pui")]
-position = Vector2(231, 448)
-
-[node name="Ruins2" parent="." instance=ExtResource("20_y3pui")]
-position = Vector2(343, 287)
-
-[node name="Ruins3" parent="." instance=ExtResource("20_y3pui")]
-position = Vector2(557, 450)
-
-[node name="Ruins4" parent="." instance=ExtResource("20_y3pui")]
-position = Vector2(726, 236)
-
-[node name="Ruins5" parent="." instance=ExtResource("20_y3pui")]
-position = Vector2(899, 235)
-
-[node name="Ruins6" parent="." instance=ExtResource("20_y3pui")]
-position = Vector2(1013, 283)
-
-[node name="Ruins7" parent="." instance=ExtResource("20_y3pui")]
-position = Vector2(1206, 377)
-
-[node name="Ruins8" parent="." instance=ExtResource("20_y3pui")]
-position = Vector2(725, 500)
-
-[node name="Ruins9" parent="." instance=ExtResource("20_y3pui")]
-position = Vector2(559, 207)
 
 [node name="Towers" type="Node2D" parent="."]
 y_sort_enabled = true

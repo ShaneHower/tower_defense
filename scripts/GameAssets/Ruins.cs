@@ -32,8 +32,6 @@ namespace  GameNamespace.GameAssets
 
         private void OnMouseEnter()
         {
-            playerHud.ruinsHovered = true;
-            playerHud.ruins = this;
             if(playerHud.chosenTower is not null)
             {
                 Modulate = new Color(1, 1, 1, 0) ;
@@ -42,8 +40,6 @@ namespace  GameNamespace.GameAssets
 
         private void OnMouseExit()
         {
-            playerHud.ruinsHovered = false;
-            playerHud.ruins = null;
             Modulate = Modulate = new Color(1, 1, 1, 1);
         }
 

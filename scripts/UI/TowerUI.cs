@@ -138,7 +138,6 @@ namespace GameNamespace.UI
 				Tower upgrade = (Tower)prefab.Instantiate();
 				gameLevel.AddChild(upgrade);
 				upgrade.Position = tower.Position;
-                upgrade.ruins = tower.ruins;
 				GameCoordinator.Instance.currentGold -= upgrade.gold;
 				tower.QueueFree();
 			}
@@ -151,7 +150,6 @@ namespace GameNamespace.UI
 		private void Sell()
 		{
 			GameCoordinator.Instance.currentGold += (int)(tower.gold * 0.5);
-			tower.ruins.Visible = true;
 			tower.QueueFree();
 		}
 

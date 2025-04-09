@@ -13,14 +13,8 @@ namespace GameNamespace.UI
 	/// </summary>
     public partial class PlayerControl : Control
 	{
-		// Class vars
-		// public bool towerUiActive = false;
-		public bool ruinsHovered = false;
-
-		// Game objects
 		private Level level;
 		public Tower chosenTower;
-		public Ruins ruins;
 		public Area2D towerDeck;
 		public HBoxContainer towerButtonContainer;
 		public bool towerDeckHovered = false;
@@ -46,7 +40,7 @@ namespace GameNamespace.UI
 			{
 				if(mouseEvent.Pressed && chosenTower is not null)
 				{
-					if(mouseEvent.ButtonIndex == MouseButton.Left && ruinsHovered)
+					if(mouseEvent.ButtonIndex == MouseButton.Left)
 					{
 						PlaceTower();
 					}
@@ -54,7 +48,6 @@ namespace GameNamespace.UI
 					{
 						// Cancel Placement
 						ClearTowerButtonState();
-						StopAnimateRuins();
 					}
 				}
 			}
@@ -65,8 +58,6 @@ namespace GameNamespace.UI
 			if(chosenTower is not null)
 			{
 				chosenTower.GlobalPosition = GetGlobalMousePosition();
-
-				if(ruinsHovered) { AlignTowerWithRuins(chosenTower); }
 
                 // Keep track of our gold, do we have enough to buy this tower at any given time?
 				if(chosenTower.gold > GameCoordinator.Instance.currentGold) { enoughGold = false; }
@@ -154,10 +145,8 @@ namespace GameNamespace.UI
 			if(enoughGold)
 			{
 				Tower tower = CreateTowerFromPrefab(chosenTower.prefab);
-				AlignTowerWithRuins(tower);
-				tower.ruins = ruins;
-				ruins.Visible = false;
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
+				tower.Position = chosenTower.Position;
 				if(tower.id == "101"){ _ = tower.AnimateSpawn(); }
 			}
 			else
@@ -214,28 +203,6 @@ namespace GameNamespace.UI
 			}
 		}
 
-		private void PlayAnimateRuins()
-		{
-			foreach(var child in level.GetChildren())
-			{
-				if(child is Ruins r)
-				{
-					r.animator.Play("pick_me");
-				}
-			}
-		}
-
-		private void StopAnimateRuins()
-		{
-			foreach(var child in level.GetChildren())
-			{
-				if(child is Ruins r)
-				{
-					r.animator.Stop();
-				}
-			}
-		}
-
 		// Helper methods
 		public void HandleTowerButtonBehavior(GameButton button, int towerId, string spriteSheet)
 		{
@@ -272,38 +239,6 @@ namespace GameNamespace.UI
 			Node2D towerGroupNode = level.GetNode<Node2D>("Towers");
 			towerGroupNode.AddChild(tower);
 			return tower;
-		}
-
-		/// <summary>
-		/// This governs the behavior for tower placement.  The player has chosen a tower to place and now they are
-		/// dragging a tower to a ruin's location to place it.  When over the ruins, it snaps the tower to the valid
-		/// build location (aligning the bottom of the ruin's sprite with the tower's sprite).
-		///
-		/// An explanation about the algorithm for snapping the tower to the ruins.
-		///     yDiff = (towerSpriteSize.Y / 2) - (ruinsSpriteSize.Y / 2)
-		///
-		/// We have to offset the location of the tower in relation to the size ratio of the tower:ruins. Both sprites
-		/// anchor points are in the center of the image, so when we try to lock the tower in place of the ruin they
-		/// don't line up in the way we would expect (the bottom of the tower is aligned with the bottom of the ruin).
-		/// We have to take half of each object and find the difference between the two in order to shift the tower
-		/// up enough pixels so that they are overlapping at the right location.
-		///
-		/// </summary>
-		/// <param name="delta"></param>
-		private void AlignTowerWithRuins(Tower tower)
-		{
-			// Get current animation meta data for the tower.
-			string currentAnimation = tower.animator.Animation;
-			SpriteFrames towerSpriteFrames = tower.animator.SpriteFrames;
-			Vector2 towerSpriteSize = towerSpriteFrames.GetFrameTexture(currentAnimation, 0).GetSize();
-
-			// Calculate tower offset and snap tower to ruins.
-			string ruinsCurrentAnimation = ruins.animator.Animation;
-			SpriteFrames ruinsSpriteFrames = ruins.animator.SpriteFrames;
-			Vector2 ruinsSpriteSize = ruinsSpriteFrames.GetFrameTexture(ruinsCurrentAnimation, 0).GetSize();
-			float yDiff = (towerSpriteSize.Y / 2) - (ruinsSpriteSize.Y / 2);
-
-			tower.GlobalPosition = ruins.GlobalPosition - new Vector2(0, yDiff);
 		}
     }
 }
