@@ -59,6 +59,13 @@ namespace GameNamespace.UI
 			TextureButton settingsButton = CreateMenuButton("Settings");
 			settingsButton.Pressed += OnSettingsButtonPressed;
 
+			TextureButton restartButton = CreateMenuButton("Restart");
+			restartButton.Pressed += () => {
+				GetTree().Paused = false;
+				GetTree().ReloadCurrentScene();
+			};
+
+
 			TextureButton quitButton = CreateMenuButton("Quit");
 			quitButton.Pressed += () => GetTree().Quit();
 		}
