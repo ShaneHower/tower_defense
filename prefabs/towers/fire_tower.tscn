@@ -90,6 +90,11 @@ frame_progress = 0.642995
 [node name="Collider" type="CollisionPolygon2D" parent="HoverArea"]
 polygon = PackedVector2Array(-10, -7, -21, 28, -7, 36, 8, 36, 21, 30, 10, -5, 16, -10, 2, -22, 10, -27, 0, -32, -2, -23, -15, -12, -11, -6)
 
+[node name="PlacementArea" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlacementArea"]
+polygon = PackedVector2Array(-21, 27, -16, 33, -2, 36, 16, 33, 22, 27, 17, 22, 15, 22, 10, 27, 6, 29, -7, 29, -13, 25, -17, 22)
+
 [node name="TowerUIControl" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 0
@@ -146,6 +151,7 @@ texture_pressed = SubResource("AtlasTexture_8xmix")
 texture_hover = SubResource("AtlasTexture_p0m8j")
 
 [node name="TextureRect" type="TextureRect" parent="TowerUIControl/TowerUI/Sell"]
+layout_mode = 0
 offset_left = 4.5
 offset_top = 3.0
 offset_right = 13.5
