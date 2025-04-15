@@ -999,6 +999,7 @@ offset_bottom = 56.0
 grow_horizontal = 2
 
 [node name="LevelPath" type="Area2D" parent="."]
+position = Vector2(1, 1)
 script = ExtResource("18_hvrd6")
 
 [node name="Spawn" type="Node2D" parent="LevelPath"]
@@ -1059,7 +1060,7 @@ metadata/order = 9
 
 [node name="Collider" type="CollisionPolygon2D" parent="LevelPath"]
 position = Vector2(11, 157)
-polygon = PackedVector2Array(244, 319, 247, 57, 517, 56, 522, 320, 630, 317, 630, 4, 974, 9, 977, 150, 1287, 148, 1287, 207, 922, 207, 915, 64, 688, 64, 686, 374, 464, 374, 460, 117, 306, 115, 309, 379, -11, 377, -10, 320)
+polygon = PackedVector2Array(244, 314, 242, 49, 522, 51, 526, 313, 628, 312, 627, 2, 980, 1, 981, 145, 1285, 143, 1287, 211, 917, 209, 915, 68, 692, 69, 692, 377, 459, 378, 460, 117, 306, 115, 309, 379, -11, 377, -10, 314)
 
 [node name="Towers" type="Node2D" parent="."]
 y_sort_enabled = true

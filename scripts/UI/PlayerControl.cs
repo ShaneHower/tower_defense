@@ -142,12 +142,13 @@ namespace GameNamespace.UI
 
 		private void PlaceTower()
 		{
-			if(enoughGold)
+			if(enoughGold && chosenTower.canPlace)
 			{
 				Tower tower = CreateTowerFromPrefab(chosenTower.prefab);
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
 				tower.Position = chosenTower.Position;
-				if(tower.id == "101"){ _ = tower.AnimateSpawn(); }
+				List<string> validIds =  ["101", "102"];
+				if(validIds.Contains(tower.id)){ _ = tower.AnimateSpawn(); }
 			}
 			else
 			{

@@ -35,6 +35,7 @@ namespace  GameNamespace.GameAssets
 		public int attackCounter = 1;
 		public bool canFire = true;
 		public bool beingPlaced = false;
+		public bool canPlace = true;
 		private List<Enemy> targetEnemies = new();
 		private int targetOrder = 0;
 		public bool isHovered = false;

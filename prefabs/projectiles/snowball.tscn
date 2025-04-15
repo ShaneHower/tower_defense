@@ -1,43 +1,47 @@
-[gd_scene load_steps=13 format=3 uid="uid://d0jd8q2chh058"]
+[gd_scene load_steps=11 format=3 uid="uid://d0jd8q2chh058"]
 
 [ext_resource type="Script" uid="uid://bb6pcwwwddkcg" path="res://scripts/GameAssets/Projectile.cs" id="1_gguga"]
-[ext_resource type="Texture2D" uid="uid://bk5c7xk2gxpc5" path="res://sprites/Projectiles-Sheet.png" id="2_w5q71"]
-[ext_resource type="Texture2D" uid="uid://cphdh5jmbq73c" path="res://sprites/Snowball Explode.png" id="3_w5q71"]
+[ext_resource type="Texture2D" uid="uid://c021oqaf7sr3k" path="res://sprites/Projectile-BigSnowball-Sheet.png" id="2_w5q71"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ekqk1"]
 radius = 47.0956
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_gguga"]
+atlas = ExtResource("2_w5q71")
+region = Rect2(0, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w5q71"]
+atlas = ExtResource("2_w5q71")
+region = Rect2(28, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ekqk1"]
+atlas = ExtResource("2_w5q71")
+region = Rect2(56, 0, 28, 28)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_h8q8t"]
-atlas = ExtResource("3_w5q71")
-region = Rect2(0, 0, 48, 48)
+atlas = ExtResource("2_w5q71")
+region = Rect2(84, 0, 28, 28)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_33pfm"]
-atlas = ExtResource("3_w5q71")
-region = Rect2(48, 0, 48, 48)
+atlas = ExtResource("2_w5q71")
+region = Rect2(112, 0, 28, 28)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xqv51"]
-atlas = ExtResource("3_w5q71")
-region = Rect2(96, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_y82mp"]
-atlas = ExtResource("3_w5q71")
-region = Rect2(144, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fcs5y"]
-atlas = ExtResource("3_w5q71")
-region = Rect2(192, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4u7m5"]
-atlas = ExtResource("3_w5q71")
-region = Rect2(240, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_wknjm"]
-atlas = ExtResource("3_w5q71")
-region = Rect2(240, 0, 48, 48)
+atlas = ExtResource("2_w5q71")
+region = Rect2(140, 0, 28, 28)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wknjm"]
 animations = [{
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gguga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w5q71")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ekqk1")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_h8q8t")
 }, {
@@ -46,26 +50,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xqv51")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_y82mp")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_fcs5y")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4u7m5")
 }],
-"loop": true,
+"loop": false,
 "name": &"default",
-"speed": 6.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_wknjm")
-}],
-"loop": true,
-"name": &"idle",
 "speed": 5.0
 }]
 
@@ -76,15 +63,14 @@ metadata/projectileId = "103"
 [node name="Collider" type="CollisionPolygon2D" parent="."]
 position = Vector2(1, 0)
 scale = Vector2(1.28125, 2.5)
-polygon = PackedVector2Array(-7.80488, -3.6, -5.46341, -3.6, -5.46341, -4.8, 3.90244, -4.8, 3.90244, -3.6, 6.2439, -3.6, 6.2439, -2.4, 8.58537, -2.4, 8.58537, 2.4, 6.2439, 2.4, 6.2439, 3.6, 3.90244, 3.6, 3.90244, 4.8, -5.46341, 4.8, -5.46341, 3.6, -7.80488, 3.6, -7.80488, 2.4, -10.1463, 2.4, -10.1463, -2.4, -7.80488, -2.4)
+polygon = PackedVector2Array(-3.90244, -4, 2.34146, -4, 7.02439, -1.6, 7.02439, 1.6, 2.34146, 4, -3.90244, 4, -8.58537, 1.2, -8.58537, -1.6)
 
 [node name="Sprite" type="Sprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0.45, 0)
-scale = Vector2(3, 3)
 texture = ExtResource("2_w5q71")
 region_enabled = true
-region_rect = Rect2(19.0857, 0, 10.1383, 16)
+region_rect = Rect2(0, 0, 28, 28)
 
 [node name="AOE" type="Area2D" parent="."]
 visible = false
@@ -94,8 +80,7 @@ texture_filter = 1
 shape = SubResource("CircleShape2D_ekqk1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="AOE"]
-self_modulate = Color(1, 1, 1, 0.772549)
 texture_filter = 1
-scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_wknjm")
-frame_progress = 0.327709
+frame = 5
+frame_progress = 1.0

@@ -23,6 +23,9 @@ namespace GameNamespace.GameManager
         {
             collider = GetNode<CollisionPolygon2D>("Collider");
             spawn = GetNode<Node2D>("Spawn");
+
+            Connect("area_entered", new Callable(this, nameof(OnAreaEnter)));
+            Connect("area_exited", new Callable(this, nameof(OnAreaExit)));
         }
 
         public void SpawnEnemy(string enemyId, EnemyData passedData=null)
@@ -38,6 +41,24 @@ namespace GameNamespace.GameManager
             // Pass data to the game coordinator
             GameCoordinator.Instance.activeEnemies.Add(enemy);
 		}
+
+        public void OnAreaEnter(Area2D area)
+        {
+            if (area.Name == "PlacementArea" && area.GetParent() is Tower tower)
+            {
+                tower.canPlace = false;
+                tower.Modulate = new Color(1, 0.4f, 0.4f, 0.7f);
+            }
+        }
+
+        public void OnAreaExit(Area2D area)
+        {
+            if (area.Name == "PlacementArea" && area.GetParent() is Tower tower)
+            {
+                tower.canPlace = true;
+                tower.Modulate = new Color(1, 1, 1, 1);
+            }
+        }
 
     }
 }
