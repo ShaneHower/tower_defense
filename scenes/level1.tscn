@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=4 uid="uid://d3l76ld5du6ay"]
+[gd_scene load_steps=27 format=4 uid="uid://d3l76ld5du6ay"]
 
 [ext_resource type="Script" uid="uid://cqtp6ogjnlu38" path="res://scripts/GameManager/Level.cs" id="1_3w4mx"]
 [ext_resource type="Texture2D" uid="uid://hfyhr1iwu453" path="res://sprites/Forest Tileset.png" id="2_jvkml"]
@@ -711,6 +711,9 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_14jow"]
+size = Vector2(1288, 98)
+
 [node name="Level" type="Node2D"]
 script = ExtResource("1_3w4mx")
 metadata/levelId = 1
@@ -1061,6 +1064,10 @@ metadata/order = 9
 [node name="Collider" type="CollisionPolygon2D" parent="LevelPath"]
 position = Vector2(11, 157)
 polygon = PackedVector2Array(244, 314, 242, 49, 522, 51, 526, 313, 628, 312, 627, 2, 980, 1, 981, 145, 1285, 143, 1287, 211, 917, 209, 915, 68, 692, 69, 692, 377, 459, 378, 460, 117, 306, 115, 309, 379, -11, 377, -10, 314)
+
+[node name="Collider2" type="CollisionShape2D" parent="LevelPath"]
+position = Vector2(641, 668)
+shape = SubResource("RectangleShape2D_14jow")
 
 [node name="Towers" type="Node2D" parent="."]
 y_sort_enabled = true

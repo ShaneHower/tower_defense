@@ -47,6 +47,7 @@ namespace GameNamespace.GameManager
             if (area.Name == "PlacementArea" && area.GetParent() is Tower tower)
             {
                 tower.canPlace = false;
+                tower.badArea = true;
                 tower.Modulate = new Color(1, 0.4f, 0.4f, 0.7f);
             }
         }
@@ -56,6 +57,7 @@ namespace GameNamespace.GameManager
             if (area.Name == "PlacementArea" && area.GetParent() is Tower tower)
             {
                 tower.canPlace = true;
+                tower.badArea = false;
                 tower.Modulate = new Color(1, 1, 1, 1);
             }
         }

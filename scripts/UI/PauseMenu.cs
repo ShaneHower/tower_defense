@@ -1,6 +1,8 @@
 namespace GameNamespace.UI
 {
 	using DevTools;
+    using GameNamespace.GameManager;
+
     using Godot;
 
     public partial class PauseMenu : UIControl
@@ -10,6 +12,7 @@ namespace GameNamespace.UI
 		public Panel settingsMenu;
         private Control parentUI;
 		private DevWindow devWindow;
+		private AudioStreamPlayer buttonFoley;
 
         public override void _Ready()
         {
@@ -20,6 +23,8 @@ namespace GameNamespace.UI
 			settingsMenu = GetNode<Panel>("SettingsMenu");
             parentUI = GetParent<Control>();
 			devWindow = parentUI.GetNode<DevWindow>("DevWindow");
+			buttonFoley = Sound.Instance.CreateFoley("ButtonPress");
+			AddChild(buttonFoley);
 
             CreateMainMenu();
 			CreateSettingsMenu();
@@ -55,19 +60,24 @@ namespace GameNamespace.UI
 			continueButton.Pressed += OnContinueButtonPressed;
 
 			TextureButton saveButton = CreateMenuButton("Save");
+			saveButton.Pressed += () => {buttonFoley.Play();};
 
 			TextureButton settingsButton = CreateMenuButton("Settings");
 			settingsButton.Pressed += OnSettingsButtonPressed;
 
 			TextureButton restartButton = CreateMenuButton("Restart");
 			restartButton.Pressed += () => {
+				buttonFoley.Play();
 				GetTree().Paused = false;
 				GetTree().ReloadCurrentScene();
 			};
 
 
 			TextureButton quitButton = CreateMenuButton("Quit");
-			quitButton.Pressed += () => GetTree().Quit();
+			quitButton.Pressed += () => {
+				buttonFoley.Play();
+				GetTree().Quit();
+			};
 		}
 
 		private TextureButton CreateMenuButton(string text)
@@ -89,11 +99,11 @@ namespace GameNamespace.UI
 
 			Button combatLogConsole = UITools.Instance.CreateCheckBox(text:"Combat Log Console", parent: buttonContainer);
 			combatLogConsole.Pressed += () => devWindow.ToggleCombatLog();
-
 		}
 
         private void OnContinueButtonPressed()
 		{
+			buttonFoley.Play();
 			GetTree().Paused = false;
 			mainMenu.Visible = false;
 		}
@@ -101,6 +111,7 @@ namespace GameNamespace.UI
 
         private void OnSettingsButtonPressed()
         {
+			buttonFoley.Play();
             mainMenu.Visible = false;
 			settingsMenu.Visible = true;
         }

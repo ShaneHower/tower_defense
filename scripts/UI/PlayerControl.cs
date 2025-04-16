@@ -23,12 +23,19 @@ namespace GameNamespace.UI
 		public GameButton activeTowerButton;
 		public List<GameButton> towerButtons = new();
 		private InputEventMouseButton mouseEvent;
+		private AudioStreamPlayer cardFoley;
+		private AudioStreamPlayer deckFoley;
 
 		public override void _Ready()
 		{
 			level = GetTree().Root.GetNode<Level>("Level");
 			towerButtonContainer = GetNode<HBoxContainer>("HBoxContainer");
 			towerDeck = GetNode<Area2D>("TowerDeck");
+			cardFoley = Sound.Instance.CreateFoley("CardSelect");
+			AddChild(cardFoley);
+
+			deckFoley = Sound.Instance.CreateFoley("DeckSelect");
+			AddChild(deckFoley);
 
 			InitTowerDeck();
 			CreateTowerButtons();
@@ -104,6 +111,7 @@ namespace GameNamespace.UI
 			towerDeck.InputEvent += (viewport, ev, shapeIdx) => {
 				if(ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
 				{
+					deckFoley.Play();
 					float step = 0.02f;
 					float delay = 0.01f;
 					if(towerButtonsVisible)
@@ -125,6 +133,7 @@ namespace GameNamespace.UI
 		{
 			if(activeTowerButton is null)
 			{
+				cardFoley.Play();
 				string towerId = (string)pressedButton.GetMeta("towerId");
 				TowerData towerData = GameDataBase.Instance.QueryTowerData(towerId);
 
@@ -152,7 +161,14 @@ namespace GameNamespace.UI
 			}
 			else
 			{
-				UITools.Instance.SpawnWarning("Not Enough Gold!", activeTowerButton);
+				if(chosenTower.badArea)
+				{
+					return;
+				}
+				else if(!enoughGold)
+				{
+					UITools.Instance.SpawnWarning("Not Enough Gold!", activeTowerButton);
+				}
 			}
 		}
 

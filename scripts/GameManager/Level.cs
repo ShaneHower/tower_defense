@@ -44,6 +44,7 @@ namespace GameNamespace.GameManager
         public UIControl uiControl;
         private Control waveHud;
         private TextureButton waveButton;
+        private AudioStreamPlayer buttonFoley;
 
 		/// <summary>
         /// This is the first bit of code to run in the scene.  Establishes the base-line health, economy, and wave
@@ -60,6 +61,8 @@ namespace GameNamespace.GameManager
             CanvasLayer uiCanvas = GetNode<CanvasLayer>("UICanvas");
             uiControl = uiCanvas.GetNode<UIControl>("UI");
             levelPath = GetNode<LevelPath>("LevelPath");
+            buttonFoley = Sound.Instance.CreateFoley("ButtonPress");
+            AddChild(buttonFoley);
 
             // Init work.
             CreateWaveButton();
@@ -139,6 +142,7 @@ namespace GameNamespace.GameManager
             {
                 string name = $"Start Wave {currentWave}";
                 waveButton = uiControl.CreateWaveButton(name);
+
                 waveButton.Pressed += OnWaveButton;
             }
         }
@@ -167,6 +171,7 @@ namespace GameNamespace.GameManager
 
         public async void OnWaveButton()
         {
+            buttonFoley.Play();
             // Free up for garabage collection after deletion.
             waveButton.QueueFree();
             waveButton = null;

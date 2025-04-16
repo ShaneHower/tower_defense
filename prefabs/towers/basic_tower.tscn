@@ -285,8 +285,8 @@ debug_color = Color(0, 0.607843, 0.662745, 0.419608)
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y27yo")
 animation = &"spawn"
-frame = 27
-frame_progress = 1.0
+frame = 17
+frame_progress = 0.915712
 
 [node name="HoverArea" type="Area2D" parent="."]
 
