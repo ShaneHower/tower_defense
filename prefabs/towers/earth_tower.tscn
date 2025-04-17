@@ -1,32 +1,32 @@
 [gd_scene load_steps=19 format=3 uid="uid://cip1rjxys2lpp"]
 
 [ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/GameAssets/Tower.cs" id="1_jxrqs"]
-[ext_resource type="Texture2D" uid="uid://dws5wys5bc1ct" path="res://sprites/EarthTowerLv1-Sheet.png" id="2_jxrqs"]
+[ext_resource type="Texture2D" uid="uid://dws5wys5bc1ct" path="res://sprites/towers/EarthTowerLv1-Sheet.png" id="2_jxrqs"]
 [ext_resource type="Script" uid="uid://dnqsvvhlg4b40" path="res://scripts/UI/TowerUI.cs" id="3_rlher"]
-[ext_resource type="Texture2D" uid="uid://ba4fg3bocjrfw" path="res://sprites/TowerUI.png" id="4_vwmjn"]
-[ext_resource type="Texture2D" uid="uid://bxfpqyvqpin22" path="res://sprites/TowerUIButton.png" id="5_yj1pc"]
-[ext_resource type="Texture2D" uid="uid://crn4lsrgxav71" path="res://sprites/UpgradeArrow.png" id="6_yj1pc"]
-[ext_resource type="Texture2D" uid="uid://boqdwu2cpvjy0" path="res://sprites/MoneySign.png" id="7_1b7ni"]
+[ext_resource type="Texture2D" uid="uid://ba4fg3bocjrfw" path="res://sprites/ui/TowerUI.png" id="4_vwmjn"]
+[ext_resource type="Texture2D" uid="uid://bxfpqyvqpin22" path="res://sprites/ui/TowerUIButton.png" id="5_yj1pc"]
+[ext_resource type="Texture2D" uid="uid://crn4lsrgxav71" path="res://sprites/ui/UpgradeArrow.png" id="6_yj1pc"]
+[ext_resource type="Texture2D" uid="uid://boqdwu2cpvjy0" path="res://sprites/ui/MoneySign.png" id="7_1b7ni"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bdhud"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_wf45v"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_yj1pc"]
 atlas = ExtResource("2_jxrqs")
 region = Rect2(0, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_rlher"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_1b7ni"]
 atlas = ExtResource("2_jxrqs")
 region = Rect2(48, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_vwmjn"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_38beg"]
 atlas = ExtResource("2_jxrqs")
 region = Rect2(96, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_yj1pc"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_aw3mx"]
 atlas = ExtResource("2_jxrqs")
 region = Rect2(144, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_1b7ni"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_tsupv"]
 atlas = ExtResource("2_jxrqs")
 region = Rect2(192, 0, 48, 72)
 
@@ -34,19 +34,19 @@ region = Rect2(192, 0, 48, 72)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_wf45v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rlher")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vwmjn")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_yj1pc")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_1b7ni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_38beg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aw3mx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tsupv")
 }],
 "loop": true,
 "name": &"idle",
@@ -83,13 +83,17 @@ debug_color = Color(0, 0.607843, 0.662745, 0.419608)
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y27yo")
 animation = &"idle"
-frame = 1
 frame_progress = 0.11278
 
 [node name="HoverArea" type="Area2D" parent="."]
 
 [node name="Collider" type="CollisionPolygon2D" parent="HoverArea"]
 polygon = PackedVector2Array(-10, -7, -22, 28, -5, 36, 9, 35, 21, 30, 10, -5, 16, -10, 2, -22, 10, -27, 0, -32, -2, -23, -15, -12, -11, -6)
+
+[node name="PlacementArea" type="Area2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlacementArea"]
+polygon = PackedVector2Array(-21, 27, -16, 33, -2, 36, 16, 33, 22, 27, 17, 22, 15, 22, 10, 27, 6, 29, -7, 29, -13, 25, -17, 22)
 
 [node name="TowerUIControl" type="Control" parent="."]
 layout_mode = 3
@@ -175,8 +179,3 @@ offset_bottom = 43.0
 texture_normal = SubResource("AtlasTexture_3njpt")
 texture_pressed = SubResource("AtlasTexture_835yi")
 texture_hover = SubResource("AtlasTexture_2tm1c")
-
-[node name="PlacementArea" type="Area2D" parent="."]
-
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="PlacementArea"]
-polygon = PackedVector2Array(-21, 27, -16, 33, -2, 36, 16, 33, 22, 27, 17, 22, 15, 22, 10, 27, 6, 29, -7, 29, -13, 25, -17, 22)

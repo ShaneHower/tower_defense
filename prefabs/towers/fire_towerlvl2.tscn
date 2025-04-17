@@ -1,33 +1,33 @@
 [gd_scene load_steps=49 format=3 uid="uid://c4pef8cmvplya"]
 
 [ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/GameAssets/Tower.cs" id="1_7fqkj"]
-[ext_resource type="Texture2D" uid="uid://d07amxdblje4o" path="res://sprites/FireTowerLv2-Sheet.png" id="2_7fqkj"]
-[ext_resource type="Texture2D" uid="uid://2dlfekaqe3g4" path="res://sprites/FireTowerLv2-Spawn-Sheet.png" id="3_e8bpr"]
+[ext_resource type="Texture2D" uid="uid://d07amxdblje4o" path="res://sprites/towers/FireTowerLv2-Sheet.png" id="2_7fqkj"]
+[ext_resource type="Texture2D" uid="uid://2dlfekaqe3g4" path="res://sprites/towers/FireTowerLv2-Spawn-Sheet.png" id="3_e8bpr"]
 [ext_resource type="Script" uid="uid://dnqsvvhlg4b40" path="res://scripts/UI/TowerUI.cs" id="3_hku7k"]
-[ext_resource type="Texture2D" uid="uid://ba4fg3bocjrfw" path="res://sprites/TowerUI.png" id="4_xd4om"]
-[ext_resource type="Texture2D" uid="uid://bxfpqyvqpin22" path="res://sprites/TowerUIButton.png" id="5_ip3fh"]
-[ext_resource type="Texture2D" uid="uid://crn4lsrgxav71" path="res://sprites/UpgradeArrow.png" id="6_ip3fh"]
-[ext_resource type="Texture2D" uid="uid://boqdwu2cpvjy0" path="res://sprites/MoneySign.png" id="7_e8bpr"]
+[ext_resource type="Texture2D" uid="uid://ba4fg3bocjrfw" path="res://sprites/ui/TowerUI.png" id="4_xd4om"]
+[ext_resource type="Texture2D" uid="uid://bxfpqyvqpin22" path="res://sprites/ui/TowerUIButton.png" id="5_ip3fh"]
+[ext_resource type="Texture2D" uid="uid://crn4lsrgxav71" path="res://sprites/ui/UpgradeArrow.png" id="6_ip3fh"]
+[ext_resource type="Texture2D" uid="uid://boqdwu2cpvjy0" path="res://sprites/ui/MoneySign.png" id="7_e8bpr"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_bdhud"]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ond83"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_e8bpr"]
 atlas = ExtResource("2_7fqkj")
 region = Rect2(0, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_hku7k"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ee027"]
 atlas = ExtResource("2_7fqkj")
 region = Rect2(48, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_xd4om"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_7hsa8"]
 atlas = ExtResource("2_7fqkj")
 region = Rect2(96, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ip3fh"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_topqo"]
 atlas = ExtResource("2_7fqkj")
 region = Rect2(144, 0, 48, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_e8bpr"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_2nm2h"]
 atlas = ExtResource("2_7fqkj")
 region = Rect2(192, 0, 48, 72)
 
@@ -151,19 +151,19 @@ region = Rect2(1344, 0, 48, 96)
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_ond83")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_hku7k")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_xd4om")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ip3fh")
-}, {
-"duration": 1.0,
 "texture": SubResource("AtlasTexture_e8bpr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ee027")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7hsa8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_topqo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2nm2h")
 }],
 "loop": true,
 "name": &"idle",
@@ -292,8 +292,6 @@ debug_color = Color(0, 0.607843, 0.662745, 0.419608)
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y27yo")
 animation = &"spawn"
-frame = 26
-frame_progress = 0.32362
 
 [node name="HoverArea" type="Area2D" parent="."]
 

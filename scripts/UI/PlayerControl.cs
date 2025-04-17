@@ -76,19 +76,19 @@ namespace GameNamespace.UI
 		public void CreateTowerButtons()
 		{
 			GameButton basicTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
-			HandleTowerButtonBehavior(button:basicTower, towerId:101, spriteSheet:"BasicTower-Sheet.png");
+			HandleTowerButtonBehavior(button:basicTower, towerId:"101");
 			towerButtons.Add(basicTower);
 
 			GameButton iceTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
-			HandleTowerButtonBehavior(button:iceTower, towerId:102, spriteSheet:"IceTowerLv1-Sheet.png");
+			HandleTowerButtonBehavior(button:iceTower, towerId:"102");
 			towerButtons.Add(iceTower);
 
 			GameButton fireTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
-			HandleTowerButtonBehavior(button:fireTower, towerId:107, spriteSheet:"FireTowerLv1-Sheet.png");
+			HandleTowerButtonBehavior(button:fireTower, towerId:"107");
 			towerButtons.Add(fireTower);
 
 			GameButton earthTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
-			HandleTowerButtonBehavior(button:earthTower, towerId:104, spriteSheet:"EarthTowerLv1-Sheet.png");
+			HandleTowerButtonBehavior(button:earthTower, towerId:"104");
 			towerButtons.Add(earthTower);
 		}
 
@@ -156,7 +156,7 @@ namespace GameNamespace.UI
 				Tower tower = CreateTowerFromPrefab(chosenTower.prefab);
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
 				tower.Position = chosenTower.Position;
-				List<string> validIds =  ["101", "102"];
+				List<string> validIds =  ["101", "102", "107"];
 				if(validIds.Contains(tower.id)){ _ = tower.AnimateSpawn(); }
 			}
 			else
@@ -221,12 +221,13 @@ namespace GameNamespace.UI
 		}
 
 		// Helper methods
-		public void HandleTowerButtonBehavior(GameButton button, int towerId, string spriteSheet)
+		public void HandleTowerButtonBehavior(GameButton button, string towerId)
 		{
-			var spritePath = $"{GameCoordinator.Instance.spriteLoc}/{spriteSheet}";
+			TowerData towerData = GameDataBase.Instance.QueryTowerData(towerId);
 			var region = new Rect2(0, 0, 48, 72);
+			string spriteSheet = $"{GameCoordinator.Instance.towerSpriteLoc}/{towerData.spriteSheet}";
 
-			TextureRect tower = UITools.Instance.GetTextureRect(texturePath:spritePath, parent:button, region:region);
+			TextureRect tower = UITools.Instance.GetTextureRect(texturePath:spriteSheet, parent:button, region:region);
 			tower.OffsetLeft = -button.Size.X / 2f;
             tower.OffsetTop = -button.Size.Y / 2f;
             tower.OffsetRight = button.Size.X / 2f;
@@ -239,6 +240,9 @@ namespace GameNamespace.UI
 			button.Visible = false;
 			button.Modulate = new Color(1, 1, 1, 0);
 			button.Scale = new Vector2(0.8f, 0.8f);
+
+			// This is overly defensive, ensure that towerData is cleared out of memory after we are done using it.
+			towerData = null;
 		}
 
 		private void ClearTowerButtonState()

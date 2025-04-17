@@ -141,7 +141,7 @@ namespace GameNamespace.UI
 				gameLevel.AddChild(upgrade);
 				upgrade.Position = tower.Position;
 				GameCoordinator.Instance.currentGold -= upgrade.gold;
-				List<string> validIds =  ["103", "107", "108"];
+				List<string> validIds =  ["103", "108"];
 				if(validIds.Contains(upgrade.id)){ _ = upgrade.AnimateSpawn(); }
 				tower.QueueFree();
 			}

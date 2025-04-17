@@ -25,6 +25,7 @@ namespace  GameNamespace.GameAssets
 		public int gold;
 		public float attackSpeed;
 		public string prefab;
+		public string spriteSheet;
 		public string projectileId;
 		public string attackModifier;
 		public int attackModCounter;
@@ -88,6 +89,7 @@ namespace  GameNamespace.GameAssets
 			gold = data.gold;
 			attackSpeed = data.attackSpeed;
 			prefab = data.prefab;
+			spriteSheet = data.spriteSheet;
 			projectileId = data.projectileId;
 			attackModifier = data.attackModifier;
 			attackModCounter = data.attackModCounter;

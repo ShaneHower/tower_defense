@@ -2,13 +2,13 @@
 
 [ext_resource type="Script" uid="uid://cqtp6ogjnlu38" path="res://scripts/GameManager/Level.cs" id="1_3w4mx"]
 [ext_resource type="Texture2D" uid="uid://hfyhr1iwu453" path="res://sprites/Forest Tileset.png" id="2_jvkml"]
+[ext_resource type="Texture2D" uid="uid://b0vuoqsqlmx8t" path="res://sprites/ui/MagicRock-Sheet.png" id="5_14jow"]
 [ext_resource type="Script" uid="uid://bexa5owl55003" path="res://scripts/UI/UIControl.cs" id="5_phfsf"]
 [ext_resource type="Script" uid="uid://ciko5w7xhyo1r" path="res://scripts/UI/PlayerControl.cs" id="6_3oqy1"]
-[ext_resource type="Texture2D" uid="uid://b0vuoqsqlmx8t" path="res://sprites/MagicRock-Sheet.png" id="7_mq0oc"]
-[ext_resource type="Texture2D" uid="uid://bd8nvufcspsd4" path="res://sprites/MagicRock.png" id="8_msy1c"]
-[ext_resource type="Texture2D" uid="uid://b5bitirqubp4s" path="res://sprites/Icons Tileset.png" id="9_7dkav"]
+[ext_resource type="Texture2D" uid="uid://bd8nvufcspsd4" path="res://sprites/ui/MagicRock.png" id="6_mvsps"]
+[ext_resource type="Texture2D" uid="uid://b5bitirqubp4s" path="res://sprites/ui/Icons Tileset.png" id="7_14jow"]
+[ext_resource type="Texture2D" uid="uid://imea5wpo01vj" path="res://sprites/ui/Heart.png" id="9_mvsps"]
 [ext_resource type="FontFile" uid="uid://w84okj4hyt8t" path="res://misc/font/CelticTime.ttf" id="10_4niyd"]
-[ext_resource type="Texture2D" uid="uid://imea5wpo01vj" path="res://sprites/Heart.png" id="11_3umqw"]
 [ext_resource type="Script" uid="uid://b18gtp6ogceg5" path="res://scripts/UI/PauseMenu.cs" id="12_gqmnx"]
 [ext_resource type="PackedScene" uid="uid://bjfu70l4w2s5c" path="res://prefabs/ui/main_menu.tscn" id="13_p71k4"]
 [ext_resource type="PackedScene" uid="uid://e48wfplay4er" path="res://prefabs/ui/settings_menu.tscn" id="14_1oofn"]
@@ -663,40 +663,40 @@ terrain_set_0/terrain_4/name = "Road"
 terrain_set_0/terrain_4/color = Color(0.28125, 0.5, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_3w4mx")
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_5m75j"]
-atlas = ExtResource("7_mq0oc")
+[sub_resource type="AtlasTexture" id="AtlasTexture_jvkml"]
+atlas = ExtResource("5_14jow")
 region = Rect2(0, 0, 56, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_2gsv3"]
-atlas = ExtResource("7_mq0oc")
+[sub_resource type="AtlasTexture" id="AtlasTexture_3w4mx"]
+atlas = ExtResource("5_14jow")
 region = Rect2(56, 0, 56, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_p04xt"]
-atlas = ExtResource("7_mq0oc")
+[sub_resource type="AtlasTexture" id="AtlasTexture_u068y"]
+atlas = ExtResource("5_14jow")
 region = Rect2(112, 0, 56, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_be4un"]
-atlas = ExtResource("7_mq0oc")
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ooyw"]
+atlas = ExtResource("5_14jow")
 region = Rect2(168, 0, 56, 80)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_e0nld"]
-atlas = ExtResource("8_msy1c")
+[sub_resource type="AtlasTexture" id="AtlasTexture_ai3nx"]
+atlas = ExtResource("6_mvsps")
 region = Rect2(0, 0, 56, 80)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ql28w"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_5m75j")
+"texture": SubResource("AtlasTexture_jvkml")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_2gsv3")
+"texture": SubResource("AtlasTexture_3w4mx")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_p04xt")
+"texture": SubResource("AtlasTexture_u068y")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_be4un")
+"texture": SubResource("AtlasTexture_1ooyw")
 }],
 "loop": true,
 "name": &"default",
@@ -704,7 +704,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_e0nld")
+"texture": SubResource("AtlasTexture_ai3nx")
 }],
 "loop": true,
 "name": &"idle",
@@ -784,7 +784,6 @@ position = Vector2(-87, 0)
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="UICanvas/UI/PlayerHud/TowerDeck"]
 position = Vector2(36, 45)
 sprite_frames = SubResource("SpriteFrames_ql28w")
-animation = &"idle"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="UICanvas/UI/PlayerHud/TowerDeck"]
 position = Vector2(38, 53)
@@ -809,7 +808,7 @@ offset_bottom = 52.0
 texture_filter = 1
 position = Vector2(11, 12)
 scale = Vector2(0.9, 0.9)
-texture = ExtResource("9_7dkav")
+texture = ExtResource("7_14jow")
 region_enabled = true
 region_rect = Rect2(169.737, 0, 22.5789, 24)
 
@@ -826,7 +825,7 @@ text = "1000"
 texture_filter = 1
 position = Vector2(11, 29)
 scale = Vector2(0.9, 0.9)
-texture = ExtResource("11_3umqw")
+texture = ExtResource("9_mvsps")
 region_rect = Rect2(1.099, 0, 167.098, 14.5)
 
 [node name="HealthValue" type="Label" parent="UICanvas/UI/LevelState/Health"]
