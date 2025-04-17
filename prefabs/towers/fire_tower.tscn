@@ -257,7 +257,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2oycu")
 }],
-"loop": true,
+"loop": false,
 "name": &"spawn",
 "speed": 29.0
 }]
@@ -290,8 +290,11 @@ one_way_collision_margin = 0.0
 debug_color = Color(0, 0.607843, 0.662745, 0.419608)
 
 [node name="Animator" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_y27yo")
 animation = &"spawn"
+frame = 28
+frame_progress = 1.0
 
 [node name="HoverArea" type="Area2D" parent="."]
 

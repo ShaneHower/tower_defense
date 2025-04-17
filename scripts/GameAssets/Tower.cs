@@ -206,17 +206,39 @@ namespace  GameNamespace.GameAssets
 
 		public async Task AnimateSpawn()
 		{
+			AudioStreamPlayer spawnSound = Sound.Instance.CreateFoley("TowerSpawn");
+			AddChild(spawnSound);
+
+            // Have to shift sprite up on this animation because its not aligned with the idle sprite
 			var origPosition = Position;
 			Position = new Vector2(Position.X, Position.Y - 12);
+
 			string spawnAnim = "spawn";
 			animator.Play(spawnAnim);
-			int framecount = animator.SpriteFrames.GetFrameCount(spawnAnim);
+
 			float fps = (float)animator.SpriteFrames.GetAnimationSpeed(spawnAnim);
-			float animationDuration = framecount / fps;
-			await Task.Delay((int)(animationDuration * 1000));
+			float msPerFrame = 1000f / fps;
+
+			// The frames which trigger a sound
+			float[] targetFrames = [7, 14, 19, 23, 26, 27];
+			int pitchCount = 0;
+
+			for (int i = 0; i < targetFrames.Length; i++)
+			{
+				float delay = (i==0 ? targetFrames[i] : targetFrames[i] - targetFrames[i - 1]) * msPerFrame;
+				await Task.Delay((int)delay);
+
+				float pitch = 1.0f + 1.0f * pitchCount++;
+				spawnSound.PitchScale = pitch;
+				spawnSound.Play();
+			}
+
+			// Wait out the remainder of the spawn animation.  I subtract 1 here because it makes the transition look smoother.
+			int frameDiff = (int)fps - (int)targetFrames[^1];
+			await Task.Delay((int)((frameDiff - 1) * msPerFrame));
+
 			Position = origPosition;
 			animator.Play("idle");
-
 		}
 
 		public override void _ExitTree()
