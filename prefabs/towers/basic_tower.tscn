@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://bbplfx4tge8a8"]
+[gd_scene load_steps=49 format=3 uid="uid://bbplfx4tge8a8"]
 
 [ext_resource type="Script" uid="uid://c2kaslsceuq56" path="res://scripts/GameAssets/Tower.cs" id="1_bcxmp"]
 [ext_resource type="Texture2D" uid="uid://bwljcppnofggm" path="res://sprites/BasicTower-Sheet.png" id="2_na66u"]
@@ -143,6 +143,10 @@ region = Rect2(1248, 0, 48, 96)
 atlas = ExtResource("3_2isls")
 region = Rect2(1296, 0, 48, 96)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ebvn1"]
+atlas = ExtResource("3_2isls")
+region = Rect2(1344, 0, 48, 96)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_y27yo"]
 animations = [{
 "frames": [{
@@ -249,10 +253,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kju8c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ebvn1")
 }],
 "loop": false,
 "name": &"spawn",
-"speed": 28.0
+"speed": 29.0
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_goty7"]
@@ -285,8 +292,8 @@ debug_color = Color(0, 0.607843, 0.662745, 0.419608)
 [node name="Animator" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_y27yo")
 animation = &"spawn"
-frame = 17
-frame_progress = 0.915712
+frame = 28
+frame_progress = 1.0
 
 [node name="HoverArea" type="Area2D" parent="."]
 
