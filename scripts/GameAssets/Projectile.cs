@@ -23,6 +23,7 @@ namespace GameNamespace.GameAssets
 		public float aoeRange;
 		public float aoeDamagePerc;
 		public string prefab;
+		public string sfx;
 
 		// Helper Vars
 		public bool aoeActive;
@@ -39,6 +40,8 @@ namespace GameNamespace.GameAssets
 			sprite = GetNode<Sprite2D>("Sprite");
 			id = (string)GetMeta("projectileId");
 			SetVars();
+
+			Sound.Instance.AddToSoundBank(sfx);
 
 			BodyEntered += OnBodyEntered;
 
@@ -58,6 +61,7 @@ namespace GameNamespace.GameAssets
 			aoe = data.aoe;
 			aoeRange = data.aoeRange;
 			aoeDamagePerc = data.aoeDamagePerc;
+		    sfx = data.sfx;
 
 			prefab = data.prefab;
 		}
@@ -91,6 +95,7 @@ namespace GameNamespace.GameAssets
 			{
 				if(collidedEnemy == target)
 				{
+					Sound.Instance.PlayFoley(sfx);
 					string msg = $"Projectile {this} with name {this.Name} has hit target {collidedEnemy}.";
 					log.Information(msg);
 					GameCoordinator.Instance.combatLog.Write(msg);

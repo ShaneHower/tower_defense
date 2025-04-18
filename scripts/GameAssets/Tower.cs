@@ -57,6 +57,7 @@ namespace  GameNamespace.GameAssets
 			// Init work
 			id = (string)GetMeta("towerId");
 			SetVars();
+			Sound.Instance.AddToSoundBank("TowerSpawn");
 
 			animator = GetNode<AnimatedSprite2D>("Animator");
 			animator.Play("idle");
@@ -206,8 +207,6 @@ namespace  GameNamespace.GameAssets
 
 		public async Task AnimateSpawn()
 		{
-			AudioStreamPlayer spawnSound = Sound.Instance.CreateFoley("TowerSpawn");
-			AddChild(spawnSound);
 
             // Have to shift sprite up on this animation because its not aligned with the idle sprite
 			var origPosition = Position;
@@ -229,8 +228,7 @@ namespace  GameNamespace.GameAssets
 				await Task.Delay((int)delay);
 
 				float pitch = 1.0f + 1.0f * pitchCount++;
-				spawnSound.PitchScale = pitch;
-				spawnSound.Play();
+				Sound.Instance.PlayFoley(sfx:"TowerSpawn", pitch:pitch);
 			}
 
 			// Wait out the remainder of the spawn animation.  I subtract 1 here because it makes the transition look smoother.

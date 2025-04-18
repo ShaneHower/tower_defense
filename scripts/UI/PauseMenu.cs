@@ -12,7 +12,6 @@ namespace GameNamespace.UI
 		public Panel settingsMenu;
         private Control parentUI;
 		private DevWindow devWindow;
-		private AudioStreamPlayer buttonFoley;
 
         public override void _Ready()
         {
@@ -23,8 +22,7 @@ namespace GameNamespace.UI
 			settingsMenu = GetNode<Panel>("SettingsMenu");
             parentUI = GetParent<Control>();
 			devWindow = parentUI.GetNode<DevWindow>("DevWindow");
-			buttonFoley = Sound.Instance.CreateFoley("ButtonPress");
-			AddChild(buttonFoley);
+			Sound.Instance.AddToSoundBank("ButtonPress");
 
             CreateMainMenu();
 			CreateSettingsMenu();
@@ -60,14 +58,14 @@ namespace GameNamespace.UI
 			continueButton.Pressed += OnContinueButtonPressed;
 
 			TextureButton saveButton = CreateMenuButton("Save");
-			saveButton.Pressed += () => {buttonFoley.Play();};
+			saveButton.Pressed += () => {Sound.Instance.PlayFoley("ButtonPress");};
 
 			TextureButton settingsButton = CreateMenuButton("Settings");
 			settingsButton.Pressed += OnSettingsButtonPressed;
 
 			TextureButton restartButton = CreateMenuButton("Restart");
 			restartButton.Pressed += () => {
-				buttonFoley.Play();
+				Sound.Instance.PlayFoley("ButtonPress");
 				GetTree().Paused = false;
 				GetTree().ReloadCurrentScene();
 			};
@@ -75,7 +73,7 @@ namespace GameNamespace.UI
 
 			TextureButton quitButton = CreateMenuButton("Quit");
 			quitButton.Pressed += () => {
-				buttonFoley.Play();
+				Sound.Instance.PlayFoley("ButtonPress");
 				GetTree().Quit();
 			};
 		}
@@ -103,7 +101,7 @@ namespace GameNamespace.UI
 
         private void OnContinueButtonPressed()
 		{
-			buttonFoley.Play();
+			Sound.Instance.PlayFoley("ButtonPress");
 			GetTree().Paused = false;
 			mainMenu.Visible = false;
 		}
@@ -111,7 +109,7 @@ namespace GameNamespace.UI
 
         private void OnSettingsButtonPressed()
         {
-			buttonFoley.Play();
+			Sound.Instance.PlayFoley("ButtonPress");
             mainMenu.Visible = false;
 			settingsMenu.Visible = true;
         }

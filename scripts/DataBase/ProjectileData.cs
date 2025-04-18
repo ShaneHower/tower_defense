@@ -14,6 +14,7 @@ namespace GameNamespace.DataBase
         public float aoeRange { get; set; }
         public float aoeDamagePerc { get; set; }
         public string prefab { get; set; }
+        public string sfx { get; set; }
     }
 
 }

@@ -31,11 +31,8 @@ namespace GameNamespace.UI
 			level = GetTree().Root.GetNode<Level>("Level");
 			towerButtonContainer = GetNode<HBoxContainer>("HBoxContainer");
 			towerDeck = GetNode<Area2D>("TowerDeck");
-			cardFoley = Sound.Instance.CreateFoley("CardSelect");
-			AddChild(cardFoley);
-
-			deckFoley = Sound.Instance.CreateFoley("DeckSelect");
-			AddChild(deckFoley);
+			Sound.Instance.AddToSoundBank("CardSelect");
+			Sound.Instance.AddToSoundBank("DeckSelect");
 
 			InitTowerDeck();
 			CreateTowerButtons();
@@ -111,7 +108,7 @@ namespace GameNamespace.UI
 			towerDeck.InputEvent += (viewport, ev, shapeIdx) => {
 				if(ev is InputEventMouseButton mb && mb.Pressed && mb.ButtonIndex == MouseButton.Left)
 				{
-					deckFoley.Play();
+					Sound.Instance.PlayFoley("DeckSelect");
 					float step = 0.02f;
 					float delay = 0.01f;
 					if(towerButtonsVisible)
@@ -133,7 +130,7 @@ namespace GameNamespace.UI
 		{
 			if(activeTowerButton is null)
 			{
-				cardFoley.Play();
+				Sound.Instance.PlayFoley("CardSelect");
 				string towerId = (string)pressedButton.GetMeta("towerId");
 				TowerData towerData = GameDataBase.Instance.QueryTowerData(towerId);
 

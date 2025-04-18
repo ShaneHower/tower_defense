@@ -61,8 +61,7 @@ namespace GameNamespace.GameManager
             CanvasLayer uiCanvas = GetNode<CanvasLayer>("UICanvas");
             uiControl = uiCanvas.GetNode<UIControl>("UI");
             levelPath = GetNode<LevelPath>("LevelPath");
-            buttonFoley = Sound.Instance.CreateFoley("ButtonPress");
-            AddChild(buttonFoley);
+            Sound.Instance.AddToSoundBank("ButtonPress");
 
             // Init work.
             CreateWaveButton();
@@ -171,7 +170,7 @@ namespace GameNamespace.GameManager
 
         public async void OnWaveButton()
         {
-            buttonFoley.Play();
+            Sound.Instance.PlayFoley("ButtonPress");
             // Free up for garabage collection after deletion.
             waveButton.QueueFree();
             waveButton = null;
