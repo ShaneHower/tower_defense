@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cteexqp6oaqqc"]
 
 [ext_resource type="Script" uid="uid://bb6pcwwwddkcg" path="res://scripts/GameAssets/Projectile.cs" id="1_ax2w5"]
-[ext_resource type="Texture2D" uid="uid://bk5c7xk2gxpc5" path="res://sprites/Projectiles-Sheet.png" id="2_nhevh"]
+[ext_resource type="Texture2D" uid="uid://bk5c7xk2gxpc5" path="res://sprites/projectiles/Projectiles-Sheet.png" id="2_nhevh"]
 
 [node name="fire" type="Area2D"]
 script = ExtResource("1_ax2w5")

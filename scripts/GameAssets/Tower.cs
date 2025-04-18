@@ -25,6 +25,7 @@ namespace  GameNamespace.GameAssets
 		public int gold;
 		public float attackSpeed;
 		public string prefab;
+		public string spriteSheet;
 		public string projectileId;
 		public string attackModifier;
 		public int attackModCounter;
@@ -36,6 +37,7 @@ namespace  GameNamespace.GameAssets
 		public bool canFire = true;
 		public bool beingPlaced = false;
 		public bool canPlace = true;
+		public bool badArea = false;
 		private List<Enemy> targetEnemies = new();
 		private int targetOrder = 0;
 		public bool isHovered = false;
@@ -55,6 +57,7 @@ namespace  GameNamespace.GameAssets
 			// Init work
 			id = (string)GetMeta("towerId");
 			SetVars();
+			Sound.Instance.AddToSoundBank("TowerSpawn");
 
 			animator = GetNode<AnimatedSprite2D>("Animator");
 			animator.Play("idle");
@@ -87,6 +90,7 @@ namespace  GameNamespace.GameAssets
 			gold = data.gold;
 			attackSpeed = data.attackSpeed;
 			prefab = data.prefab;
+			spriteSheet = data.spriteSheet;
 			projectileId = data.projectileId;
 			attackModifier = data.attackModifier;
 			attackModCounter = data.attackModCounter;
@@ -203,17 +207,36 @@ namespace  GameNamespace.GameAssets
 
 		public async Task AnimateSpawn()
 		{
+
+            // Have to shift sprite up on this animation because its not aligned with the idle sprite
 			var origPosition = Position;
 			Position = new Vector2(Position.X, Position.Y - 12);
+
 			string spawnAnim = "spawn";
 			animator.Play(spawnAnim);
-			int framecount = animator.SpriteFrames.GetFrameCount(spawnAnim);
+
 			float fps = (float)animator.SpriteFrames.GetAnimationSpeed(spawnAnim);
-			float animationDuration = framecount / fps;
-			await Task.Delay((int)(animationDuration * 1000));
+			float msPerFrame = 1000f / fps;
+
+			// The frames which trigger a sound
+			float[] targetFrames = [7, 14, 19, 23, 26, 27];
+			int pitchCount = 0;
+
+			for (int i = 0; i < targetFrames.Length; i++)
+			{
+				float delay = (i==0 ? targetFrames[i] : targetFrames[i] - targetFrames[i - 1]) * msPerFrame;
+				await Task.Delay((int)delay);
+
+				float pitch = 1.0f + 1.0f * pitchCount++;
+				Sound.Instance.PlayFoley(sfx:"TowerSpawn", pitch:pitch);
+			}
+
+			// Wait out the remainder of the spawn animation.  I subtract 1 here because it makes the transition look smoother.
+			int frameDiff = (int)fps - (int)targetFrames[^1];
+			await Task.Delay((int)((frameDiff - 1) * msPerFrame));
+
 			Position = origPosition;
 			animator.Play("idle");
-
 		}
 
 		public override void _ExitTree()

@@ -22,12 +22,12 @@ namespace GameNamespace.UI
             if(type == "tower")
             {
                 spriteDimensions = new Vector2(56, 80);
-                spriteSheet = $"{GameCoordinator.Instance.spriteLoc}/TowerButton-Sheet.png";
+                spriteSheet = $"{GameCoordinator.Instance.uiSpriteLoc}/TowerButton-Sheet.png";
             }
             else if (type == "Menu")
             {
                 spriteDimensions = new Vector2(120, 35);
-                spriteSheet = $"{GameCoordinator.Instance.spriteLoc}/Button-Sheet.png";
+                spriteSheet = $"{GameCoordinator.Instance.uiSpriteLoc}/Button-Sheet.png";
             }
         }
 

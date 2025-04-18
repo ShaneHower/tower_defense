@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://d0jd8q2chh058"]
 
 [ext_resource type="Script" uid="uid://bb6pcwwwddkcg" path="res://scripts/GameAssets/Projectile.cs" id="1_gguga"]
-[ext_resource type="Texture2D" uid="uid://c021oqaf7sr3k" path="res://sprites/Projectile-BigSnowball-Sheet.png" id="2_w5q71"]
+[ext_resource type="Texture2D" uid="uid://c021oqaf7sr3k" path="res://sprites/projectiles/Projectile-BigSnowball-Sheet.png" id="2_w5q71"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ekqk1"]
 radius = 47.0956
@@ -53,7 +53,7 @@ animations = [{
 }],
 "loop": false,
 "name": &"default",
-"speed": 5.0
+"speed": 24.0
 }]
 
 [node name="snowball" type="Area2D"]
@@ -82,5 +82,4 @@ shape = SubResource("CircleShape2D_ekqk1")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="AOE"]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_wknjm")
-frame = 5
 frame_progress = 1.0

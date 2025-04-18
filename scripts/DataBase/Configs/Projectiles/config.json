@@ -4,7 +4,8 @@
         "name": "arrow",
         "speed": 200.0,
         "damage": 15.0,
-        "prefab": "arrow.tscn"
+        "prefab": "arrow.tscn",
+        "sfx": "Arrow"
     },
     "102": {
         "id": "102",
@@ -14,7 +15,8 @@
         "effect": "slow",
         "effectRate": 0.5,
         "effectDuration": 1.5,
-        "prefab": "ice.tscn"
+        "prefab": "ice.tscn",
+        "sfx": "Ice"
     },
     "103": {
         "id": "103",
@@ -27,7 +29,8 @@
         "aoe": true,
         "aoeRange": 10,
         "aoeDamagePerc": 0.3,
-        "prefab": "snowball.tscn"
+        "prefab": "snowball.tscn",
+        "sfx": "Snowball"
     },
     "104": {
         "id": "104",
@@ -37,7 +40,8 @@
         "effect": "burn",
         "effectRate": 0.5,
         "effectDuration": 4,
-        "prefab": "fire.tscn"
+        "prefab": "fire.tscn",
+        "sfx": "Burn"
     },
     "105": {
         "id": "105",
@@ -46,6 +50,7 @@
         "damage": 20.0,
         "effect": "stun",
         "effectDuration": 0.2,
-        "prefab": "rock.tscn"
+        "prefab": "rock.tscn",
+        "sfx": "Stun"
     }
 }

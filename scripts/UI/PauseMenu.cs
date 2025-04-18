@@ -1,6 +1,8 @@
 namespace GameNamespace.UI
 {
 	using DevTools;
+    using GameNamespace.GameManager;
+
     using Godot;
 
     public partial class PauseMenu : UIControl
@@ -20,6 +22,7 @@ namespace GameNamespace.UI
 			settingsMenu = GetNode<Panel>("SettingsMenu");
             parentUI = GetParent<Control>();
 			devWindow = parentUI.GetNode<DevWindow>("DevWindow");
+			Sound.Instance.AddToSoundBank("ButtonPress");
 
             CreateMainMenu();
 			CreateSettingsMenu();
@@ -55,19 +58,24 @@ namespace GameNamespace.UI
 			continueButton.Pressed += OnContinueButtonPressed;
 
 			TextureButton saveButton = CreateMenuButton("Save");
+			saveButton.Pressed += () => {Sound.Instance.PlayFoley("ButtonPress");};
 
 			TextureButton settingsButton = CreateMenuButton("Settings");
 			settingsButton.Pressed += OnSettingsButtonPressed;
 
 			TextureButton restartButton = CreateMenuButton("Restart");
 			restartButton.Pressed += () => {
+				Sound.Instance.PlayFoley("ButtonPress");
 				GetTree().Paused = false;
 				GetTree().ReloadCurrentScene();
 			};
 
 
 			TextureButton quitButton = CreateMenuButton("Quit");
-			quitButton.Pressed += () => GetTree().Quit();
+			quitButton.Pressed += () => {
+				Sound.Instance.PlayFoley("ButtonPress");
+				GetTree().Quit();
+			};
 		}
 
 		private TextureButton CreateMenuButton(string text)
@@ -89,11 +97,11 @@ namespace GameNamespace.UI
 
 			Button combatLogConsole = UITools.Instance.CreateCheckBox(text:"Combat Log Console", parent: buttonContainer);
 			combatLogConsole.Pressed += () => devWindow.ToggleCombatLog();
-
 		}
 
         private void OnContinueButtonPressed()
 		{
+			Sound.Instance.PlayFoley("ButtonPress");
 			GetTree().Paused = false;
 			mainMenu.Visible = false;
 		}
@@ -101,6 +109,7 @@ namespace GameNamespace.UI
 
         private void OnSettingsButtonPressed()
         {
+			Sound.Instance.PlayFoley("ButtonPress");
             mainMenu.Visible = false;
 			settingsMenu.Visible = true;
         }

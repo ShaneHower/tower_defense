@@ -28,6 +28,8 @@ namespace GameNamespace.GameManager
         public string towerPrefabLoc = "res://prefabs/towers";
         public string uiPrefabLoc = "res://prefabs/ui";
         public string spriteLoc = "res://sprites";
+        public string towerSpriteLoc = "res://sprites/towers";
+        public string uiSpriteLoc = "res://sprites/ui";
         public string scriptLoc = "res://scripts";
         private static readonly ILogger log = Log.ForContext<GameCoordinator>();
 

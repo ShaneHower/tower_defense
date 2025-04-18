@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://diqm5v8chlx4"]
 
 [ext_resource type="Script" uid="uid://bb6pcwwwddkcg" path="res://scripts/GameAssets/Projectile.cs" id="1_7jadn"]
-[ext_resource type="Texture2D" uid="uid://ds8f25bv66rd5" path="res://sprites/Projectile-SmallSnowball-Sheet.png" id="2_7jadn"]
+[ext_resource type="Texture2D" uid="uid://ds8f25bv66rd5" path="res://sprites/projectiles/Projectile-SmallSnowball-Sheet.png" id="2_7jadn"]
 
 [node name="ice" type="Area2D"]
 script = ExtResource("1_7jadn")

@@ -10,6 +10,7 @@ namespace GameNamespace.DataBase
         public int gold { get; set; }
         public float attackSpeed { get; set; }
         public string prefab { get; set; }
+        public string spriteSheet { get; set; }
         public string projectileId { get; set; }
         public string attackModifier { get; set; }
         public int attackModCounter { get; set; }

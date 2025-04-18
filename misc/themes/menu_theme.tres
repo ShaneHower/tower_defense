@@ -1,9 +1,9 @@
 [gd_resource type="Theme" load_steps=3 format=3 uid="uid://dae7p5rry0vr2"]
 
-[ext_resource type="Texture2D" uid="uid://bbh5fgs2cebaj" path="res://sprites/menu_stone_blend.png" id="1_amlv4"]
+[ext_resource type="Texture2D" uid="uid://bbh5fgs2cebaj" path="res://sprites/ui/menu_stone_blend.png" id="1_wtrus"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_amlv4"]
-texture = ExtResource("1_amlv4")
+texture = ExtResource("1_wtrus")
 
 [resource]
 Panel/styles/panel = SubResource("StyleBoxTexture_amlv4")

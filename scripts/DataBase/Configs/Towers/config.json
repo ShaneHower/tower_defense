@@ -2,10 +2,12 @@
     "101": {
         "id": "101",
         "name": "basic",
+        "level": 1,
         "radius": 1.0,
         "gold": 150,
         "attackSpeed": 18,
         "prefab": "basic_tower.tscn",
+        "spriteSheet": "BasicTower-Sheet.png",
         "projectileId": "101"
     },
     "102": {
@@ -17,6 +19,7 @@
         "gold": 250,
         "attackSpeed": 20,
         "prefab": "ice_tower.tscn",
+        "spriteSheet": "IceTowerLv1-Sheet.png",
         "projectileId": "102",
         "nextLevelId": "103"
     },
@@ -29,6 +32,7 @@
         "gold": 200,
         "attackSpeed": 20,
         "prefab": "ice_tower_lvl2.tscn",
+        "spriteSheet": "IceTowerLv2-Sheet.png",
         "projectileId": "102",
         "attackModifier": "103",
         "attackModCounter": 3
@@ -36,49 +40,59 @@
     "104": {
         "id": "104",
         "name": "earth",
+        "level": 1,
         "radius": 1.0,
         "gold": 250,
         "attackSpeed": 15,
         "prefab": "earth_tower.tscn",
+        "spriteSheet": "EarthTowerLv1-Sheet.png",
         "projectileId": "105",
         "nextLevelId": "105"
     },
     "105": {
         "id": "105",
         "name": "earth2",
+        "level": 2,
         "radius": 1.0,
         "gold": 200,
         "attackSpeed": 20,
         "prefab": "earth_towerlvl2.tscn",
+        "spriteSheet": "EarthTowerLv2-Sheet.png",
         "projectileId": "105",
         "nextLevelId": "106"
     },
     "106": {
         "id": "106",
         "name": "earth3",
+        "level": 3,
         "radius": 1.0,
         "gold": 200,
         "attackSpeed": 20,
         "prefab": "earth_towerlvl3.tscn",
+        "spriteSheet": "EarthTowerLv3-Sheet.png",
         "projectileId": "105"
     },
     "107": {
         "id": "107",
         "name": "fire",
+        "level": 1,
         "radius": 1.0,
         "gold": 250,
         "attackSpeed": 25,
         "prefab": "fire_tower.tscn",
+        "spriteSheet": "FireTowerLv1-Sheet.png",
         "projectileId": "104",
         "nextLevelId": "108"
     },
     "108": {
         "id": "108",
         "name": "fire2",
+        "level": 2,
         "radius": 1.0,
         "gold": 200,
         "attackSpeed": 25,
         "prefab": "fire_towerlvl2.tscn",
+        "spriteSheet": "FireTowerLv2-Sheet.png",
         "projectileId": "104",
         "multiShot": 2
     }
