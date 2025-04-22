@@ -72,19 +72,23 @@ namespace GameNamespace.UI
 		// Init Methods
 		public void CreateTowerButtons()
 		{
-			GameButton basicTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
+			GameButton basicTower = UITools.Instance.CreateGameButtonFromRegion(buttonType:"tower");
+			towerButtonContainer.AddChild(basicTower);
 			HandleTowerButtonBehavior(button:basicTower, towerId:"101");
 			towerButtons.Add(basicTower);
 
-			GameButton iceTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
+			GameButton iceTower = UITools.Instance.CreateGameButtonFromRegion(buttonType:"tower");
+			towerButtonContainer.AddChild(iceTower);
 			HandleTowerButtonBehavior(button:iceTower, towerId:"102");
 			towerButtons.Add(iceTower);
 
-			GameButton fireTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
+			GameButton fireTower = UITools.Instance.CreateGameButtonFromRegion(buttonType:"tower");
+			towerButtonContainer.AddChild(fireTower);
 			HandleTowerButtonBehavior(button:fireTower, towerId:"107");
 			towerButtons.Add(fireTower);
 
-			GameButton earthTower = UITools.Instance.CreateGameButtonFromRegion(parent:towerButtonContainer, buttonType:"tower");
+			GameButton earthTower = UITools.Instance.CreateGameButtonFromRegion(buttonType:"tower");
+			towerButtonContainer.AddChild(earthTower);
 			HandleTowerButtonBehavior(button:earthTower, towerId:"104");
 			towerButtons.Add(earthTower);
 		}
@@ -153,7 +157,7 @@ namespace GameNamespace.UI
 				Tower tower = CreateTowerFromPrefab(chosenTower.prefab);
 				GameCoordinator.Instance.currentGold -= chosenTower.gold;
 				tower.Position = chosenTower.Position;
-				List<string> validIds =  ["101", "102", "107"];
+				List<string> validIds =  ["101", "102", "104", "107"];
 				if(validIds.Contains(tower.id)){ _ = tower.AnimateSpawn(); }
 			}
 			else
@@ -224,7 +228,8 @@ namespace GameNamespace.UI
 			var region = new Rect2(0, 0, 48, 72);
 			string spriteSheet = $"{GameCoordinator.Instance.towerSpriteLoc}/{towerData.spriteSheet}";
 
-			TextureRect tower = UITools.Instance.GetTextureRect(texturePath:spriteSheet, parent:button, region:region);
+			TextureRect tower = UITools.Instance.GetTextureRect(texturePath:spriteSheet, region:region);
+			button.AddChild(tower);
 			tower.OffsetLeft = -button.Size.X / 2f;
             tower.OffsetTop = -button.Size.Y / 2f;
             tower.OffsetRight = button.Size.X / 2f;

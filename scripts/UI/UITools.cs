@@ -3,6 +3,8 @@ namespace GameNamespace.UI
     using Godot;
     using GameNamespace.GameManager;
     using System;
+    using System.ComponentModel;
+
 
     public partial class UITools: Control
 	{
@@ -18,28 +20,39 @@ namespace GameNamespace.UI
 		{
 			Theme theme = new();
 			Font font = ResourceLoader.Load<Font>(fontLoc);
-			theme.SetFont("font", gameObject, font);
-            theme.SetFontSize("font_size", gameObject, fontSize);
+
+            if(gameObject == "RichTextLabel")
+            {
+                theme.SetFont("normal_font", gameObject, font);
+                theme.SetFontSize("normal_font_size", gameObject, fontSize);
+                theme.SetFont("bold_font", gameObject, font);
+                theme.SetFontSize("bold_font_size", gameObject, fontSize);
+            }
+            else
+            {
+                theme.SetFont("font", gameObject, font);
+                theme.SetFontSize("font_size", gameObject, fontSize);
+            }
+
 			return theme;
 		}
 
-        public void ConfigureControl(Control control, string gameObject, Control parent, int fontSize=0)
+        public void ConfigureControl(Control control, string gameObject, int fontSize=0)
         {
             control.TextureFilter = TextureFilterEnum.Nearest;
             int fontSizeOverride = fontSize == 0 ? 12 : fontSize;
             control.Theme = GetGameFontTheme(fontSize:fontSizeOverride,  gameObject:gameObject);
-            parent.AddChild(control);
         }
 
-        public Button CreateButton(string text, Control parent, int fontSize=0)
+        public Button CreateButton(string text, int fontSize=0)
 		{
 			Button button = new();
 			button.Text = text;
-            ConfigureControl(control:button, gameObject:"Button", parent:parent, fontSize:fontSize);
+            ConfigureControl(control:button, gameObject:"Button", fontSize:fontSize);
 			return button;
 		}
 
-        public GameButton CreateGameButtonFromRegion(Control parent, string buttonType="Menu")
+        public GameButton CreateGameButtonFromRegion(string buttonType="Menu")
         {
 
             PackedScene buttonScene = GD.Load<PackedScene>($"{GameCoordinator.Instance.uiPrefabLoc}/game_button.tscn");
@@ -69,30 +82,37 @@ namespace GameNamespace.UI
             button.TextureFilter = TextureFilterEnum.Nearest;
             button.StretchMode = TextureButton.StretchModeEnum.KeepCentered;
 
-            parent.AddChild(button);
             return button;
         }
 
-        public CheckBox CreateCheckBox(string text, Control parent, int fontSize=0)
+        public CheckBox CreateCheckBox(string text, int fontSize=0)
         {
             CheckBox checkBox = new();
             checkBox.Text = text;
-            ConfigureControl(control:checkBox, gameObject:"CheckBox", parent:parent, fontSize:fontSize);
+            ConfigureControl(control:checkBox, gameObject:"CheckBox", fontSize:fontSize);
             return checkBox;
         }
 
-        public Label CreateLabel(string text, Control parent, int fontSize=0)
+        public Label CreateLabel(string text, int fontSize=0)
         {
             Label label = new();
             label.Text = text;
-            ConfigureControl(control:label, gameObject:"Label", parent:parent, fontSize:fontSize);
+            ConfigureControl(control:label, gameObject:"Label", fontSize:fontSize);
             label.SetAnchorsPreset(LayoutPreset.Center);
             label.HorizontalAlignment = HorizontalAlignment.Center;
             label.VerticalAlignment = VerticalAlignment.Center;
             return label;
         }
 
-        public TextureRect GetTextureRect(string texturePath, Control parent, Rect2 region)
+        public RichTextLabel CreateRichTextLabel(string text, int fontSize=0)
+        {
+            RichTextLabel label = new();
+            label.Text = text;
+            ConfigureControl(control:label, gameObject:"RichTextLabel", fontSize:fontSize);
+            return label;
+        }
+
+        public TextureRect GetTextureRect(string texturePath, Rect2 region)
         {
             Texture2D texture = GD.Load<Texture2D>(texturePath);
             AtlasTexture atlasTexture = new AtlasTexture
@@ -113,8 +133,6 @@ namespace GameNamespace.UI
             textureRect.AnchorRight = 0.5f;
             textureRect.AnchorBottom = 0.5f;
 
-            parent.AddChild(textureRect);
-
             return textureRect;
         }
 
@@ -130,7 +148,8 @@ namespace GameNamespace.UI
 		public void SpawnWarning(string message, Control pressedButton)
 		{
 			// Create label with light red color and raise it above the parent by 20 pixels
-            Label warning = CreateLabel(text:message, parent:pressedButton, fontSize:20);
+            Label warning = CreateLabel(text:message, fontSize:20);
+            pressedButton.AddChild(warning);
             warning.AddThemeColorOverride("font_color", new Color(0.9f, 0.3f, 0.3f));
             warning.Position -= new Vector2(0, 20);
 

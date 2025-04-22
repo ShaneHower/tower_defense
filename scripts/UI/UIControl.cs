@@ -31,8 +31,11 @@ namespace GameNamespace.UI
 
 		public TextureButton CreateWaveButton(string buttonText)
 		{
-			GameButton button = UITools.Instance.CreateGameButtonFromRegion(parent:waveHud, buttonType:"Menu");
-			Label label = UITools.Instance.CreateLabel(text:buttonText, parent:button, fontSize:25);
+			GameButton button = UITools.Instance.CreateGameButtonFromRegion(buttonType:"Menu");
+			waveHud.AddChild(button);
+
+			Label label = UITools.Instance.CreateLabel(text:buttonText, fontSize:25);
+			button.AddChild(label);
 			label.Size = button.Size;
 
 			float windowWidth = waveHud.Size.X;
@@ -78,7 +81,9 @@ namespace GameNamespace.UI
 			vBox.OffsetBottom = 100;
 			AddChild(vBox, true);
 
-			Label gameOverLabel = UITools.Instance.CreateLabel(text:"GAME OVER", parent:vBox, fontSize:100);
+			Label gameOverLabel = UITools.Instance.CreateLabel(text:"GAME OVER", fontSize:100);
+			vBox.AddChild(gameOverLabel);
+
 			gameOverLabel.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
 			gameOverLabel.HorizontalAlignment = HorizontalAlignment.Center;
 
@@ -87,8 +92,12 @@ namespace GameNamespace.UI
 			buttonBox.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
 			vBox.AddChild(buttonBox);
 
-			GameButton restartButton = UITools.Instance.CreateGameButtonFromRegion(parent:buttonBox, buttonType:"Menu");
-			Label restartLabel = UITools.Instance.CreateLabel(text:"Restart", parent:restartButton, fontSize:25);
+			GameButton restartButton = UITools.Instance.CreateGameButtonFromRegion(buttonType:"Menu");
+			buttonBox.AddChild(restartButton);
+
+			Label restartLabel = UITools.Instance.CreateLabel(text:"Restart", fontSize:25);
+			restartButton.AddChild(restartLabel);
+
 			restartLabel.Size = restartButton.Size;
 			restartButton.SizeFlagsHorizontal = SizeFlags.Expand;
 			restartButton.Pressed += () => {
@@ -96,8 +105,12 @@ namespace GameNamespace.UI
 				GetTree().ReloadCurrentScene();
 			};
 
-			GameButton exitButton = UITools.Instance.CreateGameButtonFromRegion(parent:buttonBox, buttonType:"Menu");
-			Label exitLabel = UITools.Instance.CreateLabel(text:"Exit", parent:exitButton, fontSize:25);
+			GameButton exitButton = UITools.Instance.CreateGameButtonFromRegion(buttonType:"Menu");
+			buttonBox.AddChild(exitButton);
+
+			Label exitLabel = UITools.Instance.CreateLabel(text:"Exit", fontSize:25);
+			exitButton.AddChild(exitLabel);
+
 			exitLabel.Size = exitButton.Size;
 			exitButton.SizeFlagsHorizontal = SizeFlags.Expand;
 			exitButton.Pressed += () => {
@@ -122,7 +135,9 @@ namespace GameNamespace.UI
 			vBox.OffsetBottom = 100;
 			AddChild(vBox, true);
 
-			Label gameOverLabel = UITools.Instance.CreateLabel(text:"YOU WON!", parent:vBox, fontSize:100);
+			Label gameOverLabel = UITools.Instance.CreateLabel(text:"YOU WON!", fontSize:100);
+			vBox.AddChild(gameOverLabel);
+
 			gameOverLabel.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
 			gameOverLabel.HorizontalAlignment = HorizontalAlignment.Center;
 
@@ -131,8 +146,12 @@ namespace GameNamespace.UI
 			buttonBox.SizeFlagsHorizontal = SizeFlags.ShrinkCenter;
 			vBox.AddChild(buttonBox);
 
-			GameButton restartButton = UITools.Instance.CreateGameButtonFromRegion(parent:buttonBox, buttonType:"Menu");
-			Label restartLabel = UITools.Instance.CreateLabel(text:"Restart", parent:restartButton, fontSize:25);
+			GameButton restartButton = UITools.Instance.CreateGameButtonFromRegion(buttonType:"Menu");
+			buttonBox.AddChild(restartButton);
+
+			Label restartLabel = UITools.Instance.CreateLabel(text:"Restart", fontSize:25);
+			restartButton.AddChild(restartLabel);
+
 			restartLabel.Size = restartButton.Size;
 			restartButton.SizeFlagsHorizontal = SizeFlags.Expand;
 			restartButton.Pressed += () => {
@@ -140,8 +159,12 @@ namespace GameNamespace.UI
 				GetTree().ReloadCurrentScene();
 			};
 
-			GameButton exitButton = UITools.Instance.CreateGameButtonFromRegion(parent:buttonBox, buttonType:"Menu");
-			Label exitLabel = UITools.Instance.CreateLabel(text:"Exit", parent:exitButton, fontSize:25);
+			GameButton exitButton = UITools.Instance.CreateGameButtonFromRegion(buttonType:"Menu");
+			buttonBox.AddChild(exitButton);
+
+			Label exitLabel = UITools.Instance.CreateLabel(text:"Exit", fontSize:25);
+			exitButton.AddChild(exitLabel);
+
 			exitLabel.Size = exitButton.Size;
 			exitButton.SizeFlagsHorizontal = SizeFlags.Expand;
 			exitButton.Pressed += () => {

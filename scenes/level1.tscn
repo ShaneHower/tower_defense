@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=4 uid="uid://d3l76ld5du6ay"]
+[gd_scene load_steps=28 format=4 uid="uid://d3l76ld5du6ay"]
 
 [ext_resource type="Script" uid="uid://cqtp6ogjnlu38" path="res://scripts/GameManager/Level.cs" id="1_3w4mx"]
 [ext_resource type="Texture2D" uid="uid://hfyhr1iwu453" path="res://sprites/Forest Tileset.png" id="2_jvkml"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://e48wfplay4er" path="res://prefabs/ui/settings_menu.tscn" id="14_1oofn"]
 [ext_resource type="Script" uid="uid://bbhcwwkl4vi11" path="res://scripts/UI/DevTools/DevWindow.cs" id="15_6i0tl"]
 [ext_resource type="Script" uid="uid://c5ekhkgq3cd0e" path="res://scripts/UI/DevTools/SpawnBox.cs" id="16_6lx4c"]
+[ext_resource type="Script" uid="uid://o874m5hqygoy" path="res://scripts/UI/ToolTip.cs" id="16_mvsps"]
 [ext_resource type="Script" uid="uid://cvvl7a2b4b4ym" path="res://scripts/UI/DevTools/CombatLogConsole.cs" id="17_6xmqk"]
 [ext_resource type="Script" uid="uid://oro0k6vpttsg" path="res://scripts/GameManager/LevelPath.cs" id="18_hvrd6"]
 [ext_resource type="PackedScene" uid="uid://wmt2picv8hbi" path="res://prefabs/path_index.tscn" id="19_1vjko"]
@@ -999,6 +1000,19 @@ offset_left = -69.5
 offset_right = 69.5
 offset_bottom = 56.0
 grow_horizontal = 2
+
+[node name="ToolTip" type="Control" parent="UICanvas/UI"]
+anchors_preset = 0
+offset_left = 74.0
+offset_top = 254.0
+offset_right = 205.0
+offset_bottom = 384.0
+script = ExtResource("16_mvsps")
+
+[node name="Panel" type="Panel" parent="UICanvas/UI/ToolTip"]
+layout_mode = 0
+offset_right = 134.0
+offset_bottom = 129.0
 
 [node name="LevelPath" type="Area2D" parent="."]
 position = Vector2(1, 1)

@@ -80,8 +80,12 @@ namespace GameNamespace.UI
 
 		private TextureButton CreateMenuButton(string text)
 		{
-			TextureButton button = UITools.Instance.CreateGameButtonFromRegion(parent:buttonContainer, buttonType:"Menu");
-			Label buttonLabel = UITools.Instance.CreateLabel(text:text, parent:button, fontSize:25);
+			TextureButton button = UITools.Instance.CreateGameButtonFromRegion(buttonType:"Menu");
+			buttonContainer.AddChild(button);
+
+			Label buttonLabel = UITools.Instance.CreateLabel(text:text, fontSize:25);
+			button.AddChild(buttonLabel);
+
 			buttonLabel.Size = button.Size;
 
 			return button;
@@ -92,10 +96,12 @@ namespace GameNamespace.UI
 			settingsMenu.Visible = false;
 			VBoxContainer buttonContainer = settingsMenu.GetNode<VBoxContainer>("VBoxContainer");
 
-			Button spawnBoxButton = UITools.Instance.CreateCheckBox(text:"Spawn Box", parent:buttonContainer);
+			Button spawnBoxButton = UITools.Instance.CreateCheckBox(text:"Spawn Box");
+			buttonContainer.AddChild(spawnBoxButton);
 			spawnBoxButton.Pressed += () => devWindow.ToggleSpawnBox();
 
-			Button combatLogConsole = UITools.Instance.CreateCheckBox(text:"Combat Log Console", parent: buttonContainer);
+			Button combatLogConsole = UITools.Instance.CreateCheckBox(text:"Combat Log Console");
+			buttonContainer.AddChild(combatLogConsole);
 			combatLogConsole.Pressed += () => devWindow.ToggleCombatLog();
 		}
 
